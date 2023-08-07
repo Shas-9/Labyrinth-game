@@ -9,9 +9,11 @@ int main()
 {
     printHello();
     std::cout << "App is running" << std::endl;
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(600, 600), "SFML works!");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
+    shape.setPosition(20, 300);
+    std::cout << "THE CIRCLE IS AT " << shape.getPosition().x << std::endl;
 
     while (window.isOpen())
     {

@@ -8,14 +8,14 @@ SRC_FILES = $(wildcard src/*.cpp src/*.h)
 #OBJ_FILES := $(filter %.o,$(SRC_FILES:.cpp=.o))
 
 build:
-	g++ -c $(SRC_FILES) $(CC_FLAGS)
-	g++ -o $(BIN_NAME) test.o foo.o $(INCLUDES) $(LIBS)
+	g++ -c $(SRC_FILES) $(CC_FLAGS) $(INCLUDES)
+	g++ -o $(BIN_NAME) test.o foo.o -Llibs/sfml/lib $(LIBS)
 
 clean:
 	rm -rf src/*.o src/*.out *.o *.out
 
 run:
-	./$(BIN_NAME)
+	export LD_LIBRARY_PATH=libs/sfml/lib && ./$(BIN_NAME)
 
 test:
 	echo UNIMPLEMENTED
