@@ -3,13 +3,14 @@ CC_FLAGS = -Wall -Wextra
 INCLUDES = -Ilibs/sfml/include
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
-SRC_FILES = $(wildcard src/*.cpp src/*.h)
-#OBJ_FILES = $(wildcard src/*.cpp)
-#OBJ_FILES := $(filter %.o,$(SRC_FILES:.cpp=.o))
+SRC_FILES = $(wildcard src/*.cpp)
+O_FILES = $(patsubst src/%.cpp, %.o, $(SRC_FILES))
+
+all: clean build run
 
 build:
 	g++ -c $(SRC_FILES) $(CC_FLAGS) $(INCLUDES)
-	g++ -o $(BIN_NAME) test.o foo.o -Llibs/sfml/lib $(LIBS)
+	g++ -o $(BIN_NAME) $(O_FILES) -Llibs/sfml/lib $(LIBS)
 
 clean:
 	rm -rf src/*.o src/*.out *.o *.out
@@ -20,6 +21,4 @@ run:
 test:
 	echo UNIMPLEMENTED
 
-all: clean build run
-
-.PHONY: all clean build run test
+.PHONY: all clean build run main
