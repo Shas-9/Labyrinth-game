@@ -2,6 +2,8 @@
 
 We're nerds so we're starting this weeks in advance
 
+We did not start this weeks in advance
+
 #Getting started
 Clone the repo and run "make all" in the terminal
 If everything works fine then test.cpp and foo.cpp should run
