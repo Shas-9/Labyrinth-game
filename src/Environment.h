@@ -15,10 +15,11 @@ class Environment {
   Obstacle* obstacles;
   Item* items;
   Enemy* enemies;
+  
+  Obstacle* generatePaths();
 
  public:
   Environment();
-  Obstacle* generatePaths();
   void render();
 
   Item* getItems();
