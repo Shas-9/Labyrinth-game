@@ -1,4 +1,4 @@
-#ifndef ITEM_INCLDUE
+#ifndef ITEM_INCLUDE
 #define ITEM_INCLUDE
 
 #include "RenderedObject.h"
@@ -9,7 +9,9 @@ class Item : public RenderedObject {
 
  public:
   Item();
-  virtual void use() = 0;
+  virtual void use();
+  virtual void render();
+  virtual void update();
 };
 
 #endif

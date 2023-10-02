@@ -1,4 +1,4 @@
-#ifndef VECTOR_INCLDUE
+#ifndef VECTOR_INCLUDE
 #define VECTOR_INCLUDE
 
 class Vector {
@@ -7,13 +7,17 @@ class Vector {
   double y;
 
  public:
+  Vector();
   Vector(double x, double y);
-  void right(int scale);
-  void left(int scale);
-  void up(int scale);
-  void down(int scale);
+  Vector(int x, int y);
+  void moveHorizontal(double value);
+  void moveVertical(double value);
+
   double getXPosition();
   double getYPosition();
+
+  void setPosition(double x, double y);
+  void setPosition(int x, int y);
 };
 
 #endif

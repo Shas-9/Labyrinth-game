@@ -13,7 +13,7 @@ build:
 	g++ -o $(BIN_NAME) $(O_FILES) -Llibs/sfml/lib $(LIBS)
 
 clean:
-	rm -rf src/*.o src/*.out *.o *.out
+	rm -rf src/*.o src/*.out *.o *.out src/*.h.gch
 
 run:
 	export LD_LIBRARY_PATH=libs/sfml/lib && ./$(BIN_NAME)

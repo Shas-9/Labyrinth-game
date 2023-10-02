@@ -1,18 +1,22 @@
-#ifndef PLAYER_INCLDUE
+#ifndef PLAYER_INCLUDE
 #define PLAYER_INCLUDE
 
 #include "Entity.h"
-#include "Game.h"
+#include "Environment.h"
 #include "Weapon.h"
 
 class Player : public Entity {
  protected:
   int score;
   Weapon* current_item;
-  Game* game;
+  Environment* environment;
 
  public:
-  Player(Game* game);
+  Player();
+  Player(Vector position, string type, string movement_animation,
+         int movement_speed, int health, int attack_damage,
+         string attack_animation, string death_animation,
+         Environment* environment);
   void moveUp();
   void moveDown();
   void moveRight();

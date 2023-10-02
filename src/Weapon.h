@@ -1,4 +1,4 @@
-#ifndef WEAPON_INCLDUE
+#ifndef WEAPON_INCLUDE
 #define WEAPON_INCLUDE
 
 #include "Item.h"

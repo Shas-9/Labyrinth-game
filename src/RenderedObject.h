@@ -1,4 +1,4 @@
-#ifndef RENDERED_OBJECT_INCLDUE
+#ifndef RENDERED_OBJECT_INCLUDE
 #define RENDERED_OBJECT_INCLUDE
 
 #include <string>
@@ -13,6 +13,7 @@ class RenderedObject {
 
  public:
   RenderedObject();
+  RenderedObject(Vector position, string type);
   virtual void render() = 0;
   virtual void update() = 0;
 };
