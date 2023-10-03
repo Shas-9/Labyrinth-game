@@ -14,7 +14,6 @@ class UI {
   Game game;
   Vector screen_dimensions;
   sf::RenderWindow* window_ptr;
-  sf::RenderWindow window;
 
  public:
   UI();

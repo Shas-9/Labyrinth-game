@@ -6,7 +6,7 @@ Clone the repo and run "make all" in the terminal
 
 ## Testing
 
-We're using the Criterion framework for testing in this project
+We're using the Criterion framework for testing in this project: https://github.com/Snaipe/Criterion
 
 ### Installing Criterion
 
