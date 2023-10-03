@@ -18,6 +18,7 @@ class Game {
   void updateAll();
   void renderAll();
   void pause();
+  void endGame();
 };
 
 #endif
