@@ -9,6 +9,7 @@ using namespace std;
 class RenderedObject {
  protected:
   Vector position;
+  Vector dimensions;
   string type;
 
  public:
