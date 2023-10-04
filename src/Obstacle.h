@@ -4,6 +4,8 @@
 #include "RenderedObject.h"
 
 class Obstacle : public RenderedObject {
+  private:
+  Vector dimensions;
  public:
   Obstacle();
   Obstacle(Vector position, string type, Vector dimensions);
