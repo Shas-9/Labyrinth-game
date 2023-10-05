@@ -6,7 +6,16 @@ LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 SRC_FILES = $(wildcard src/*.cpp)
 O_FILES = $(patsubst src/%.cpp, %.o, $(SRC_FILES))
 
+DEV_FILES = $(wildcard dev/*.cpp)
+DEV_O_FILES = $(patsubst dev/%.cpp, %.o, $(DEV_FILES))
+
 all: clean build run
+
+main: clean try run
+
+try:
+	g++ -c $(DEV_FILES) $(CC_FLAGS) $(INCLUDES)
+	g++ -o $(BIN_NAME) $(DEV_O_FILES) -Llibs/sfml/lib $(LIBS)
 
 build:
 	g++ -c $(SRC_FILES) $(CC_FLAGS) $(INCLUDES)
