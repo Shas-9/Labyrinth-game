@@ -15,8 +15,8 @@ Vector::Vector() {
   this->y = 0;
 }
 
-void Vector::moveVertical(double value) { this->x += value; }
-void Vector::moveHorizontal(double value) { this->y += value; }
+void Vector::moveHorizontal(double value) { this->x += value; }
+void Vector::moveVertical(double value) { this->y += value; }
 
 double Vector::getXPosition() { return this->x; }
 double Vector::getYPosition() { return this->y; }

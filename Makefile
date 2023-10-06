@@ -17,7 +17,6 @@ build:
 	test/bin/$@ --verbose
 
 test: $(patsubst test/%.test.cpp, %.test, $(wildcard test/*.test.cpp))
-	# @for test in $(TESTBINS) ; do echo "Running test ./$$test" && ./$$test && echo "" ; done
 
 clean:
 	rm -rf src/*.o src/*.out *.o *.out src/*.h.gch
