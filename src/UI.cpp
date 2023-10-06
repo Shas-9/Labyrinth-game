@@ -32,7 +32,7 @@ UI::UI() { UI(Vector(600, 600)); }
 
 void UI::renderUI() {
   sf::Texture title;
-  title.loadFromFile("Images/UI.png", sf::IntRect(0, 0, 1000, 600));
+  title.loadFromFile("images/UI.png", sf::IntRect(0, 0, 1000, 600));
 
   sf::Sprite ui_title;
   ui_title.setTexture(title);
