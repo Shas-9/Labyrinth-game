@@ -20,11 +20,21 @@ UI::UI(Vector screen_dimensions) {
     }
 
     (*this->window_ptr).clear();
-    // this->renderUI();
+    this->renderUI();
     // this->game.renderAll();
+
     (*this->window_ptr).display();
   }
 }
 
 UI::UI(int width, int height) { UI(Vector(width, height)); }
 UI::UI() { UI(Vector(600, 600)); }
+
+void UI::renderUI() {
+  sf::Texture title;
+  title.loadFromFile("Images/UI.png", sf::IntRect(0, 0, 1000, 600));
+
+  sf::Sprite ui_title;
+  ui_title.setTexture(title);
+  (*this->window_ptr).draw(ui_title);
+}
