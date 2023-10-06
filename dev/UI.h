@@ -2,8 +2,11 @@
 #define UI_INCLUDE
 
 #include <SFML/Graphics.hpp>
+#include <string>
 
 // #include "Game.h"
+#include "Vector.h"
+
 
 class UI {
  private:
@@ -12,12 +15,12 @@ class UI {
   // string* highscores_names;
   // string current_state;
   // Game game;
-  // Vector screen_dimensions;
+  Vector screen_dimensions;
   sf::RenderWindow* window_ptr;
 
  public:
   UI();
-  // UI(Vector screen_dimensions);
+  UI(Vector screen_dimensions);
   UI(int width, int hight);
   void fetchHighScores();
   void startGames();
