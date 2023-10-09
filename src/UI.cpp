@@ -11,10 +11,10 @@ UI::UI(Vector screen_dimensions) {
   shape.setFillColor(sf::Color::Green);
   shape.setPosition(20, 300);
 
-  Button play_button("Play Game", Vector(100, 500), Vector(150, 100), sf::Color::Blue, sf::Color::Black, 24);
-
   this->window_ptr = &window;
   // this->game = Game(this->window_ptr);
+
+  Button play_button("Play Game", Vector(100, 500), Vector(150, 100), sf::Color::Blue, sf::Color::Black, 24);
 
   while ((*this->window_ptr).isOpen()) {
     sf::Event event;
