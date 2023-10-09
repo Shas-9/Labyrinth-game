@@ -7,41 +7,55 @@ UI::UI(Vector screen_dimensions) {
   this->screen_dimensions = screen_dimensions;
 
   sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getXPosition(), this->screen_dimensions.getYPosition()), "CatQuest");
-  sf::CircleShape shape(100.f);
-  shape.setFillColor(sf::Color::Green);
-  shape.setPosition(20, 300);
 
   this->window_ptr = &window;
   // this->game = Game(this->window_ptr);
 
+  Button tutorial_btn("Tutorial", Vector(600, 500), Vector(150, 100), sf::Color::Yellow, sf::Color::Black, 24);
+
   Button play_button("Play Game", Vector(100, 500), Vector(150, 100), sf::Color::Blue, sf::Color::Black, 24);
 
-  while ((*this->window_ptr).isOpen()) {
+  while((*this->window_ptr).isOpen()) {
     sf::Event event;
+
+    // Event loop
     while ((*this->window_ptr).pollEvent(event)) {
-      if (event.type == sf::Event::Closed) (*this->window_ptr).close();
+      switch (event.type) {
 
-      if (event.type == sf::Event::MouseButtonPressed) {
-        if (play_button.isMouseOver(*this->window_ptr)) {
-          std::cout << "Play button pressed" << std::endl;
-          // this->game.startGame(); // TODO: Fix this when Game is implemented
-        }
-      }
+        case sf::Event::Closed:
+          (*this->window_ptr).close();
+          break;
 
-      if (event.type = sf::Event::MouseMoved) {
-        if (play_button.isMouseOver(*this->window_ptr)) {
-          play_button.setBackToColor(sf::Color::Red);
-        } else {
-          play_button.setBackToColor(sf::Color::Blue);
-        }
+        case sf::Event::MouseButtonPressed:
+          if ((play_button.isMouseOver(*this->window_ptr))) {
+            std::cout << "Play button pressed" << std::endl;
+            // this->game.startGame(); // TODO: Fix this when Game is implemented
+          } 
+          else if (tutorial_btn.isMouseOver(*this->window_ptr)) {
+            std::cout << "Tutorial button pressed" << std::endl;
+          }
+          break;
+        
+        case sf::Event::MouseMoved:
+          if (play_button.isMouseOver(*this->window_ptr)) {
+            play_button.setBackToColor(sf::Color::Red);
+          } else {
+            play_button.setBackToColor(sf::Color::Blue);
+          }
+
+          if (tutorial_btn.isMouseOver(*this->window_ptr)) {
+            tutorial_btn.setBackToColor(sf::Color::Red);
+          } else {
+            tutorial_btn.setBackToColor(sf::Color::Yellow);
+          }
+          break;
       }
     }
 
     (*this->window_ptr).clear();
     this->renderUI();
     play_button.drawButton(*this->window_ptr);
-    // this->game.renderAll();
-
+    tutorial_btn.drawButton(*this->window_ptr);
     (*this->window_ptr).display();
   }
 }

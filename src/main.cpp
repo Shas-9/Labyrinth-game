@@ -5,8 +5,7 @@
 
 int main() {
   Vector vector = Vector(1000, 800);
-  UI ui = UI(vector);
-  // ui.renderUI();
+  UI* ui = new UI(vector);
 
   return 0;
 }
