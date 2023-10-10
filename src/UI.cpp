@@ -71,3 +71,30 @@ void UI::renderUI() {
   ui_title.setTexture(title);
   (*this->window_ptr).draw(ui_title);
 }
+
+void UI::fetchHighScores() {
+  std::vector<std::string> names;
+  std::ifstream names_file("highscores/names.txt");
+  std::vector<int> scores;
+  std::ifstream scores_file("highscores/scores.txt");
+
+  std::string name;
+  std::string score;
+
+  while (getline(names_file, name)) {
+    names.push_back(name);
+  }
+  names_file.close();
+
+  while (getline(scores_file, score)) {
+    scores.push_back(std::stoi(score));
+  }
+  scores_file.close();
+
+  this->highscores_names = names;
+  this->highscores_values = scores;
+
+  for (std::vector<std::string>::size_type i = 0; i < this->highscores_names.size(); i++) {
+    std::cout << this->highscores_names[i] << " " << this->highscores_values[i] << std::endl;
+  }
+}
