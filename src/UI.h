@@ -13,8 +13,8 @@ class UI {
  private:
   int highscores_num;
   int* highscores_values;
-  // string* highscores_names;
-  // string current_state;
+  std::string* highscores_names;
+  std::string current_state;
   // Game game;
   Vector screen_dimensions;
   sf::RenderWindow* window_ptr;
