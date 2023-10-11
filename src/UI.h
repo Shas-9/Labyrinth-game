@@ -21,6 +21,7 @@ class UI {
   // Game game;
   Vector screen_dimensions;
   sf::RenderWindow* window_ptr;
+  sf::Event* event_ptr;
 
  public:
   UI();
@@ -30,6 +31,7 @@ class UI {
   void startGames();
   void renderUI();
   void renderScreen();
+  bool drawTutorial();
 };
 
 #endif
