@@ -1,5 +1,8 @@
 #include "Obstacle.h"
 
+Obstacle::Obstacle()
+    : RenderedObject(Vector(0, 0), "obstacle"), dimensions(Vector(10, 10)) {}
+
 // The constructor function for the object
 Obstacle::Obstacle(Vector position, string type, Vector dimensions)
     : RenderedObject(position, type), dimensions(dimensions) {
