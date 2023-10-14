@@ -24,7 +24,6 @@ UI::UI(Vector screen_dimensions) {
   this->event_ptr = &event;
 
   while ((*this->window_ptr).isOpen()) {
-    std::cout << "LOOP 1 RUNNING" << std::endl;
 
     // Event loop
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
@@ -172,19 +171,27 @@ void UI::enterName() {
         case sf::Event::Closed:
           (*this->window_ptr).close();
           break;
-        
-        case sf::Event::TextEntered:
-          if ((*this->event_ptr).text.unicode < 128) {
-            name += static_cast<char>((*this->event_ptr).text.unicode);
-            name_entered.setString(name);
-          }
-          break;
 
         case sf::Event::KeyPressed:
          if ((*this->event_ptr).key.code == sf::Keyboard::BackSpace) {
-            name = name.substr(0, name.size() - 1);
+            name.pop_back();
             name_entered.setString(name);
          }
+         break;
+        
+        case sf::Event::TextEntered:
+          std::cout << "SO<ETHING" << std::endl;
+          if ((*this->event_ptr).text.unicode < 128  && (*this->event_ptr).text.unicode != 8 && (*this->event_ptr).text.unicode != 13) {
+            std::cout << (*this->event_ptr).text.unicode << std::endl;
+            name += static_cast<char>((*this->event_ptr).text.unicode);
+            name_entered.setString(name);
+          }
+          else if ((*this->event_ptr).text.unicode == 13) {
+            this->player_name = name;
+            // this->game.startGame();
+            return;
+          }
+          break;
       }
     }
 
