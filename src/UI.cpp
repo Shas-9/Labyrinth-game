@@ -4,6 +4,13 @@
 #include <iostream>
 #include <string>
 
+// Default constructor
+UI::UI() { UI(Vector(600, 600)); }
+
+// Overloaded constructor with width and height
+UI::UI(int width, int height) { UI(Vector(width, height)); }
+
+// Overloaded constructor with Vector
 UI::UI(Vector screen_dimensions) {
   this->screen_dimensions = screen_dimensions;
 
@@ -23,6 +30,7 @@ UI::UI(Vector screen_dimensions) {
   sf::Event event;
   this->event_ptr = &event;
 
+  // Screen loop
   while ((*this->window_ptr).isOpen()) {
 
     // Event loop
@@ -66,6 +74,7 @@ UI::UI(Vector screen_dimensions) {
       }
     }
 
+    // Display on the screen
     (*this->window_ptr).clear();
     this->renderUI();
     play_button.drawButton(*this->window_ptr);
@@ -74,9 +83,7 @@ UI::UI(Vector screen_dimensions) {
   }
 }
 
-UI::UI(int width, int height) { UI(Vector(width, height)); }
-UI::UI() { UI(Vector(600, 600)); }
-
+// Rendering the UI image
 void UI::renderUI() {
   sf::Texture title;
   title.loadFromFile("images/UI.png",
@@ -88,6 +95,7 @@ void UI::renderUI() {
   (*this->window_ptr).draw(ui_title);
 }
 
+// Fetching the highscores from the highscores folder
 void UI::fetchHighScores() {
   std::ifstream names_file("highscores/names.txt");
   std::ifstream scores_file("highscores/scores.txt");
@@ -104,6 +112,7 @@ void UI::fetchHighScores() {
   scores_file.close();
 }
 
+// Displaying the tutorial screen
 bool UI::drawTutorial() {
   sf::Text how_to_play;
   sf::Font arial;
@@ -117,7 +126,10 @@ bool UI::drawTutorial() {
   Button menu("Back to Menu", Vector(100, 500), Vector(200, 150),
               sf::Color::Blue, sf::Color::Black, 24);
 
+  // Screen loop
   while ((*this->window_ptr).isOpen()) {
+
+    // Event loop
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
       switch ((*this->event_ptr).type) {
         case sf::Event::Closed:
@@ -142,6 +154,7 @@ bool UI::drawTutorial() {
       }
     }
 
+    // Display on the screen
     (*this->window_ptr).clear();
     (*this->window_ptr).draw(how_to_play);
     menu.drawButton(*this->window_ptr);
@@ -149,6 +162,7 @@ bool UI::drawTutorial() {
   }
 }
 
+// Entering the name of the player screen
 void UI::enterName() {
   sf::Text enter_name;
   sf::Font arial;
@@ -163,8 +177,10 @@ void UI::enterName() {
 
   Button name_entered(name, Vector(100, 500), Vector(200, 150), sf::Color::Blue, sf::Color::Black, 24);
 
+  // Screen loop
   while ((*this->window_ptr).isOpen()) {
     
+    // Event loop
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
       switch ((*this->event_ptr).type) {
 
@@ -180,9 +196,7 @@ void UI::enterName() {
          break;
         
         case sf::Event::TextEntered:
-          std::cout << "SO<ETHING" << std::endl;
           if ((*this->event_ptr).text.unicode < 128  && (*this->event_ptr).text.unicode != 8 && (*this->event_ptr).text.unicode != 13) {
-            std::cout << (*this->event_ptr).text.unicode << std::endl;
             name += static_cast<char>((*this->event_ptr).text.unicode);
             name_entered.setString(name);
           }
@@ -195,10 +209,10 @@ void UI::enterName() {
       }
     }
 
+    // Display on the screen
     (*this->window_ptr).clear();
     (*this->window_ptr).draw(enter_name);
     name_entered.drawButton(*this->window_ptr);
     (*this->window_ptr).display();
   }
-  // this->game.startGame();
 }
