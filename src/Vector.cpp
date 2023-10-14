@@ -18,15 +18,15 @@ Vector::Vector() {
 void Vector::moveHorizontal(double value) { this->x += value; }
 void Vector::moveVertical(double value) { this->y += value; }
 
-double Vector::getXPosition() { return this->x; }
-double Vector::getYPosition() { return this->y; }
+double Vector::getX() { return this->x; }
+double Vector::getY() { return this->y; }
 
-void Vector::setPosition(double x, double y) {
+void Vector::set(double x, double y) {
   this->x = x;
   this->y = y;
 }
 
-void Vector::setPosition(int x, int y) {
+void Vector::set(int x, int y) {
   this->x = x;
   this->y = y;
 }
