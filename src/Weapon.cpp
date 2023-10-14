@@ -17,3 +17,9 @@ void Weapon::pickUp() {
 void Weapon::drop() {
   this->isWithPlayer = false;
 }
+
+void Weapon::render(sf::RenderWindow &window) {
+  window.draw(this->rectangle);
+}
+
+void Weapon::update() {}

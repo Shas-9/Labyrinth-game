@@ -11,3 +11,9 @@ Item::Item(Vector postion, Vector dimensions, std::string type,
 std::string Item::getType() {
   return this->type;
 }
+
+void Item::render(sf::RenderWindow &window) {
+  window.draw(this->rectangle);
+}
+
+void Item::update() {}
