@@ -7,8 +7,8 @@
 UI::UI(Vector screen_dimensions) {
   this->screen_dimensions = screen_dimensions;
 
-  sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getXPosition(),
-                                        this->screen_dimensions.getYPosition()),
+  sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getX(),
+                                        this->screen_dimensions.getY()),
                           "CatQuest");
 
   this->window_ptr = &window;
@@ -80,8 +80,8 @@ UI::UI() { UI(Vector(600, 600)); }
 void UI::renderUI() {
   sf::Texture title;
   title.loadFromFile("images/UI.png",
-                     sf::IntRect(0, 0, this->screen_dimensions.getXPosition(),
-                                 this->screen_dimensions.getYPosition()));
+                     sf::IntRect(0, 0, this->screen_dimensions.getX(),
+                                 this->screen_dimensions.getY()));
 
   sf::Sprite ui_title;
   ui_title.setTexture(title);
