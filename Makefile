@@ -13,10 +13,9 @@ build:
 	g++ -o $(BIN_NAME) $(O_FILES) -Llibs/sfml/lib $(LIBS)
 
 %.test: 
-	g++ $(CC_FLAGS) test/$@.cpp $(patsubst %.test, %.o, $@) -o test/bin/$@ -lcriterion
-	test/bin/$@ --verbose
-
-test: $(patsubst test/%.test.cpp, %.test, $(wildcard test/*.test.cpp))
+	g++ -c test/$@.cpp $(CC_FLAGS) $(INCLUDES)
+	g++ $(CC_FLAGS) $@.o Environment.o Obstacle.o Vector.o RenderedObject.o -o test/bin/$@ -Llibs/sfml/lib -lcriterion $(LIBS)
+	export LD_LIBRARY_PATH=libs/sfml/lib && ./test/bin/$@ --verbose
 
 clean:
 	rm -rf src/*.o src/*.out *.o *.out src/*.h.gch
