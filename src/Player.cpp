@@ -78,6 +78,10 @@ Item* Player::getNearbyItem() {
   for (int i = 0; i < this->environment->getItemsNum(); i++) {
     if (this->isCollidingWith(items_array[i])) {
        if (items_array[i].getType() == "weapon") {
+         items_array[i].pickUp();
+         if (this->current_item != NULL) {
+           this->current_item.drop();
+         }
          return items_array[i];
        }
        else if (items_array[i].getType() == "potion") {
