@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <vector>
+#include <map>
 #include <string>
 
 // #include "Game.h"
@@ -15,8 +16,7 @@ class UI {
  private:
   int score;
   std::string player_name;
-  std::vector<int> highscores_values;
-  std::vector<std::string> highscores_names;
+  std::map<std::string, int> highscores;
   std::string current_state;
   // Game game;
   Vector screen_dimensions;
