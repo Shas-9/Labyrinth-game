@@ -20,7 +20,7 @@ class RenderedObject {
   bool collidingWith(RenderedObject* rendered_object);
 
   Vector getPosition();
-  Vector getDimentions();
+  Vector getDimensions();
   /** */
 
   virtual void render() = 0;

@@ -13,11 +13,11 @@ class Vector {
   void moveHorizontal(double value);
   void moveVertical(double value);
 
-  double getXPosition();
-  double getYPosition();
+  double getX();
+  double getY();
 
-  void setPosition(double x, double y);
-  void setPosition(int x, int y);
+  void set(double x, double y);
+  void set(int x, int y);
 };
 
 #endif
