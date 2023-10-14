@@ -8,13 +8,13 @@
 class Obstacle : public RenderedObject {
  private:
   Vector dimensions;
-  sf::RectangleShape rectangle;
+  sf::RectangleShape* rectangle;
 
  public:
   Obstacle();
   Obstacle(Vector position, string type, Vector dimensions);
   void update();
-  void render();
+  void render(sf::RenderWindow& window);
 };
 
 #endif
