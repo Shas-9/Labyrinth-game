@@ -22,6 +22,9 @@ class Entity : public RenderedObject {
          string attack_animation, string death_animation);
   void changePosition(Vector position);
   void update();
+  
+  virtual void render() = 0;
+  virtual void update() = 0;
 };
 
 #endif

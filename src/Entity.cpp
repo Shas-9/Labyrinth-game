@@ -16,7 +16,7 @@ Entity::Entity(Vector position, string type, string movement_animation,
 }
 
 void Entity::changePosition(Vector position) {
-  this->position.setPosition(position.getXPosition(), position.getYPosition());
+  this->position.set(position.getX(), position.getY());
 }
 
 void Entity::update() {}
