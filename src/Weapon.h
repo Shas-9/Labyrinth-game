@@ -15,6 +15,7 @@ class Weapon : public Item {
   void pickUp();
   void drop();
   int use(Player* player);
+  void render(sf::RenderWindow &window);
 };
 
 #endif
