@@ -5,13 +5,15 @@
 
 class Item : public RenderedObject {
  protected:
-  string description;
+  std::string description;
 
  public:
   Item();
   virtual void use();
   virtual void render();
   virtual void update();
+
+  std::string getType();
 };
 
 #endif
