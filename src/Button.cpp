@@ -10,7 +10,7 @@ Button::Button(std::string text, Vector position, Vector size, sf::Color bgcolor
   this->text.setFont(this->arial);
   this->text.setCharacterSize(charsize);
 
-  button.setSize(sf::Vector2f(size.getXPosition(), size.getYPosition()));
+  button.setSize(sf::Vector2f(size.getX(), size.getY()));
   button.setFillColor(bgcolor);
   
   this->setPosition(position);
@@ -26,12 +26,12 @@ void Button::setTextColor(sf::Color color) {
 
 void Button::setPosition(Vector position) {
   this->position = position;
-  this->button.setPosition(this->position.getXPosition(), this->position.getYPosition());
+  this->button.setPosition(this->position.getX(), this->position.getY());
 
 
   // Formula for centering text in a button
-  float text_x = (this->position.getXPosition() + (this->button.getSize().x / 2)) - (this->text.getLocalBounds().width / 2);
-  float text_y = (this->position.getYPosition() + (this->button.getSize().y / 2)) - (this->text.getLocalBounds().height / 2);
+  float text_x = (this->position.getX() + (this->button.getSize().x / 2)) - (this->text.getLocalBounds().width / 2);
+  float text_y = (this->position.getY() + (this->button.getSize().y / 2)) - (this->text.getLocalBounds().height / 2);
 
   this->text.setPosition(text_x, text_y);
 }
@@ -58,4 +58,7 @@ bool Button::isMouseOver(sf::RenderWindow &window) {
   }
 }
 
-
+void Button::setString(std::string text) {
+  this->text.setString(text);
+  this->setPosition(this->position);
+}
