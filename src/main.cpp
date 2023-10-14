@@ -2,6 +2,7 @@
 
 #include "UI.h"
 #include "Vector.h"
+#include "Environment.h"
 
 int main() {
   Vector vector = Vector(1000, 800);

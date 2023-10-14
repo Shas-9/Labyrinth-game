@@ -1,8 +1,10 @@
 #ifndef RENDERED_OBJECT_INCLUDE
 #define RENDERED_OBJECT_INCLUDE
 
+#include <SFML/Graphics.hpp>
 #include <string>
-using namespace std;
+
+using std::string;
 
 #include "Vector.h"
 
@@ -23,7 +25,7 @@ class RenderedObject {
   Vector getDimensions();
   /** */
 
-  virtual void render() = 0;
+  virtual void render(sf::RenderWindow& window) = 0;
   virtual void update() = 0;
 };
 
