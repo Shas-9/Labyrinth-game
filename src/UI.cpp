@@ -1,29 +1,34 @@
 #include "UI.h"
-#include <iostream>
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <string>
 
 UI::UI(Vector screen_dimensions) {
   this->screen_dimensions = screen_dimensions;
 
-  sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getXPosition(), this->screen_dimensions.getYPosition()), "CatQuest");
+  sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getXPosition(),
+                                        this->screen_dimensions.getYPosition()),
+                          "CatQuest");
 
   this->window_ptr = &window;
   // this->game = Game(this->window_ptr);
 
-  Button tutorial_btn("Tutorial", Vector(600, 500), Vector(150, 100), sf::Color::Yellow, sf::Color::Black, 24);
+  Button tutorial_btn("Tutorial", Vector(600, 500), Vector(150, 100),
+                      sf::Color::Yellow, sf::Color::Black, 24);
 
-  Button play_button("Play Game", Vector(100, 500), Vector(150, 100), sf::Color::Blue, sf::Color::Black, 24);
-    
+  Button play_button("Play Game", Vector(100, 500), Vector(150, 100),
+                     sf::Color::Blue, sf::Color::Black, 24);
+
   sf::Event event;
   this->event_ptr = &event;
 
-  while((*this->window_ptr).isOpen()) {
+  while ((*this->window_ptr).isOpen()) {
+    std::cout << "LOOP 1 RUNNING" << std::endl;
 
     // Event loop
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
       switch (event.type) {
-
         case sf::Event::Closed:
           (*this->window_ptr).close();
           break;
@@ -31,10 +36,12 @@ UI::UI(Vector screen_dimensions) {
         case sf::Event::MouseButtonPressed:
           if ((play_button.isMouseOver(*this->window_ptr))) {
             std::cout << "Play button pressed" << std::endl;
+
             this->enterName();
             // this->game.startGame(); // TODO: Fix this when Game is implemented
           } 
           else if (tutorial_btn.isMouseOver(*this->window_ptr)) {
+
             std::cout << "Tutorial button pressed" << std::endl;
             bool menu_button_pressed = false;
 
@@ -43,7 +50,7 @@ UI::UI(Vector screen_dimensions) {
             }
           }
           break;
-        
+
         case sf::Event::MouseMoved:
           if (play_button.isMouseOver(*this->window_ptr)) {
             play_button.setBackToColor(sf::Color::Red);
@@ -73,7 +80,9 @@ UI::UI() { UI(Vector(600, 600)); }
 
 void UI::renderUI() {
   sf::Texture title;
-  title.loadFromFile("images/UI.png", sf::IntRect(0, 0, this->screen_dimensions.getXPosition(), this->screen_dimensions.getYPosition()));
+  title.loadFromFile("images/UI.png",
+                     sf::IntRect(0, 0, this->screen_dimensions.getXPosition(),
+                                 this->screen_dimensions.getYPosition()));
 
   sf::Sprite ui_title;
   ui_title.setTexture(title);
@@ -81,30 +90,19 @@ void UI::renderUI() {
 }
 
 void UI::fetchHighScores() {
-  std::vector<std::string> names;
   std::ifstream names_file("highscores/names.txt");
-  std::vector<int> scores;
   std::ifstream scores_file("highscores/scores.txt");
 
   std::string name;
   std::string score;
 
   while (getline(names_file, name)) {
-    names.push_back(name);
+    getline(scores_file, score);
+
+    this->highscores.insert({name, std::stoi(score)});
   }
   names_file.close();
-
-  while (getline(scores_file, score)) {
-    scores.push_back(std::stoi(score));
-  }
   scores_file.close();
-
-  this->highscores_names = names;
-  this->highscores_values = scores;
-
-  // for (std::vector<std::string>::size_type i = 0; i < this->highscores_names.size(); i++) {
-  //   std::cout << this->highscores_names[i] << " " << this->highscores_values[i] << std::endl;
-  // }
 }
 
 bool UI::drawTutorial() {
@@ -117,13 +115,12 @@ bool UI::drawTutorial() {
   how_to_play.setFillColor(sf::Color::White);
   how_to_play.setPosition(100, 100);
 
-  Button menu("Back to Menu", Vector(100, 500), Vector(200, 150), sf::Color::Blue, sf::Color::Black, 24);
-  
-  while ((*this->window_ptr).isOpen()) {
+  Button menu("Back to Menu", Vector(100, 500), Vector(200, 150),
+              sf::Color::Blue, sf::Color::Black, 24);
 
+  while ((*this->window_ptr).isOpen()) {
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
       switch ((*this->event_ptr).type) {
-
         case sf::Event::Closed:
           (*this->window_ptr).close();
           break;
@@ -133,9 +130,9 @@ bool UI::drawTutorial() {
             std::cout << "Menu button pressed" << std::endl;
             // menu_button_pressed = true;
             return true;
-          } 
+          }
           break;
-        
+
         case sf::Event::MouseMoved:
           if (menu.isMouseOver(*this->window_ptr)) {
             menu.setBackToColor(sf::Color::Red);
@@ -148,7 +145,7 @@ bool UI::drawTutorial() {
 
     (*this->window_ptr).clear();
     (*this->window_ptr).draw(how_to_play);
-    menu.drawButton(*this->window_ptr); 
+    menu.drawButton(*this->window_ptr);
     (*this->window_ptr).display();
   }
 }
