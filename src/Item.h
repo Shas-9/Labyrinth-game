@@ -2,6 +2,7 @@
 #define ITEM_INCLUDE
 
 #include "RenderedObject.h"
+#include "Player.h"
 
 class Item : public RenderedObject {
  protected:
@@ -9,7 +10,9 @@ class Item : public RenderedObject {
 
  public:
   Item();
-  virtual void use();
+  Item(Vector position, Vector dimensions, std::string type,
+       std::string description);
+  virtual void use(Player* player);
   virtual void render();
   virtual void update();
 
