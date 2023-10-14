@@ -58,4 +58,7 @@ bool Button::isMouseOver(sf::RenderWindow &window) {
   }
 }
 
-
+void Button::setString(std::string text) {
+  this->text.setString(text);
+  this->setPosition(this->position);
+}

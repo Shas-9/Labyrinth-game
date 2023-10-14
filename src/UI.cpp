@@ -31,6 +31,7 @@ UI::UI(Vector screen_dimensions) {
         case sf::Event::MouseButtonPressed:
           if ((play_button.isMouseOver(*this->window_ptr))) {
             std::cout << "Play button pressed" << std::endl;
+            this->enterName();
             // this->game.startGame(); // TODO: Fix this when Game is implemented
           } 
           else if (tutorial_btn.isMouseOver(*this->window_ptr)) {
@@ -150,4 +151,50 @@ bool UI::drawTutorial() {
     menu.drawButton(*this->window_ptr); 
     (*this->window_ptr).display();
   }
+}
+
+void UI::enterName() {
+  sf::Text enter_name;
+  sf::Font arial;
+  arial.loadFromFile("fonts/arial.ttf");
+  enter_name.setFont(arial);
+  enter_name.setString("Enter your name");
+  enter_name.setCharacterSize(24);
+  enter_name.setFillColor(sf::Color::White);
+  enter_name.setPosition(100, 100);
+
+  std::string name = "";
+
+  Button name_entered(name, Vector(100, 500), Vector(200, 150), sf::Color::Blue, sf::Color::Black, 24);
+
+  while ((*this->window_ptr).isOpen()) {
+    
+    while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+      switch ((*this->event_ptr).type) {
+
+        case sf::Event::Closed:
+          (*this->window_ptr).close();
+          break;
+        
+        case sf::Event::TextEntered:
+          if ((*this->event_ptr).text.unicode < 128) {
+            name += static_cast<char>((*this->event_ptr).text.unicode);
+            name_entered.setString(name);
+          }
+          break;
+
+        case sf::Event::KeyPressed:
+         if ((*this->event_ptr).key.code == sf::Keyboard::BackSpace) {
+            name = name.substr(0, name.size() - 1);
+            name_entered.setString(name);
+         }
+      }
+    }
+
+    (*this->window_ptr).clear();
+    (*this->window_ptr).draw(enter_name);
+    name_entered.drawButton(*this->window_ptr);
+    (*this->window_ptr).display();
+  }
+  // this->game.startGame();
 }

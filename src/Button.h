@@ -23,6 +23,7 @@ public:
 
     void setPosition(Vector position);
     void drawButton(sf::RenderWindow &window);
+    void setString(std::string text);
 
     bool isMouseOver(sf::RenderWindow &window);
 };

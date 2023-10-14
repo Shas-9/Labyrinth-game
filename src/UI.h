@@ -23,15 +23,17 @@ class UI {
   sf::RenderWindow* window_ptr;
   sf::Event* event_ptr;
 
+  void renderUI();
+  bool drawTutorial();
+
  public:
   UI();
   UI(Vector screen_dimensions);
   UI(int width, int hight);
   void fetchHighScores();
   void startGames();
-  void renderUI();
   void renderScreen();
-  bool drawTutorial();
+  void enterName();
 };
 
 #endif
