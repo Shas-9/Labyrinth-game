@@ -14,7 +14,7 @@ build:
 
 %.test: 
 	g++ -c test/$@.cpp $(CC_FLAGS) $(INCLUDES)
-	g++ $(CC_FLAGS) $@.o Environment.o Obstacle.o Vector.o RenderedObject.o -o test/bin/$@ -Llibs/sfml/lib -lcriterion $(LIBS)
+	g++ $(CC_FLAGS) $@.o MazeGenerator.o Environment.o Obstacle.o Vector.o RenderedObject.o -o test/bin/$@ -Llibs/sfml/lib -lcriterion $(LIBS)
 	export LD_LIBRARY_PATH=libs/sfml/lib && ./test/bin/$@ --verbose
 
 clean:
