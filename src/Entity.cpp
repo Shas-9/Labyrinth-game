@@ -36,9 +36,3 @@ void Entity::setHealth(int health) {
 void Entity::setMaxHealth(int max_health) {
   this->max_health = max_health;
 }
-
-void Entity::render(sf::RenderWindow &window) {
-  window.draw(*this->rectangle);
-}
-
-void Entity::update() {}

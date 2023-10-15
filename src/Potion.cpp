@@ -14,8 +14,4 @@ void Potion::use(Player* player) {
   }
 }
 
-void Potion::render(sf::RenderWindow &window) {
-  window.draw(*this->rectangle);
-}
-
 void Potion::update() {}

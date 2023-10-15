@@ -15,8 +15,4 @@ void Enemy::takeDamage(int damage) {
   this->health -= damage;
 }
 
-void Enemy::render(sf::RenderWindow &window) {
-  window.draw(*this->rectangle);
-}
-
 void Enemy::update() {}

@@ -42,3 +42,7 @@ bool RenderedObject::collidingWith(RenderedObject* rendered_object) {
   else
     return false;
 }
+
+void RenderedObject::render(sf::RenderWindow& window) {
+  window.draw(*this->rectangle);
+}

@@ -12,8 +12,8 @@ class Potion : public Item {
   Potion();
   Potion(Vector position, Vector dimensions, std::string type,
          std::string description, int health_regen);
-  void use(Player* player);
-  void render(sf::RenderWindow &window);
+
+  void use(Player* player) override;
 
   virtual void update();
 };

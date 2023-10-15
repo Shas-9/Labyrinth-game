@@ -26,7 +26,7 @@ class RenderedObject {
   Vector getDimensions();
   /** */
 
-  virtual void render(sf::RenderWindow& window) = 0;
+  void render(sf::RenderWindow& window);
   virtual void update() = 0;
 };
 

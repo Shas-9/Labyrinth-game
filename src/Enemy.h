@@ -17,9 +17,8 @@ class Enemy : public Entity {
         string attack_animation, string death_animation,
         Obstacle* obstacles, int sight_distance);
   // void trackPlayer();
-  void update();
+  void update() override;
 
-  virtual void render(sf::RenderWindow &window);
   void takeDamage(int damage);
 };
 
