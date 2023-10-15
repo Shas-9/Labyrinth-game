@@ -2,6 +2,7 @@
 #define POTION_H
 
 #include "Item.h"
+#include "Player.h"
 
 class Potion : public Item {
  protected:

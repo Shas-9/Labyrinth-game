@@ -95,7 +95,4 @@ Item* Player::getNearbyItem() {
   }
 }
 
-// Render player
-void Player::render(sf::RenderWindow &window) {
-  window.draw(*this->rectangle);
-}
+void Player::update() {}

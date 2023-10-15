@@ -29,7 +29,7 @@ class Entity : public RenderedObject {
   void setHealth(int health);
   void setMaxHealth(int max_health);
   
-  virtual void render(sf::RenderWindow &window);
+  void render(sf::RenderWindow &window);
   virtual void update() = 0;
 };
 

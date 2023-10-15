@@ -27,7 +27,8 @@ class Player : public Entity {
   void dropItem();
   int getScore();
   Item* getNearbyItem();
-  virtual void render(sf::RenderWindow &window);
+
+  void update() override;
 };
 
 #endif
