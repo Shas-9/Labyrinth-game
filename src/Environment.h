@@ -1,8 +1,8 @@
 #ifndef ENVIRONMENT_INCLUDE
 #define ENVIRONMENT_INCLUDE
 
-#include "Enemy.h"
-#include "Item.h"
+// #include "Enemy.h"
+// #include "Item.h"
 #include "Obstacle.h"
 #include "RenderedObject.h"
 
@@ -13,10 +13,8 @@ class Environment {
   int enemies_num;
 
   Obstacle* obstacles;
-  Item* items;
-  Enemy* enemies;
-
-  Obstacle* generatePaths();
+  // Item* items;
+  // Enemy* enemies;
 
  public:
   Environment();
@@ -26,8 +24,8 @@ class Environment {
   int getItemsNum();
   int getEnemiesNum();
 
-  Item* getItems();
-  Enemy* getEnemies();
+  // Item* getItems();
+  // Enemy* getEnemies();
   Obstacle* getObstacles();
 };
 
