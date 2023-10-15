@@ -17,7 +17,7 @@ RenderedObject::RenderedObject(Vector position, string type)
 }
 
 Vector RenderedObject::getPosition() { return this->position; }
-Vector RenderedObject::getDimensions() { this->dimensions; }
+Vector RenderedObject::getDimensions() { return this->dimensions; }
 
 bool RenderedObject::collidingWith(RenderedObject* rendered_object) {
   double RectALeft = rendered_object->getPosition().getX();

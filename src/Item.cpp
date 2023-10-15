@@ -2,7 +2,7 @@
 
 Item::Item() {}
 
-Item::Item(Vector postion, Vector dimensions, std::string type,
+Item::Item(Vector position, Vector dimensions, std::string type,
            std::string description)
     : RenderedObject(position, type), description(description) {
       this->dimensions = dimensions;

@@ -53,10 +53,11 @@ void Player::moveLeft() {
 
 
 // Pick up item if player is near one
-void Player::pickUpItem(Item* item) {
-  if (this->getNearbyItem() != NULL) {
-    // this->current_item = item;
-  }
+void Player::pickUpItem() {
+  this->getNearbyItem();
+  // if (this->getNearbyItem() != NULL) {
+  //   // this->current_item = item;
+  // }
 }
 
 // Drop item if player has one
@@ -72,11 +73,14 @@ int Player::getScore() {
 }
 
 // Get nearby item if there is one
-Item* Player::getNearbyItem() {
+void Player::getNearbyItem() {
   Item* items_array = this->environment->getItems();
   
   for (int i = 0; i < this->environment->getItemsNum(); i++) {
     if (this->collidingWith(&items_array[i])) {
+      if (items_array[i].getType() == "potions") {
+        items_array[i].use(this);
+      }
       //  if (items_array[i].getType() == "weapon") {
       //    // items_array[i].pickUp();
       //    if (this->current_item != NULL) {
@@ -84,13 +88,13 @@ Item* Player::getNearbyItem() {
       //    }
       //    return &items_array[i];
       //  }
-       if (items_array[i].getType() == "potion") {
-         items_array[i].use(this);
-         return NULL;
-       } 
-       else {
-         return NULL;
-       }
+      //  if (items_array[i].getType() == "potion") {
+      //    items_array[i].use(this);
+      //    return NULL;
+      //  } 
+      //  else {
+      //    return NULL;
+      //  }
     }
   }
 }
