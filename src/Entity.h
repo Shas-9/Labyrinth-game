@@ -11,6 +11,7 @@ class Entity : public RenderedObject {
   string movement_animation;
   int movement_speed;
   int health;
+  int max_health;
   int attack_damage;
   string attack_animation;
   string death_animation;
@@ -22,8 +23,14 @@ class Entity : public RenderedObject {
          string attack_animation, string death_animation);
   void changePosition(Vector position);
   void update();
+
+  int getHealth();
+  int getMaxHealth();
+
+  void setHealth(int health);
+  void setMaxHealth(int max_health);
   
-  virtual void render() = 0;
+  virtual void render(sf::RenderWindow &window);
   virtual void update() = 0;
 };
 

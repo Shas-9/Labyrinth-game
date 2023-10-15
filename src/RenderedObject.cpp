@@ -3,7 +3,18 @@
 RenderedObject::RenderedObject() : position(Vector(0, 0)), type("") {}
 
 RenderedObject::RenderedObject(Vector position, string type)
-    : position(position), type(type) {}
+    : position(position), type(type) {
+  // Create the rectangular object
+  this->rectangle = new sf::RectangleShape();
+
+  // Set the size of the object
+  this->rectangle->setSize(sf::Vector2f(this->dimensions.getX(),
+                                        this->dimensions.getY()));
+
+  // Set the position of the object
+  this->rectangle->setPosition(
+      sf::Vector2f(this->position.getX(), this->position.getY()));
+}
 
 Vector RenderedObject::getPosition() { return this->position; }
 Vector RenderedObject::getDimensions() { this->dimensions; }

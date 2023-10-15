@@ -8,14 +8,14 @@ Potion::Potion(Vector position, Vector dimensions, std::string type,
 }
 
 void Potion::use(Player* player) {
-  player->health += this->health_regen;
-  if (player->health > player->max_health) {
-    player->health = player->max_health;
+  player->setHealth(player->getHealth() + this->health_regen);
+  if (player->getHealth() > player->getMaxHealth()) {
+    player->setHealth(player->getMaxHealth());
   }
 }
 
 void Potion::render(sf::RenderWindow &window) {
-  window.draw(this->rectangle);
+  window.draw(*this->rectangle);
 }
 
 void Potion::update() {}

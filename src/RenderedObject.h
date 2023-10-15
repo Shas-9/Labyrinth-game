@@ -13,6 +13,7 @@ class RenderedObject {
   Vector position;
   Vector dimensions;
   string type;
+  sf::RectangleShape* rectangle;
 
  public:
   RenderedObject();

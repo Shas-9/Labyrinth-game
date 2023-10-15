@@ -8,7 +8,7 @@ Cat::Cat(Vector position, Vector dimensions, std::string type, std::string descr
 }
 
 void Cat::render(sf::RenderWindow &window) {
-  window.draw(this->rectangle);
+  window.draw(*this->rectangle);
 }
 
 void Cat::use(Player* player) {

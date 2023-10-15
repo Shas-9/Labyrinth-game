@@ -13,7 +13,7 @@ class Item : public RenderedObject {
   Item(Vector position, Vector dimensions, std::string type,
        std::string description);
   virtual void use(Player* player);
-  virtual void render();
+  virtual void render(sf::RenderWindow &window);
   virtual void update();
 
   std::string getType();

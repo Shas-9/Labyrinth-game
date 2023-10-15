@@ -13,6 +13,8 @@ class Potion : public Item {
          std::string description, int health_regen);
   void use(Player* player);
   void render(sf::RenderWindow &window);
+
+  virtual void update();
 };
 
 #endif

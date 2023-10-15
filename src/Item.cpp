@@ -13,7 +13,7 @@ std::string Item::getType() {
 }
 
 void Item::render(sf::RenderWindow &window) {
-  window.draw(this->rectangle);
+  window.draw(*this->rectangle);
 }
 
 void Item::update() {}
