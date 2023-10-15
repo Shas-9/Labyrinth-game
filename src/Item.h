@@ -2,7 +2,7 @@
 #define ITEM_INCLUDE
 
 #include "RenderedObject.h"
-#include "Player.h"
+class Player;
 
 class Item : public RenderedObject {
  protected:

@@ -22,7 +22,6 @@ class Entity : public RenderedObject {
          int movement_speed, int health, int attack_damage,
          string attack_animation, string death_animation);
   void changePosition(Vector position);
-  void update();
 
   int getHealth();
   int getMaxHealth();
