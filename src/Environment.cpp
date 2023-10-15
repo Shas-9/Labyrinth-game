@@ -170,3 +170,23 @@ Obstacle* Environment::generatePaths() {
 Obstacle* Environment::getObstacles() {
   return this->obstacles;
 }
+
+Item* Environment::getItems() {
+  return this->items;
+}
+
+Enemy* Environment::getEnemies() {
+  return this->enemies;
+}
+
+int Environment::getObstaclesNum() {
+  return this->obstacles_num;
+}
+
+int Environment::getItemsNum() {
+  return this->items_num;
+}
+
+int Environment::getEnemiesNum() {
+  return this->enemies_num;
+}

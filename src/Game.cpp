@@ -12,5 +12,4 @@ Game::Game(sf::RenderWindow *window_ptr) {
 void Game::updateAll() {
   if (!this->isGamePaused) {
     }
-  }
 }

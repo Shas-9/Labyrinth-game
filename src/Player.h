@@ -3,12 +3,13 @@
 
 #include "Entity.h"
 #include "Environment.h"
+#include "Enemy.h"
 // #include "Weapon.h"
 
 class Player : public Entity {
  protected:
   int score;
-  Weapon* current_item;
+  // Weapon* current_item;
   Environment* environment;
 
  public:
@@ -22,11 +23,14 @@ class Player : public Entity {
   void moveRight();
   void moveLeft();
   void attack();  // If Player has Weapon, use it instead
-  void pickUpItem(Item* item);
+  void pickUpItem();
   void dropItem();
   int getScore();
-  Item* getNearbyItem();
-  void render(sf::RenderWindow &window);
+  // Item* getNearbyItem();
+
+  void getNearbyItem();
+
+  void update() override;
 };
 
 #endif
