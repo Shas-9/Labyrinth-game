@@ -1,9 +1,9 @@
 #include "Environment.h"
 #include "MazeGenerator.h"
 
-Environment::Environment() {
+Environment::Environment(sf::Texture* obstacles_texture, sf::Texture* items_textures, sf::Texture* enemies_textures) {
   // Generate the paths
-  MazeGenerator* maze_generator = new MazeGenerator();
+  MazeGenerator* maze_generator = new MazeGenerator(obstacles_texture);
   maze_generator->generatePaths();
   Obstacle* map_obstacles = maze_generator->getObstacles();
   this->obstacles_num = maze_generator->getObstaclesNum();

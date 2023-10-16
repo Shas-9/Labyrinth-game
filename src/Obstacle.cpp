@@ -7,41 +7,21 @@ Obstacle::Obstacle()
   : RenderedObject(Vector(0, 0), Vector(10, 10), "obstacle") {}
 
 // The constructor function for the object
-Obstacle::Obstacle(Vector position, string type, Vector dimensions)
+Obstacle::Obstacle(Vector position, string type, Vector dimensions, sf::Texture* texture)
   : RenderedObject(position, dimensions, type) {
-  // std::cout << "Obstacle {" << this->dimensions.getX() << ", " << this->dimensions.getY() << "}" << std::endl;
-  // Create the rectanglular obstacle object
-  this->rectangle = new sf::RectangleShape();
-
-  // Set the size of the obstacle
-  this->rectangle->setSize(sf::Vector2f(this->dimensions.getX(), this->dimensions.getY()));
-
-  // Set the position of the obstacle
-  this->rectangle->setPosition(sf::Vector2f(this->position.getX(), this->position.getY()));
-
-
-  sf::Texture* texture = new sf::Texture();
-  texture->create(100, 100);
-  texture->loadFromFile("textures/stone_wall.png");
-  // texture.
-  
-  texture->setRepeated(true);
-  
-
-  // sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, 10, 10);
-  // sf::Sprite *sprite = new sf::Sprite(*texture, *rectSourceSprite);
-
-
-
-  this->rectangle->setTexture(texture, true);
+  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, this->getDimensions().getX() / 3, this->getDimensions().getY() / 3);
+  this->sprite = new sf::Sprite();
+  sprite->setTexture(*texture);
+  sprite->setTextureRect(*rectSourceSprite);
+  sprite->scale(sf::Vector2f(3, 3));
 }
 
 // This function takes in the window object and draws the object
 void Obstacle::render(sf::RenderWindow *window, Vector camera_position) {
-  this->rectangle->setPosition(
+  this->sprite->setPosition(
     sf::Vector2f(this->position.getX() - camera_position.getX() + 500, this->position.getY() - camera_position.getY() + 400)
   );
-  window->draw(*this->rectangle);
+  window->draw(*this->sprite);
 }
 
 // Obstacle update function should do nothing.

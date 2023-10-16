@@ -8,11 +8,11 @@
 
 class Obstacle : public RenderedObject {
 private:
-  sf::RectangleShape* rectangle;
+  sf::Sprite* sprite;
 
 public:
   Obstacle();
-  Obstacle(Vector position, string type, Vector dimensions);
+  Obstacle(Vector position, string type, Vector dimensions, sf::Texture* texture);
   void update();
   void render(sf::RenderWindow* window, Vector camera_position);
   void printData(std::ofstream* outfile);

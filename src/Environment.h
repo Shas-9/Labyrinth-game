@@ -21,7 +21,7 @@ class Environment {
   sf::RenderWindow *window_ptr;
 
  public:
-  Environment();
+  Environment(sf::Texture* obstacles_texture, sf::Texture* items_textures, sf::Texture* enemies_textures);
   void render(sf::RenderWindow *window_ptr);
 
   int getObstaclesNum();

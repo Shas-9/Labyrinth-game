@@ -1,5 +1,9 @@
 #include "MazeGenerator.h"
 
+
+MazeGenerator::MazeGenerator(sf::Texture* obstacles_texture) {
+  this->obstacles_texture = obstacles_texture;
+}
 void MazeGenerator::setValidMazeNeighboringPoints(
   int* possible_visiting_points_num_ptr,
   PointList* possible_visiting_points_ptr,
@@ -313,27 +317,27 @@ Obstacle** MazeGenerator::computeGrid(int x, int y, int gridSize, int boxSize, i
 
       // If the left side is set to true add the left side of the box
       if (sides_of_box[0] == true) {
-        Obstacle* obs = new Obstacle(Vector(boxX, boxY), "obstacle", Vector(thickness, boxSize));
+        Obstacle* obs = new Obstacle(Vector(boxX, boxY), "obstacle", Vector(thickness, boxSize), this->obstacles_texture);
         total_obstacles.push_back(obs);
       }
 
 
       // If the right side is set to true add the right side of the box
       if (sides_of_box[1] == true) {
-        Obstacle* obs = new Obstacle(Vector(boxX + boxSize - thickness, boxY), "obstacle", Vector(thickness, boxSize));
+        Obstacle* obs = new Obstacle(Vector(boxX + boxSize - thickness, boxY), "obstacle", Vector(thickness, boxSize), this->obstacles_texture);
         total_obstacles.push_back(obs);
       }
 
 
       // If the top side is set to true add the top side of the box
       if (sides_of_box[2] == true) {
-        Obstacle* obs = new Obstacle(Vector(boxX, boxY), "obstacle", Vector(boxSize, thickness));
+        Obstacle* obs = new Obstacle(Vector(boxX, boxY), "obstacle", Vector(boxSize, thickness), this->obstacles_texture);
         total_obstacles.push_back(obs);
       }
 
       // If the bottom side is set to true add the bottom side of the box
       if (sides_of_box[3] == true) {
-        Obstacle* obs = new Obstacle(Vector(boxX, boxY + boxSize - thickness), "obstacle", Vector(boxSize, thickness));
+        Obstacle* obs = new Obstacle(Vector(boxX, boxY + boxSize - thickness), "obstacle", Vector(boxSize, thickness), this->obstacles_texture);
         total_obstacles.push_back(obs);
       }
     }

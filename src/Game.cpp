@@ -1,13 +1,18 @@
 #include "Game.h"
+#include "Utility.h"
 #include "Button.h"
 // Default Game constructer does nothing (window object required)
 Game::Game() {}
 
 Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
+  Utility* util = new Utility();
+  util->setObstacleTexture();
+
   this->window_ptr = window_ptr;
-  this->environment = new Environment();
+  this->environment = new Environment(util->getObstacleTexture(), util->getObstacleTexture(), util->getObstacleTexture());
   this->isGamePaused = false;
   this->isGameOver = false;
+
 
   // Create the player object
   this->player = Player(
@@ -26,7 +31,6 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
   this->event_ptr = event_ptr;
 
   Button menu("Pause", Vector(780, 20), Vector(200, 50), sf::Color(136, 149, 168), sf::Color::Black, 24);
-  Obstacle *test_obs = new Obstacle(Vector(0, 0), "obstacle", Vector(30, 200));
 
   // Screen loop
   while ((*this->window_ptr).isOpen()) {
@@ -103,7 +107,6 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
 
     this->player.render(this->window_ptr);
     
-    test_obs->render(this->window_ptr, this->player.getPosition());
     // Display on the screen
     for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
       this->environment->getObstacles()[i].render(this->window_ptr, player.getPosition());

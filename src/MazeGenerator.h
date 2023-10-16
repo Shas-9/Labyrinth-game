@@ -31,6 +31,7 @@ class MazeGenerator {
 private:
   int obstacles_num;
   Obstacle* obstacles;
+  sf::Texture* obstacles_texture;
 
   void printGrid(int grid[][MAZE_HEIGHT]);
   void printPointsVisited(PointList points);
@@ -45,6 +46,7 @@ private:
     PointList* points_visited_ptr, Point current_point
   );
 public:
+  MazeGenerator(sf::Texture* obstacles_texture);
   void generatePaths();
   Obstacle* getObstacles();
   int getObstaclesNum();
