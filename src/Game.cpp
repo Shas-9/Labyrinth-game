@@ -6,18 +6,23 @@ Game::Game() {}
 
 Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
   Utility* util = new Utility();
-  util->setObstacleTexture();
+  util->loadObstacleTexture();
+  util->loadGroundTexture();
+  util->loadPlayerTexture();
 
   this->window_ptr = window_ptr;
-  this->environment = new Environment(util->getObstacleTexture(), util->getObstacleTexture(), util->getObstacleTexture());
+  this->environment = new Environment(
+    util->getObstacleTexture(),
+    util->getObstacleTexture(),
+    util->getObstacleTexture()
+  );
   this->isGamePaused = false;
   this->isGameOver = false;
 
-
   // Create the player object
   this->player = Player(
-    Vector(300, 300),
-    Vector(50, 50),
+    Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
+    Vector(140, 180),
     "player",
     "movement_animation",
     2,
@@ -25,12 +30,20 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
     10,
     "attack_animation",
     "death_animation",
-    this->environment
+    this->environment,
+    util->getPlayerTexture()
   );
 
   this->event_ptr = event_ptr;
 
-  Button menu("Pause", Vector(780, 20), Vector(200, 50), sf::Color(136, 149, 168), sf::Color::Black, 24);
+  Button pause_button("Pause", Vector(780, 20), Vector(200, 50), sf::Color(136, 149, 168), sf::Color::Black, 24);
+
+  // Loading ground textures
+  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, 60000, 60000);
+  sf::Sprite* ground_sprite = new sf::Sprite();
+  ground_sprite->setTexture(*util->getGroundTexture());
+  ground_sprite->setTextureRect(*rectSourceSprite);
+  ground_sprite->scale(sf::Vector2f(3, 3));
 
   // Screen loop
   while ((*this->window_ptr).isOpen()) {
@@ -73,7 +86,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
         break;
 
         // case sf::Event::MouseButtonPressed:
-        //   if ((menu.isMouseOver(*this->window_ptr))) {
+        //   if ((pause_button.isMouseOver(*this->window_ptr))) {
         //     std::cout << "Menu button pressed" << std::endl;
         //     // menu_button_pressed = true;
         //     return;
@@ -81,10 +94,10 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
         //   break;
 
         // case sf::Event::MouseMoved:
-        //   if (menu.isMouseOver(*this->window_ptr)) {
-        //     menu.setBackToColor(sf::Color::Red);
+        //   if (pause_button.isMouseOver(*this->window_ptr)) {
+        //     pause_button.setBackToColor(sf::Color::Red);
         //   } else {
-        //     menu.setBackToColor(sf::Color::Blue);
+        //     pause_button.setBackToColor(sf::Color::Blue);
         //   }
         //   break;
       }
@@ -105,15 +118,24 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
 
     (*this->window_ptr).clear();
 
+    // Render the ground
+    ground_sprite->setPosition(sf::Vector2f(-player.getPosition().getX() + 500, -player.getPosition().getY() + 400));
+    this->window_ptr->draw(*ground_sprite);
+
+    // Render the player
     this->player.render(this->window_ptr);
-    
-    // Display on the screen
+
+    // Render all obstacles/walls of the cave
     for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
       this->environment->getObstacles()[i].render(this->window_ptr, player.getPosition());
     }
 
-    menu.drawButton(*this->window_ptr);
+    // Render the pause button
+    pause_button.drawButton(*this->window_ptr);
+
+    // Display the current frame
     (*this->window_ptr).display();
+
   }
 }
 

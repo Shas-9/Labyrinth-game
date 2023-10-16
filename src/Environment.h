@@ -7,6 +7,7 @@
 #include "Item.h"
 #include "Obstacle.h"
 #include "RenderedObject.h"
+#include "MazeGenerator.h"
 
 class Environment {
  private:
