@@ -24,6 +24,7 @@ class Game {
   void renderAll();
   void pause();
   void endGame();
+  bool pauseScreen();
 };
 
 #endif
