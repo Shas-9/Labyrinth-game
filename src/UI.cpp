@@ -277,6 +277,7 @@ bool UI::enterName() {
         } else if ((*this->event_ptr).text.unicode == 13) {
           this->player_name = name;
           this->startGame();
+          return true;
         }
         break;
 

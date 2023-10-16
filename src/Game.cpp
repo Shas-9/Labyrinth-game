@@ -51,7 +51,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
   ground_sprite->scale(sf::Vector2f(3, 3));
 
   // Screen loop
-  while ((*this->window_ptr).isOpen()) {
+  while ((*this->window_ptr).isOpen() && !(this->isGameOver)) {
 
     // Event loop
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
@@ -234,7 +234,8 @@ bool Game::pauseScreen() {
 
         if ((quit_game_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Quit game button pressed" << std::endl;
-          (*this->window_ptr).close();
+          this->isGameOver = true;
+          return true;
         }
         break;
       }
