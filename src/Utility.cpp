@@ -8,7 +8,9 @@ void Utility::frames_handler(
   bool moving_left,
   bool moving_right,
   bool moving_up,
-  bool moving_down) {
+  bool moving_down,
+  int speed_factor
+) {
   bool is_moving = true;
 
   if (moving_left) {
@@ -24,8 +26,8 @@ void Utility::frames_handler(
   }
 
   if (is_moving) {
-    (*current_animation_frame) = (*current_animation_frame) == 399 ? 0 : (*current_animation_frame) + 1;
-    sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / 100]);
+    (*current_animation_frame) = (*current_animation_frame) == (3999/speed_factor) ? 0 : (*current_animation_frame) + 1;
+    sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / (1000/speed_factor)]);
   } else {
     sprite->setTextureRect(*walking_frames[(*current_frames_index)][0]);
   }

@@ -1,6 +1,5 @@
 #include "Game.h"
-#include "Utility.h"
-#include "Button.h"
+
 // Default Game constructer does nothing (window object required)
 Game::Game() {}
 
@@ -25,7 +24,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
     Vector(140, 180),
     "player",
     "movement_animation",
-    8,
+    4,
     100,
     10,
     "attack_animation",

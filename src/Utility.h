@@ -25,12 +25,14 @@ public:
     bool moving_left,
     bool moving_right,
     bool moving_up,
-    bool moving_down
+    bool moving_down,
+    int speed_factor
   );
+  
+  static vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions);
 
   void loadPlayerTexture();
   sf::Texture* getPlayerTexture();
-  vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions);
 
   void loadEnemyTexture();
   sf::Texture* getEnemyTexture();

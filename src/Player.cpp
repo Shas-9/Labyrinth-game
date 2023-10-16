@@ -33,10 +33,8 @@ Player::Player(
   this->moving_down = false;
 
   // Loading textures
-
-  Utility* util = new Utility();
-
-  this->walking_frames = util->getPlayerWalkingFrames(this->getDimensions());
+  // Utility* util = new Utility();
+  this->walking_frames = Utility::getPlayerWalkingFrames(this->getDimensions());
 
   this->current_frames_index = 0;
   this->current_animation_frame = 0;
@@ -65,7 +63,6 @@ void Player::moveUp() {
 
   if (!this->canMove()) {
     this->position.set(this->position.getX(), old_position.getY());
-
   }
 }
 
@@ -228,7 +225,8 @@ void Player::render(sf::RenderWindow *window) {
     moving_left,
     moving_right,
     moving_up,
-    moving_down
+    moving_down,
+    20
   );
 
   this->sprite->setPosition(sf::Vector2f(500, 400));
