@@ -11,11 +11,13 @@ class Game {
   Environment *environment;
   Player player;
   bool isGamePaused;
+  bool isGameOver;
+  sf::Event* event_ptr;
   sf::RenderWindow *window_ptr;
 
  public:
   Game();
-  Game(sf::RenderWindow *window);
+  Game(sf::RenderWindow *window, sf::Event* event_ptr);
   void updateAll();
   void renderAll();
   void pause();

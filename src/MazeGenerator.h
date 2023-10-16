@@ -20,8 +20,8 @@ using std::vector;
 
 #define MAZE_WIDTH 14
 #define MAZE_HEIGHT 14
-#define MAZE_BOX_SIZE 200
-#define MAZE_BOX_THICKNESS 48
+#define MAZE_BOX_SIZE 7000
+#define MAZE_BOX_THICKNESS 200
 
 #define Point pair<int, int>
 #define PointList vector<Point>
@@ -31,6 +31,7 @@ class MazeGenerator {
 private:
   int obstacles_num;
   Obstacle* obstacles;
+  sf::Texture* obstacles_texture;
 
   void printGrid(int grid[][MAZE_HEIGHT]);
   void printPointsVisited(PointList points);
@@ -45,8 +46,10 @@ private:
     PointList* points_visited_ptr, Point current_point
   );
 public:
+  MazeGenerator(sf::Texture* obstacles_texture);
   void generatePaths();
   Obstacle* getObstacles();
+  int getObstaclesNum();
 };
 
 #endif

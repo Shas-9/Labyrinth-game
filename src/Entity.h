@@ -18,7 +18,7 @@ class Entity : public RenderedObject {
 
  public:
   Entity();
-  Entity(Vector position, string type, string movement_animation,
+  Entity(Vector position, Vector dimensions, string type, string movement_animation,
          int movement_speed, int health, int attack_damage,
          string attack_animation, string death_animation);
   void changePosition(Vector position);
