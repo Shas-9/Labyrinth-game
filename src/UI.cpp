@@ -7,6 +7,8 @@
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
+#define BUTTON_TEXT_SIZE int (40)
+#define BUTTON_SIZE Vector (250, 110)
 
 // Default constructor
 UI::UI() { UI(Vector(600, 600)); }
@@ -27,11 +29,11 @@ UI::UI(Vector screen_dimensions) {
   this->window_ptr = &window;
   // this->game = Game(this->window_ptr);
 
-  Button tutorial_btn("How to play", Vector(700, 600), Vector(152, 65),
-    TUTORIAL_BUTTON_COLOR, sf::Color::White, 24, 3);
+  Button tutorial_btn("How to play", Vector(1344, 810), BUTTON_SIZE,
+    TUTORIAL_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
 
-  Button play_button("Play Game", Vector(150, 600), Vector(150, 65),
-    PLAY_BUTTON_COLOR, sf::Color::White, 24);
+  Button play_button("Play Game", Vector(288, 810), BUTTON_SIZE,
+    PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
 
   sf::Event event;
   this->event_ptr = &event;
@@ -102,9 +104,9 @@ void UI::renderUI() {
   cat_font.loadFromFile("fonts/cat_font.ttf");
   cat_title.setFont(cat_font);
   cat_title.setString("CatQuest");
-  cat_title.setCharacterSize(170);
+  cat_title.setCharacterSize(200);
   cat_title.setFillColor(sf::Color::White);
-  cat_title.setPosition(125, 230);
+  cat_title.setPosition(480, 350);
 
 
   sf::Sprite ui_title;
@@ -139,9 +141,9 @@ void UI::fetchHighScores() {
 bool UI::drawTutorial() {
   std::string how_to_play;
   how_to_play = ("Gameplay Instructions:\n\n"
-    "Use the 'W' 'A' 'S' 'D' keys to move around the screen.\n"
+    "Use the 'W' 'A' 'S' 'D' keys to move around the screen. "
     "Find the cat within the maze to win.\n"
-    "Avoid the spiders, they will decrease your health points.\n"
+    "Avoid the spiders, they will decrease your health points. "
     "If your health reaches 0, you lose.\n\n"
     "Press the menu button to return to the menu.");
 
@@ -153,11 +155,11 @@ bool UI::drawTutorial() {
   sf::Sprite bg_sprite;
   bg_sprite.setTexture(background);
 
-  Button game_instructions(how_to_play, Vector(190, 260), Vector(650, 270),
-    sf::Color::Black, sf::Color::White, 28);
+  Button game_instructions(how_to_play, Vector(590, 420), Vector(650, 270),
+    sf::Color::Black, sf::Color::White, 32);
 
-  Button menu("Back to Menu", Vector(720, 600), Vector(180, 65),
-    PLAY_BUTTON_COLOR, sf::Color::White, 24, 5);
+  Button menu("Back to Menu", Vector(1382, 810), Vector(290, 120),
+    PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
 
   // Screen loop
   while ((*this->window_ptr).isOpen()) {
@@ -207,9 +209,9 @@ bool UI::enterName() {
   score_font.loadFromFile("fonts/MouldyCheese.ttf");
   enter_name.setFont(score_font);
   enter_name.setString("Enter your name: ");
-  enter_name.setCharacterSize(36);
+  enter_name.setCharacterSize(40);
   enter_name.setFillColor(sf::Color::White);
-  enter_name.setPosition(600, 300);
+  enter_name.setPosition(1250, 450);
 
   sf::Text highscores_text;
   highscores_text.setFont(score_font);
@@ -221,9 +223,9 @@ bool UI::enterName() {
   }
 
   highscores_text.setString(highscores_string);
-  highscores_text.setCharacterSize(40);
+  highscores_text.setCharacterSize(50);
   highscores_text.setFillColor(sf::Color::White);
-  highscores_text.setPosition(80, 300);
+  highscores_text.setPosition(220, 450);
 
 
   sf::Texture background;
@@ -235,18 +237,18 @@ bool UI::enterName() {
   bg_sprite.setTexture(background);
 
   std::string name = "";
-  Button name_entered(name, Vector(620, 360), Vector(250, 70), sf::Color::White, sf::Color::Black, 36, 10);
+  Button name_entered(name, Vector(1260, 520), Vector(300, 100), sf::Color::White, sf::Color::Black, BUTTON_TEXT_SIZE, 10);
   name_entered.setCustomFont("fonts/MouldyCheese.ttf");
 
   sf::Text to_play;
   to_play.setFont(score_font);
   to_play.setString("Press enter to play");
-  to_play.setCharacterSize(36);
+  to_play.setCharacterSize(40);
   to_play.setFillColor(sf::Color::White);
-  to_play.setPosition(590, 450);
+  to_play.setPosition(1230, 650);
 
-  Button menu("Back to Menu", Vector(700, 620), Vector(180, 65),
-    PLAY_BUTTON_COLOR, sf::Color::White, 24, 5);
+  Button menu("Back to Menu", Vector(1344, 840), Vector (300, 110),
+    PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 8);
 
 
   // Screen loop

@@ -37,7 +37,7 @@ void Button::setPosition(Vector position) {
 
 
   // Formula for centering text in a button
-  float text_x = (this->position.getX() + (this->button.getSize().x / 2))
+  float text_x = (this->position.getX() - 4 + (this->button.getSize().x / 2))
                  - (this->text.getLocalBounds().width / 2);
   float text_y = (this->position.getY() - this->move_text_pixels + 
                   (this->button.getSize().y / 2)) - (this->text.getLocalBounds().height / 2);
