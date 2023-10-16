@@ -1,6 +1,8 @@
 #ifndef ENVIRONMENT_INCLUDE
 #define ENVIRONMENT_INCLUDE
 
+#include <SFML/Graphics.hpp>
+
 #include "Enemy.h"
 #include "Item.h"
 #include "Obstacle.h"
@@ -16,9 +18,11 @@ class Environment {
   Item* items;
   Enemy* enemies;
 
+  sf::RenderWindow *window_ptr;
+
  public:
   Environment();
-  void render();
+  void render(sf::RenderWindow *window_ptr);
 
   int getObstaclesNum();
   int getItemsNum();

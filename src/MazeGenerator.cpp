@@ -351,3 +351,4 @@ Obstacle** MazeGenerator::computeGrid(int x, int y, int gridSize, int boxSize, i
 }
 
 Obstacle* MazeGenerator::getObstacles() { return this->obstacles; }
+int MazeGenerator::getObstaclesNum() { return this->obstacles_num; }

@@ -17,7 +17,7 @@ class RenderedObject {
 
  public:
   RenderedObject();
-  RenderedObject(Vector position, string type);
+  RenderedObject(Vector position, Vector dimensions, string type);
 
   /** NEWLY ADDED FUNCTIONS*/
   bool collidingWith(RenderedObject* rendered_object);
@@ -26,7 +26,7 @@ class RenderedObject {
   Vector getDimensions();
   /** */
 
-  void render(sf::RenderWindow& window);
+  void render(sf::RenderWindow* window);
   virtual void update() = 0;
 };
 

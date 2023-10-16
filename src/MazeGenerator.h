@@ -20,8 +20,8 @@ using std::vector;
 
 #define MAZE_WIDTH 14
 #define MAZE_HEIGHT 14
-#define MAZE_BOX_SIZE 200
-#define MAZE_BOX_THICKNESS 48
+#define MAZE_BOX_SIZE 7000
+#define MAZE_BOX_THICKNESS 200
 
 #define Point pair<int, int>
 #define PointList vector<Point>
@@ -47,6 +47,7 @@ private:
 public:
   void generatePaths();
   Obstacle* getObstacles();
+  int getObstaclesNum();
 };
 
 #endif

@@ -7,7 +7,7 @@
 #include <map>
 #include <string>
 
-// #include "Game.h"
+#include "Game.h"
 #include "Vector.h"
 #include "Button.h"
 
@@ -18,7 +18,7 @@ class UI {
   std::string player_name;
   std::map<std::string, int> highscores;
   std::string current_state;
-  // Game game;
+  Game game;
   Vector screen_dimensions;
   sf::RenderWindow* window_ptr;
   sf::Event* event_ptr;
@@ -31,7 +31,8 @@ class UI {
   UI(Vector screen_dimensions);
   UI(int width, int hight);
   void fetchHighScores();
-  void startGames();
+  void startGame();
+  void drawGame();
   void renderScreen();
   void enterName();
 };
