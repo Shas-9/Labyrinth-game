@@ -5,6 +5,8 @@
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
 #define PAUSE_BUTTON_COLOR sf::Color (22, 30, 43)
 #define QUIT_BUTTON_COLOR sf::Color (74, 74, 46)
+#define BUTTON_TEXT_SIZE int (40)
+#define BUTTON_SIZE Vector (250, 110)
 
 // Default Game constructer does nothing (window object required)
 Game::Game() {}
@@ -41,10 +43,11 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
 
   this->event_ptr = event_ptr;
 
-  Button pause_button("Pause Game", Vector(780, 20), Vector(200, 60), PAUSE_BUTTON_COLOR, sf::Color::White, 24, 3);
+  Button pause_button("Pause Game", Vector(1600, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
+                      BUTTON_TEXT_SIZE, 10);
 
   std::string hp_string = "HP: ";
-  Button hp_text(hp_string, Vector(60, 10), Vector(100, 60), sf::Color(0,0,0,0), sf::Color::White, 32, 5);
+  Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color(0,0,0,0), sf::Color::White, 44, 5);
   hp_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   // Loading ground textures
@@ -197,19 +200,19 @@ bool Game::pauseScreen() {
   sf::Text pause_text;
   pause_text.setFont(cat_font);
   pause_text.setString("Game Paused");
-  pause_text.setCharacterSize(100);
+  pause_text.setCharacterSize(130);
   pause_text.setFillColor(sf::Color::White);
-  pause_text.setPosition(sf::Vector2f(160, 200));
+  pause_text.setPosition(sf::Vector2f(500, 350));
 
   sf::Text resume_text;
   resume_text.setFont(font);
   resume_text.setString("All progress will be lost if you quit");
-  resume_text.setCharacterSize(40);
+  resume_text.setCharacterSize(46);
   resume_text.setFillColor(sf::Color::White);
-  resume_text.setPosition(sf::Vector2f(175, 450));
+  resume_text.setPosition(sf::Vector2f(580, 650));
 
-  Button resume_button("Resume", Vector(150, 600), Vector(150, 60), PAUSE_BUTTON_COLOR, sf::Color::White, 24, 4);
-  Button quit_game_button("Quit Game", Vector(700, 600), Vector(150, 60), QUIT_BUTTON_COLOR, sf::Color::White, 24, 3);
+  Button resume_button("Resume", Vector(300, 800), BUTTON_SIZE, PAUSE_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
+  Button quit_game_button("Quit Game", Vector(1300, 800), BUTTON_SIZE, QUIT_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
 
 
   // Screen loop
