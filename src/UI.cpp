@@ -322,20 +322,48 @@ void UI::startGame() {
   // }
 }
 
-// void UI::pushHighScore() {
-//   int lowest_score;
-//   for (auto& player : this->highscores) {
-//     lowest_score = player.second;
+void UI::pushHighScore() {
+  int lowest_score = this->highscores.begin()->second;
+  std::string key;
 
-//   }
-//   for (auto& player: this->highscores) {
-//     if (this->score > )
-//   }
-//   std::fstream names_file("highscores/names.txt");
-//   std::fstream scores_file("highscores/scores.txt");
+  for (auto& player : this->highscores) {
+    if (player.second < lowest_score) {
+      lowest_score = player.second;
+      key = player.first;
+    }
+  }
 
-//   for (auto& player : this->highscores) {
-//     names_file << player.first << "\n";
-//     scores_file << player.second << "\n";
-//   }
-// }
+  if (this->score >= lowest_score) {
+    this->highscores.erase(key);
+    this->highscores.insert({ this->player_name, this->score });
+
+    std::vector <int> scores;
+    for (auto& player : this->highscores) {
+      scores.push_back(player.second);
+    }
+
+    // sorting the highscores from highest to lowest
+    std::sort(scores.begin(), scores.end(), std::greater<int>());
+
+    std::map<std::string, int> new_highscores;
+    for (int i = 0; i < scores.size(); i++) {
+      for (auto& player : this->highscores) {
+        if (player.second == scores[i]) {
+          new_highscores.insert({ player.first, player.second });
+        }
+      }
+    }
+
+    this->highscores = new_highscores;
+
+    std::ofstream names_file("highscores/names.txt");
+    std::ofstream scores_file("highscores/scores.txt");
+
+    for (auto& player : this->highscores) {
+      names_file << player.first << "\n";
+      scores_file << player.second << "\n";
+
+      std::cout << player.first << " - " << player.second << std::endl;
+    }
+  }
+}

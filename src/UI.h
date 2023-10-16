@@ -36,6 +36,7 @@ class UI {
   void startGame();
   void drawGame();
   void renderScreen();
+  void pushHighScore();
 };
 
 #endif
