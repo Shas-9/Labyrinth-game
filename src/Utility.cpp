@@ -8,7 +8,9 @@ void Utility::frames_handler(
   bool moving_left,
   bool moving_right,
   bool moving_up,
-  bool moving_down) {
+  bool moving_down,
+  int speed_factor
+) {
   bool is_moving = true;
 
   if (moving_left) {
@@ -24,8 +26,8 @@ void Utility::frames_handler(
   }
 
   if (is_moving) {
-    (*current_animation_frame) = (*current_animation_frame) == 399 ? 0 : (*current_animation_frame) + 1;
-    sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / 100]);
+    (*current_animation_frame) = (*current_animation_frame) == (3999 / speed_factor) ? 0 : (*current_animation_frame) + 1;
+    sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / (1000 / speed_factor)]);
   } else {
     sprite->setTextureRect(*walking_frames[(*current_frames_index)][0]);
   }
@@ -41,7 +43,58 @@ sf::Texture* Utility::getGroundTexture() {
   return this->ground_texture;
 }
 
-vector<vector<sf::IntRect*>> Utility::getPlayerWalkingFrames(Vector dimensions) {
+vector<vector<sf::IntRect*>> Utility::getIronSpiderWalkingFrames(Vector dimensions, int scale) {
+  sf::IntRect* front_frame_1 = new sf::IntRect(7, 9, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* front_frame_2 = new sf::IntRect(7 + 39, 9, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* front_frame_3 = new sf::IntRect(7 + 39 * 2, 9, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* front_frame_4 = new sf::IntRect(7 + 39 * 3, 9, dimensions.getX() / scale, dimensions.getY() / scale);
+
+  sf::IntRect* back_frame_1 = new sf::IntRect(7, 50, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* back_frame_2 = new sf::IntRect(7 + 39, 50, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* back_frame_3 = new sf::IntRect(7 + 39 * 2, 50, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* back_frame_4 = new sf::IntRect(7 + 39 * 3, 50, dimensions.getX() / scale, dimensions.getY() / scale);
+
+  sf::IntRect* right_frame_1 = new sf::IntRect(7, 88, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* right_frame_2 = new sf::IntRect(7 + 39 * 1, 88, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* right_frame_3 = new sf::IntRect(7 + 39 * 2, 88, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* right_frame_4 = new sf::IntRect(7 + 39 * 3, 88, dimensions.getX() / scale, dimensions.getY() / scale);
+
+  sf::IntRect* left_frame_1 = new sf::IntRect(7 , 126, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* left_frame_2 = new sf::IntRect(7 + 39 * 1, 126, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* left_frame_3 = new sf::IntRect(7 + 39 * 2, 126, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* left_frame_4 = new sf::IntRect(7 + 39 * 3, 126, dimensions.getX() / scale, dimensions.getY() / scale);
+
+  vector<vector<sf::IntRect*>> walking_frames = {
+    {
+      left_frame_1,
+      left_frame_2,
+      left_frame_3,
+      left_frame_4
+    },
+    {
+      right_frame_1,
+      right_frame_2,
+      right_frame_3,
+      right_frame_4
+    },
+    {
+      back_frame_1,
+      back_frame_2,
+      back_frame_3,
+      back_frame_4
+    },
+    {
+      front_frame_1,
+      front_frame_2,
+      front_frame_3,
+      front_frame_4
+    }
+  };
+
+  return walking_frames;
+}
+
+vector<vector<sf::IntRect*>> Utility::getPlayerWalkingFrames(Vector dimensions, int scale) {
   sf::IntRect* front_frame_1 = new sf::IntRect(3, 2, dimensions.getX() / 10, dimensions.getY() / 10);
   sf::IntRect* front_frame_2 = new sf::IntRect(3 + 21, 2, dimensions.getX() / 10, dimensions.getY() / 10);
   sf::IntRect* front_frame_3 = new sf::IntRect(2 + 41, 2, dimensions.getX() / 10, dimensions.getY() / 10);
@@ -90,6 +143,16 @@ vector<vector<sf::IntRect*>> Utility::getPlayerWalkingFrames(Vector dimensions) 
   };
 
   return walking_frames;
+}
+
+void Utility::loadIronSpiderTexture() {
+  this->iron_spider_texture = new sf::Texture();
+  iron_spider_texture->loadFromFile("textures/iron_spider.png");
+  iron_spider_texture->setRepeated(true);
+}
+
+sf::Texture* Utility::getIronSpiderTexture() {
+  return this->iron_spider_texture;
 }
 
 void Utility::loadPlayerTexture() {

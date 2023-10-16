@@ -5,6 +5,8 @@
 
 #include "Player.h"
 #include "Environment.h"
+#include "Utility.h"
+#include "Button.h"
 
 class Game {
  private:
