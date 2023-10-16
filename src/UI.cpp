@@ -321,3 +321,16 @@ void UI::startGame() {
     // }
   // }
 }
+
+void UI::pushHighScore() {
+  for (auto& player: this->highscores) {
+    if (this->score > )
+  }
+  std::fstream names_file("highscores/names.txt");
+  std::fstream scores_file("highscores/scores.txt");
+
+  for (auto& player : this->highscores) {
+    names_file << player.first << "\n";
+    scores_file << player.second << "\n";
+  }
+}
