@@ -1,5 +1,4 @@
 #include "Environment.h"
-#include "MazeGenerator.h"
 
 Environment::Environment(sf::Texture* obstacles_texture, sf::Texture* items_textures, sf::Texture* enemies_textures) {
   // Generate the paths

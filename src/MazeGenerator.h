@@ -18,10 +18,10 @@ using std::pair;
 using std::stack;
 using std::vector;
 
-#define MAZE_WIDTH 14
-#define MAZE_HEIGHT 14
-#define MAZE_BOX_SIZE 7000
-#define MAZE_BOX_THICKNESS 200
+#define MAZE_WIDTH 10
+#define MAZE_HEIGHT 10
+#define MAZE_BOX_SIZE 2000
+#define MAZE_BOX_THICKNESS 500
 
 #define Point pair<int, int>
 #define PointList vector<Point>

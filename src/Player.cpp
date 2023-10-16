@@ -3,38 +3,56 @@
 // Default constructor for player does nothing (Environment required)
 Player::Player() {}
 
-Player::Player(Vector position, Vector dimensions, string type, string movement_animation,
-  int movement_speed, int health, int attack_damage,
-  string attack_animation, string death_animation,
-  Environment* environment)
-  : Entity(position, dimensions, type, movement_animation, movement_speed, health,
-    attack_damage, attack_animation, death_animation),
-  environment(environment) {
+Player::Player(
+  Vector position,
+  Vector dimensions,
+  string type,
+  string movement_animation,
+  int movement_speed,
+  int health,
+  int attack_damage,
+  string attack_animation,
+  string death_animation,
+  Environment* environment,
+  sf::Texture* player_texture
+) : Entity(
+  position,
+  dimensions,
+  type,
+  movement_animation,
+  movement_speed,
+  health,
+  attack_damage,
+  attack_animation,
+  death_animation
+), environment(environment) {
+  // Movement
   this->moving_left = false;
   this->moving_right = false;
   this->moving_up = false;
   this->moving_down = false;
+
+  // Loading textures
+
+  Utility* util = new Utility();
+
+  this->walking_frames = util->getPlayerWalkingFrames(this->getDimensions());
+
+  this->current_frames_index = 0;
+  this->current_animation_frame = 0;
+
+  this->sprite = new sf::Sprite();
+  sprite->setTexture(*player_texture);
+  sprite->scale(sf::Vector2f(10, 10));
+  sprite->setTextureRect(*this->walking_frames[0][0]);
 }
 
 bool Player::canMove() {
-  // Obstacle test_obs(Vector(0, 0), "obstacle", Vector(30, 200));
-  // if (this->collidingWith(&test_obs)) {
-  //   // If player is colliding with an obstacle, go back to old position.
-  //   // this->position.set(old_position.getX(), old_position.getY());
-  //   return false;
-  //   // break;
-  // }
-  // return true;
-  // std::cout << "{" << this->position.getX() << ", " << this->position.getY() << "}" << std::endl;
   // Loop over all obstacles and check if player is running into them
   for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
-    // std::cout << "{" << this->environment->getObstacles()[i].getPosition().getX() << ", " << this->environment->getObstacles()[i].getPosition().getY() << "}" << std::endl;
-
     if (this->collidingWith(&(this->environment->getObstacles()[i]))) {
       // If player is colliding with an obstacle, go back to old position.
       return false;
-      // this->position.set(old_position.getX(), old_position.getY());
-      break;
     }
   }
   return true;
@@ -154,6 +172,7 @@ void Player::getNearbyItem() {
   }
 }
 
+// Set whether the player is moving in a given direction or not
 // 0 = left
 // 1 = right
 // 2 = up
@@ -178,6 +197,7 @@ void Player::setMovementDirection(int direction, bool is_moving) {
   }
 }
 
+// Get whether the player is moving in a current direction or not
 int Player::getMovementDirection(int direction) {
   switch (direction) {
   case 0:
@@ -200,16 +220,19 @@ int Player::getMovementDirection(int direction) {
 }
 
 void Player::render(sf::RenderWindow *window) {
+  Utility::frames_handler(
+    this->sprite,
+    &this->current_frames_index,
+    &this->current_animation_frame,
+    walking_frames,
+    moving_left,
+    moving_right,
+    moving_up,
+    moving_down
+  );
 
-  // this->rectangle = new sf::RectangleShape();
-
-  // Set the size of the object
-  // this->rectangle->setSize(10, 10);
-
-  // Set the position of the object
-  this->rectangle->setPosition(sf::Vector2f(500, 400));
-
-  window->draw(*this->rectangle);
+  this->sprite->setPosition(sf::Vector2f(500, 400));
+  window->draw(*this->sprite);
 }
 
 void Player::update() {}
