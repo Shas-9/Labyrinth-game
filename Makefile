@@ -8,6 +8,9 @@ O_FILES = $(patsubst src/%.cpp, %.o, $(SRC_FILES))
 
 all: build run
 
+IronSpider.o: src/IronSpider.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
 Potion.o: src/Potion.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 

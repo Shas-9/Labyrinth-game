@@ -7,7 +7,6 @@
 
 class Enemy : public Entity {
 protected:
-      Obstacle* obstacles;
       int sight_distance;
 
 public:
@@ -16,13 +15,11 @@ public:
             Vector position,
             Vector dimensions,
             string type,
-            string movement_animation,
             int movement_speed,
             int health,
             int attack_damage,
-            string attack_animation,
-            string death_animation,
             Obstacle* obstacles,
+            int obstacles_num,
             int sight_distance
       );
       // void trackPlayer();

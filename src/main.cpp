@@ -5,7 +5,7 @@
 #include "Environment.h"
 
 int main() {
-  Vector vector = Vector(1000, 800);
+  Vector vector = Vector(1920, 1080);
   UI* ui = new UI(vector);
 
   ui->fetchHighScores();

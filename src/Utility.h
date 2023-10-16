@@ -14,6 +14,7 @@ private:
   sf::Texture* ground_texture;
   sf::Texture* health_texture;
   sf::Texture* enemies_texture;
+  sf::Texture* iron_spider_texture;
   sf::Texture* player_texture;
 
 public:
@@ -28,14 +29,15 @@ public:
     bool moving_down,
     int speed_factor
   );
-  
-  static vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions);
+
+  static vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions, int scale);
+  static vector<vector<sf::IntRect*>> getIronSpiderWalkingFrames(Vector dimensions, int scale);
 
   void loadPlayerTexture();
   sf::Texture* getPlayerTexture();
 
-  void loadEnemyTexture();
-  sf::Texture* getEnemyTexture();
+  void loadIronSpiderTexture();
+  sf::Texture* getIronSpiderTexture();
 
   void loadObstacleTexture();
   sf::Texture* getObstacleTexture();

@@ -7,98 +7,26 @@ Player::Player(
   Vector position,
   Vector dimensions,
   string type,
-  string movement_animation,
   int movement_speed,
   int health,
   int attack_damage,
-  string attack_animation,
-  string death_animation,
   Environment* environment,
   sf::Texture* player_texture
 ) : Entity(
   position,
   dimensions,
   type,
-  movement_animation,
   movement_speed,
   health,
   attack_damage,
-  attack_animation,
-  death_animation
+  environment->getObstacles(),
+  environment->getObstaclesNum()
 ), environment(environment) {
-  // Movement
-  this->moving_left = false;
-  this->moving_right = false;
-  this->moving_up = false;
-  this->moving_down = false;
-
-  // Loading textures
-  // Utility* util = new Utility();
-  this->walking_frames = Utility::getPlayerWalkingFrames(this->getDimensions());
-
-  this->current_frames_index = 0;
-  this->current_animation_frame = 0;
-
-  this->sprite = new sf::Sprite();
+  int scale = 4;
+  this->walking_frames = Utility::getIronSpiderWalkingFrames(this->getDimensions(), scale);
+  sprite->scale(sf::Vector2f(scale, scale));
   sprite->setTexture(*player_texture);
-  sprite->scale(sf::Vector2f(10, 10));
   sprite->setTextureRect(*this->walking_frames[0][0]);
-}
-
-bool Player::canMove() {
-  // Loop over all obstacles and check if player is running into them
-  for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
-    if (this->collidingWith(&(this->environment->getObstacles()[i]))) {
-      // If player is colliding with an obstacle, go back to old position.
-      return false;
-    }
-  }
-  return true;
-}
-
-// Move player up
-void Player::moveUp() {
-  Vector old_position = this->position;
-  this->position.set(this->position.getX(), this->position.getY() - movement_speed);
-
-  if (!this->canMove()) {
-    this->position.set(this->position.getX(), old_position.getY());
-  }
-}
-
-// Move player down
-void Player::moveDown() {
-  Vector old_position = this->position;
-  this->position.set(this->position.getX(), this->position.getY() + movement_speed);
-
-  if (!this->canMove()) {
-    this->position.set(this->position.getX(), old_position.getY());
-
-  }
-}
-
-// Move player right
-void Player::moveRight() {
-  Vector old_position = this->position;
-  this->position.set(this->position.getX() + movement_speed, this->position.getY());
-
-  if (!this->canMove()) {
-    this->position.set(old_position.getX(), this->position.getY());
-
-  }
-}
-
-// Move player left
-void Player::moveLeft() {
-  // Save old position
-  Vector old_position = this->position;
-  // Move to new position
-  this->position.set(this->position.getX() - movement_speed, this->position.getY());
-
-  if (!this->canMove()) {
-    this->position.set(old_position.getX(), this->position.getY());
-
-  }
 }
 
 // Attack with weapon if player has one, otherwise attack with fists
@@ -169,52 +97,6 @@ void Player::getNearbyItem() {
   }
 }
 
-// Set whether the player is moving in a given direction or not
-// 0 = left
-// 1 = right
-// 2 = up
-// 3 = down
-void Player::setMovementDirection(int direction, bool is_moving) {
-  switch (direction) {
-  case 0:
-    this->moving_left = is_moving;
-    break;
-  case 1:
-    this->moving_right = is_moving;
-    break;
-  case 2:
-    this->moving_up = is_moving;
-    break;
-  case 3:
-    this->moving_down = is_moving;
-    break;
-
-  default:
-    break;
-  }
-}
-
-// Get whether the player is moving in a current direction or not
-int Player::getMovementDirection(int direction) {
-  switch (direction) {
-  case 0:
-    return this->moving_left;
-    break;
-  case 1:
-    return this->moving_right;
-    break;
-  case 2:
-    return this->moving_up;
-    break;
-  case 3:
-    return this->moving_down;
-    break;
-
-  default:
-    return 0;
-    break;
-  }
-}
 
 void Player::render(sf::RenderWindow *window) {
   Utility::frames_handler(

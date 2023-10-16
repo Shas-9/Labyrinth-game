@@ -8,6 +8,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
   util->loadObstacleTexture();
   util->loadGroundTexture();
   util->loadPlayerTexture();
+  util->loadIronSpiderTexture();
 
   this->window_ptr = window_ptr;
   this->environment = new Environment(
@@ -21,16 +22,14 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
   // Create the player object
   this->player = Player(
     Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
-    Vector(140, 180),
+    // Vector(140, 180),
+    Vector(118, 98),
     "player",
-    "movement_animation",
     4,
     100,
     10,
-    "attack_animation",
-    "death_animation",
     this->environment,
-    util->getPlayerTexture()
+    util->getIronSpiderTexture()
   );
 
   this->event_ptr = event_ptr;

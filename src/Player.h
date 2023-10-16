@@ -12,14 +12,6 @@
 class Player : public Entity {
 protected:
        int score;
-       bool moving_left;
-       bool moving_right;
-       bool moving_up;
-       bool moving_down;
-       sf::Sprite* sprite;
-       vector<vector<sf::IntRect*>> walking_frames;
-       int current_frames_index;
-       int current_animation_frame;
        // Weapon* current_item;
        Environment* environment;
 
@@ -29,27 +21,16 @@ public:
               Vector position,
               Vector dimensions,
               string type,
-              string movement_animation,
               int movement_speed,
               int health,
               int attack_damage,
-              string attack_animation,
-              string death_animation,
               Environment* environment,
               sf::Texture* player_texture
        );
-       void moveUp();
-       void moveDown();
-       void moveRight();
-       void moveLeft();
        void attack();  // If Player has Weapon, use it instead
        void pickUpItem();
        void dropItem();
        int getScore();
-       void setMovementDirection(int direction, bool is_moving);
-       int getMovementDirection(int direction);
-       bool canMove();
-       void frames_handler();
        // Item* getNearbyItem();
 
        void getNearbyItem();
