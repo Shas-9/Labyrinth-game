@@ -43,6 +43,10 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
 
   Button pause_button("Pause Game", Vector(780, 20), Vector(200, 60), PAUSE_BUTTON_COLOR, sf::Color::White, 24, 3);
 
+  std::string hp_string = "HP: ";
+  Button hp_text(hp_string, Vector(60, 10), Vector(100, 60), sf::Color(0,0,0,0), sf::Color::White, 32, 5);
+  hp_text.setCustomFont("fonts/MouldyCheese.ttf");
+
   // Loading ground textures
   sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, 60000, 60000);
   sf::Sprite* ground_sprite = new sf::Sprite();
@@ -142,6 +146,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
 
     (*this->window_ptr).clear();
 
+
     // Render the ground
     ground_sprite->setPosition(sf::Vector2f(-player.getPosition().getX() + 500, -player.getPosition().getY() + 400));
     this->window_ptr->draw(*ground_sprite);
@@ -156,6 +161,11 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
 
     // Render the pause button
     pause_button.drawButton(*this->window_ptr);
+
+    // Render the hp text
+    hp_string = "Health: " + std::to_string(this->player.getHealth());
+    hp_text.setString(hp_string);
+    hp_text.drawButton(*this->window_ptr);
 
     // Display the current frame
     (*this->window_ptr).display();
