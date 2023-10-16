@@ -13,10 +13,11 @@ class RenderedObject {
   Vector position;
   Vector dimensions;
   string type;
+  sf::RectangleShape* rectangle;
 
  public:
   RenderedObject();
-  RenderedObject(Vector position, string type);
+  RenderedObject(Vector position, Vector dimensions, string type);
 
   /** NEWLY ADDED FUNCTIONS*/
   bool collidingWith(RenderedObject* rendered_object);
@@ -25,7 +26,7 @@ class RenderedObject {
   Vector getDimensions();
   /** */
 
-  virtual void render(sf::RenderWindow& window) = 0;
+  void render(sf::RenderWindow* window);
   virtual void update() = 0;
 };
 

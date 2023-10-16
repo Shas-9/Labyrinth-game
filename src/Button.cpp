@@ -1,9 +1,11 @@
 #include "Button.h"
 
+// Default constructor
 Button::Button() {
   this->arial.loadFromFile("fonts/arial.ttf");
 }
 
+// Overloaded constructor
 Button::Button(std::string text, Vector position, Vector size, sf::Color bgcolor, sf::Color textcolor, int charsize): Button() {
   this->text.setString(text);
   this->text.setColor(textcolor);
@@ -16,6 +18,7 @@ Button::Button(std::string text, Vector position, Vector size, sf::Color bgcolor
   this->setPosition(position);
 }
 
+// Changing the color of the button
 void Button::setBackToColor(sf::Color color) {
   this->button.setFillColor(color);
 }
@@ -24,6 +27,7 @@ void Button::setTextColor(sf::Color color) {
   this->text.setColor(color);
 }
 
+// Setting the position of the button and text
 void Button::setPosition(Vector position) {
   this->position = position;
   this->button.setPosition(this->position.getX(), this->position.getY());
@@ -36,11 +40,13 @@ void Button::setPosition(Vector position) {
   this->text.setPosition(text_x, text_y);
 }
 
+// Displying the button on the screen
 void Button::drawButton(sf::RenderWindow &window) {
   window.draw(this->button);
   window.draw(this->text);
 }
 
+// Checking if the mouse is over the button
 bool Button::isMouseOver(sf::RenderWindow &window) {
   float mouse_x = sf::Mouse::getPosition(window).x;
   float mouse_y = sf::Mouse::getPosition(window).y;
@@ -58,6 +64,7 @@ bool Button::isMouseOver(sf::RenderWindow &window) {
   }
 }
 
+// Setting the text of the button
 void Button::setString(std::string text) {
   this->text.setString(text);
   this->setPosition(this->position);

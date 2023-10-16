@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 // Tests whether the constructor with arguements sets attributes for the class
-// The getXPosition and getYPosition should return the corresponding values
+// The getX and getY should return the corresponding values
 Test(vector_suite, test_1) {
   Vector vector(10, 10);
 

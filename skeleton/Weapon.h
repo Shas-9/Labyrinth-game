@@ -10,9 +10,12 @@ class Weapon : public Item {
 
  public:
   Weapon();
+  Weapon(Vector position, Vector dimensions, std::string type,
+         std::string description, int damage);
   void pickUp();
   void drop();
-  void use();
+  int use(Player* player);
+  void render(sf::RenderWindow &window);
 };
 
 #endif

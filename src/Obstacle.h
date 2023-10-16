@@ -2,19 +2,20 @@
 #define OBSTACLE_INCLUDE
 
 #include <SFML/Graphics.hpp>
+#include <fstream>
 
 #include "RenderedObject.h"
 
 class Obstacle : public RenderedObject {
- private:
-  Vector dimensions;
-  sf::RectangleShape* rectangle;
+private:
+  sf::Sprite* sprite;
 
- public:
+public:
   Obstacle();
-  Obstacle(Vector position, string type, Vector dimensions);
+  Obstacle(Vector position, string type, Vector dimensions, sf::Texture* texture);
   void update();
-  void render(sf::RenderWindow& window);
+  void render(sf::RenderWindow* window, Vector camera_position);
+  void printData(std::ofstream* outfile);
 };
 
 #endif
