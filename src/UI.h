@@ -17,6 +17,7 @@ class UI {
   int score;
   std::string player_name;
   std::map<std::string, int> highscores;
+  int num_highscores;
   std::string current_state;
   Game game;
   Vector screen_dimensions;
@@ -25,6 +26,7 @@ class UI {
 
   void renderUI();
   bool drawTutorial();
+  bool enterName();
 
  public:
   UI();
@@ -34,7 +36,6 @@ class UI {
   void startGame();
   void drawGame();
   void renderScreen();
-  void enterName();
 };
 
 #endif

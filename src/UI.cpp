@@ -4,6 +4,10 @@
 #include <iostream>
 #include <string>
 
+#define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
+#define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
+#define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
+
 // Default constructor
 UI::UI() { UI(Vector(600, 600)); }
 
@@ -12,6 +16,8 @@ UI::UI(int width, int height) { UI(Vector(width, height)); }
 
 // Overloaded constructor with Vector
 UI::UI(Vector screen_dimensions) {
+  this->fetchHighScores();
+
   this->screen_dimensions = screen_dimensions;
 
   sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getX(),
@@ -21,11 +27,11 @@ UI::UI(Vector screen_dimensions) {
   this->window_ptr = &window;
   // this->game = Game(this->window_ptr);
 
-  Button tutorial_btn("Tutorial", Vector(600, 500), Vector(150, 100),
-    sf::Color::Yellow, sf::Color::Black, 24);
+  Button tutorial_btn("How to play", Vector(700, 600), Vector(152, 65),
+    TUTORIAL_BUTTON_COLOR, sf::Color::White, 24, 3);
 
-  Button play_button("Play Game", Vector(100, 500), Vector(150, 100),
-    sf::Color::Blue, sf::Color::Black, 24);
+  Button play_button("Play Game", Vector(150, 600), Vector(150, 65),
+    PLAY_BUTTON_COLOR, sf::Color::White, 24);
 
   sf::Event event;
   this->event_ptr = &event;
@@ -43,9 +49,11 @@ UI::UI(Vector screen_dimensions) {
       case sf::Event::MouseButtonPressed:
         if ((play_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Play button pressed" << std::endl;
+          bool menu_button_pressed = false;
 
-          this->enterName();
-          this->startGame(); // TODO: Fix this when Game is implemented
+          while(!(menu_button_pressed)) {
+            menu_button_pressed = this->enterName();
+          }
         } else if (tutorial_btn.isMouseOver(*this->window_ptr)) {
 
           std::cout << "Tutorial button pressed" << std::endl;
@@ -59,15 +67,15 @@ UI::UI(Vector screen_dimensions) {
 
       case sf::Event::MouseMoved:
         if (play_button.isMouseOver(*this->window_ptr)) {
-          play_button.setBackToColor(sf::Color::Red);
+          play_button.setBackToColor(MOUSE_OVER_COLOR);
         } else {
-          play_button.setBackToColor(sf::Color::Blue);
+          play_button.setBackToColor(PLAY_BUTTON_COLOR);
         }
 
         if (tutorial_btn.isMouseOver(*this->window_ptr)) {
-          tutorial_btn.setBackToColor(sf::Color::Red);
+          tutorial_btn.setBackToColor(MOUSE_OVER_COLOR);
         } else {
-          tutorial_btn.setBackToColor(sf::Color::Yellow);
+          tutorial_btn.setBackToColor(TUTORIAL_BUTTON_COLOR);
         }
         break;
       }
@@ -89,9 +97,20 @@ void UI::renderUI() {
     sf::IntRect(0, 0, this->screen_dimensions.getX(),
       this->screen_dimensions.getY()));
 
+  sf::Text cat_title;
+  sf::Font cat_font;
+  cat_font.loadFromFile("fonts/cat_font.ttf");
+  cat_title.setFont(cat_font);
+  cat_title.setString("CatQuest");
+  cat_title.setCharacterSize(170);
+  cat_title.setFillColor(sf::Color::White);
+  cat_title.setPosition(125, 230);
+
+
   sf::Sprite ui_title;
   ui_title.setTexture(title);
   (*this->window_ptr).draw(ui_title);
+  (*this->window_ptr).draw(cat_title);
 }
 
 // Fetching the highscores from the highscores folder
@@ -102,28 +121,43 @@ void UI::fetchHighScores() {
   std::string name;
   std::string score;
 
+  int i = 0;
+
   while (getline(names_file, name)) {
     getline(scores_file, score);
 
     this->highscores.insert({ name, std::stoi(score) });
+    i++;
   }
+
+  this->num_highscores = i + 1;
   names_file.close();
   scores_file.close();
 }
 
 // Displaying the tutorial screen
 bool UI::drawTutorial() {
-  sf::Text how_to_play;
-  sf::Font arial;
-  arial.loadFromFile("fonts/arial.ttf");
-  how_to_play.setFont(arial);
-  how_to_play.setString("Game control instructions");
-  how_to_play.setCharacterSize(24);
-  how_to_play.setFillColor(sf::Color::White);
-  how_to_play.setPosition(100, 100);
+  std::string how_to_play;
+  how_to_play = ("Gameplay Instructions:\n\n"
+    "Use the 'W' 'A' 'S' 'D' keys to move around the screen.\n"
+    "Find the cat within the maze to win.\n"
+    "Avoid the spiders, they will decrease your health points.\n"
+    "If your health reaches 0, you lose.\n\n"
+    "Press the menu button to return to the menu.");
 
-  Button menu("Back to Menu", Vector(100, 500), Vector(200, 150),
-    sf::Color::Blue, sf::Color::Black, 24);
+  sf::Texture background;
+  background.loadFromFile("images/UI.png",
+    sf::IntRect(0, 0, this->screen_dimensions.getX(),
+      this->screen_dimensions.getY()));
+
+  sf::Sprite bg_sprite;
+  bg_sprite.setTexture(background);
+
+  Button game_instructions(how_to_play, Vector(190, 260), Vector(650, 270),
+    sf::Color::Black, sf::Color::White, 28);
+
+  Button menu("Back to Menu", Vector(720, 600), Vector(180, 65),
+    PLAY_BUTTON_COLOR, sf::Color::White, 24, 5);
 
   // Screen loop
   while ((*this->window_ptr).isOpen()) {
@@ -145,9 +179,9 @@ bool UI::drawTutorial() {
 
       case sf::Event::MouseMoved:
         if (menu.isMouseOver(*this->window_ptr)) {
-          menu.setBackToColor(sf::Color::Red);
+          menu.setBackToColor(MOUSE_OVER_COLOR);
         } else {
-          menu.setBackToColor(sf::Color::Blue);
+          menu.setBackToColor(PLAY_BUTTON_COLOR);
         }
         break;
       }
@@ -155,7 +189,8 @@ bool UI::drawTutorial() {
 
     // Display on the screen
     (*this->window_ptr).clear();
-    (*this->window_ptr).draw(how_to_play);
+    (*this->window_ptr).draw(bg_sprite);
+    game_instructions.drawButton(*this->window_ptr);
     menu.drawButton(*this->window_ptr);
     (*this->window_ptr).display();
   }
@@ -166,19 +201,53 @@ void UI::drawGame() {
 }
 
 // Entering the name of the player screen
-void UI::enterName() {
+bool UI::enterName() {
   sf::Text enter_name;
-  sf::Font arial;
-  arial.loadFromFile("fonts/arial.ttf");
-  enter_name.setFont(arial);
-  enter_name.setString("Enter your name");
-  enter_name.setCharacterSize(24);
+  sf::Font score_font;
+  score_font.loadFromFile("fonts/MouldyCheese.ttf");
+  enter_name.setFont(score_font);
+  enter_name.setString("Enter your name: ");
+  enter_name.setCharacterSize(36);
   enter_name.setFillColor(sf::Color::White);
-  enter_name.setPosition(100, 100);
+  enter_name.setPosition(600, 300);
+
+  sf::Text highscores_text;
+  highscores_text.setFont(score_font);
+  std::string highscores_string = "Highscores:\n\n";
+  
+  int i = 1;
+  for (auto& player : this->highscores) {
+    highscores_string += std::to_string(i++) + ". " + player.first + " - " + std::to_string(player.second) + "\n";
+  }
+
+  highscores_text.setString(highscores_string);
+  highscores_text.setCharacterSize(40);
+  highscores_text.setFillColor(sf::Color::White);
+  highscores_text.setPosition(80, 300);
+
+
+  sf::Texture background;
+  background.loadFromFile("images/UI.png",
+                          sf::IntRect(0, 0, this->screen_dimensions.getX(),
+                          this->screen_dimensions.getY()));
+
+  sf::Sprite bg_sprite;
+  bg_sprite.setTexture(background);
 
   std::string name = "";
+  Button name_entered(name, Vector(620, 360), Vector(250, 70), sf::Color::White, sf::Color::Black, 36, 10);
+  name_entered.setCustomFont("fonts/MouldyCheese.ttf");
 
-  Button name_entered(name, Vector(100, 500), Vector(200, 150), sf::Color::Blue, sf::Color::Black, 24);
+  sf::Text to_play;
+  to_play.setFont(score_font);
+  to_play.setString("Press enter to play");
+  to_play.setCharacterSize(36);
+  to_play.setFillColor(sf::Color::White);
+  to_play.setPosition(590, 450);
+
+  Button menu("Back to Menu", Vector(700, 620), Vector(180, 65),
+    PLAY_BUTTON_COLOR, sf::Color::White, 24, 5);
+
 
   // Screen loop
   while ((*this->window_ptr).isOpen()) {
@@ -193,6 +262,9 @@ void UI::enterName() {
 
       case sf::Event::KeyPressed:
         if ((*this->event_ptr).key.code == sf::Keyboard::BackSpace) {
+          if (name.size() < 1) {
+            break;
+          }
           name.pop_back();
           name_entered.setString(name);
         }
@@ -204,8 +276,23 @@ void UI::enterName() {
           name_entered.setString(name);
         } else if ((*this->event_ptr).text.unicode == 13) {
           this->player_name = name;
-          // this->startGame();
-          return;
+          this->startGame();
+        }
+        break;
+
+      case sf::Event::MouseMoved:
+        if (menu.isMouseOver(*this->window_ptr)) {
+          menu.setBackToColor(MOUSE_OVER_COLOR);
+        } else {
+          menu.setBackToColor(PLAY_BUTTON_COLOR);
+        }
+        break;
+
+      case sf::Event::MouseButtonPressed:
+        if ((menu.isMouseOver(*this->window_ptr))) {
+          std::cout << "Menu button pressed" << std::endl;
+          // menu_button_pressed = true;
+          return true;
         }
         break;
       }
@@ -213,8 +300,12 @@ void UI::enterName() {
 
     // Display on the screen
     (*this->window_ptr).clear();
+    (*this->window_ptr).draw(bg_sprite);
     (*this->window_ptr).draw(enter_name);
+    (*this->window_ptr).draw(highscores_text);
     name_entered.drawButton(*this->window_ptr);
+    (*this->window_ptr).draw(to_play);
+    menu.drawButton(*this->window_ptr);
     (*this->window_ptr).display();
   }
 }
