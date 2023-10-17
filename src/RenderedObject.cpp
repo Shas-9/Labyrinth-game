@@ -34,16 +34,6 @@ bool RenderedObject::isCollidingWithObject(RenderedObject* rendered_object) {
   return !notColliding;
 }
 
-bool RenderedObject::isCollidingWithObjects(RenderedObject* rendered_objects, int objects_num) {
-  // Loop over all obstacles and check if player is running into them
-  for (int i = 0; i < objects_num; i++) {
-    if (this->isCollidingWithObject(&(rendered_objects[i]))) {
-      return true;
-    }
-  }
-  return false;
-}
-
 void RenderedObject::render(sf::RenderWindow* window) {
   window->draw(*this->rectangle);
 }

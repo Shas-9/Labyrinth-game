@@ -2,21 +2,10 @@
 
 Cat::Cat() {}
 
-Cat::Cat(Vector position, Vector dimensions, std::string type, std::string description)
-    : Item(position, dimensions, type, description) {
-      this->isWithPlayer = false;
+Cat::Cat(Vector position, sf::Texture* cat_texture) : Item(position, Vector(200, 135), "cat", "your cat!") {
+  double scale = 0.3;
+  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, this->getDimensions().getX() / scale, this->getDimensions().getY() / scale);
+  sprite->setTexture(*cat_texture);
+  sprite->setTextureRect(*rectSourceSprite);
+  sprite->scale(sf::Vector2f(scale, scale));
 }
-
-// void Cat::render(sf::RenderWindow &window) {
-//   window.draw(*this->rectangle);
-// }
-
-// void Cat::use(Player* player) {
-//   this->isWithPlayer = true;
-// }
-
-// bool Cat::getIsWithPlayer() {
-//   return this->isWithPlayer;
-// }
-
-// void Cat::update() {}

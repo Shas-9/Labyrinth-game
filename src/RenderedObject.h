@@ -21,7 +21,6 @@ class RenderedObject {
 
   
   bool isCollidingWithObject(RenderedObject* rendered_object);
-  bool isCollidingWithObjects(RenderedObject* rendered_object, int objects_num);
 
   Vector getPosition();
   void setPosition(Vector new_position);

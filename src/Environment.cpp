@@ -3,7 +3,8 @@
 Environment::Environment(
   sf::Texture* obstacles_texture,
   sf::Texture* potion_texture,
-  sf::Texture* iron_spider_texture
+  sf::Texture* iron_spider_texture,
+  sf::Texture* cat_texture
 ) {
   // Generate the paths
   MazeGenerator* maze_generator = new MazeGenerator(obstacles_texture);
@@ -14,14 +15,21 @@ Environment::Environment(
 
   // Add the itmes based on the map generated
   // (items must be inside the map and randomly generated)
-  this->items_num = 30;
+  this->items_num = 31;
   this->items = new Item[this->items_num];
+
+  // Add cat item
+
+  // while (!cat.isInObstacle(this->obstacles, this->obstacles_num)) {
+  //   cat.setPosition(Vector(rand() % MAP_BOUNDS, rand() % MAP_BOUNDS));
+  // }
+
+  
+
+  // Add health items
   for (int i = 0; i < this->items_num; i++) {
     Potion potion = Potion(
       Vector(rand() % MAP_BOUNDS, rand() % MAP_BOUNDS),
-      "potion",
-      "a health potion",
-      30,
       potion_texture
     );
 
@@ -51,8 +59,29 @@ Environment::Environment(
 
     this->enemies[i] = spider;
   }
+
+  this->items[1] = Cat(Vector(800, 800), cat_texture);
 }
 
+void  Environment::removeItem(int index) {
+  if (index < this->items_num) {
+    Item* new_items_array = new Item[this->items_num - 1];
+    Item* temp = this->items;
+
+    int index_reached = 0;
+    for (int i = 0; i < this->items_num; i++) {
+      if (i == index) {
+        index_reached = 1;
+      } else {
+        new_items_array[i - index_reached] = this->items[i];
+      }
+    }
+
+    this->items_num--;
+    this->items = new_items_array;
+    delete[] temp;
+  }
+}
 
 Obstacle* Environment::getObstacles() {
   return this->obstacles;

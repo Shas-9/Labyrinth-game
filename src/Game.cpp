@@ -21,23 +21,26 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   util->loadPlayerTexture();
   util->loadIronSpiderTexture();
   util->loadPotionTexture();
+  util->loadCatTexture();
 
   this->window_ptr = window_ptr;
   this->environment = new Environment(
     util->getObstacleTexture(),
     util->getPotionTexture(),
-    util->getIronSpiderTexture()
+    util->getIronSpiderTexture(),
+    util->getCatTexture()
   );
-  this->isGamePaused = false;
-  this->isGameOver = false;
+  this->is_game_won = false;
+  this->is_game_paused = false;
+  this->is_game_over = false;
 
   // Create the player object
   this->player = Player(
     Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
-    Vector(140/2, 180/2),
+    Vector(140 / 2, 180 / 2),
     "player",
     4,
-    9000,
+    10000,
     10,
     this->environment,
     util->getPlayerTexture()
@@ -47,18 +50,18 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
 
   Button pause_button("Pause Game", Vector(1570, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
-                      BUTTON_TEXT_SIZE, 10);
+    BUTTON_TEXT_SIZE, 10);
 
   std::string hp_string = "HP: ";
   Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color(0, 0, 0, 0), sf::Color::White, 44, 5);
   hp_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   std::string time_string = "Time: ";
-  Button time_text(time_string, Vector(900, 50), Vector(100, 30), sf::Color(0,0,0,0), sf::Color::White, 44, 5);
+  Button time_text(time_string, Vector(900, 50), Vector(100, 30), sf::Color(0, 0, 0, 0), sf::Color::White, 44, 5);
   time_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   // Loading ground textures
-  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, MAP_BOUNDS/3, MAP_BOUNDS/3);
+  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, MAP_BOUNDS / 3, MAP_BOUNDS / 3);
   sf::Sprite* ground_sprite = new sf::Sprite();
   ground_sprite->setTexture(*util->getGroundTexture());
   ground_sprite->setTextureRect(*rectSourceSprite);
@@ -67,17 +70,17 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   int time_elapsed = 0;
 
   // Screen loop
-  while ((*this->window_ptr).isOpen() && !(this->isGameOver)) {
+  while (this->window_ptr->isOpen() && !(this->is_game_over)) {
 
     if (this->player.getHealth() <= 0) {
       this->isGameOver = true;
     }
 
     // Event loop
-    while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+    while (this->window_ptr->pollEvent((*this->event_ptr))) {
       switch ((*this->event_ptr).type) {
       case sf::Event::Closed:
-        (*this->window_ptr).close();
+        this->window_ptr->close();
         break;
 
       case sf::Event::KeyPressed:
@@ -113,7 +116,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
           bool resume_button_pressed = false;
 
           while (!(resume_button_pressed)) {
-            resume_button_pressed = this->pauseScreen();
+            resume_button_pressed = this->pause();
           }
           clock->restart();
         }
@@ -134,15 +137,18 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
           bool resume_button_pressed = false;
 
           while (!(resume_button_pressed)) {
-            resume_button_pressed = this->pauseScreen();
+            resume_button_pressed = this->pause();
           }
-        clock->restart();
+          clock->restart();
         }
 
         break;
       }
     }
 
+    this->window_ptr->clear();
+
+    // Player movement
     if (this->player.getMovementDirection(0)) {
       this->player.moveLeft();
     }
@@ -155,8 +161,6 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     if (this->player.getMovementDirection(3)) {
       this->player.moveDown();
     }
-
-    (*this->window_ptr).clear();
 
     // Calculate the camera position for all rendered objects
     Vector camera_position = Vector(
@@ -205,15 +209,21 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
     // Render and update all enemies
     for (int i = 0; i < this->environment->getItemsNum(); i++) {
+      this->environment->getItems()[i].render(this->window_ptr, camera_position);
+
       if (this->environment->getItems()[i].isCollidingWithObject(&this->player)) {
         // Use item
         if (this->environment->getItems()[i].getType() == "health") {
-          this->player.gainHealth(this->environment->getItems()[i].getValue());
+          this->player.gainHealth(400);
+          this->environment->removeItem(i);
+        } else if (this->environment->getItems()[i].getType() == "cat") {
+          this->is_game_won = true;
+          this->is_game_over = true;
         }
+
         // player.gainHealth(this->environment->getItems()[i]());
       }
 
-      this->environment->getItems()[i].render(this->window_ptr, camera_position);
     }
 
     // Render the player
@@ -232,18 +242,8 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     time_text.setString(time_string);
     time_text.drawButton(*this->window_ptr);
 
-    // Display the current frame
-    (*this->window_ptr).display();
+    this->window_ptr->display();
 
-  }
-}
-
-void Game::renderAll() {
-
-}
-
-void Game::updateAll() {
-  if (!this->isGamePaused) {
   }
 }
 
@@ -252,7 +252,7 @@ bool Game::confirmationScreen() {
   texture.loadFromFile("images/UI.png");
   sf::Sprite sprite;
   sprite.setTexture(texture);
-  sprite.setTextureRect(sf::IntRect(0, 0, (*this->window_ptr).getSize().x, (*this->window_ptr).getSize().y));
+  sprite.setTextureRect(sf::IntRect(0, 0, this->window_ptr->getSize().x, this->window_ptr->getSize().y));
 
   sf::Font font;
   font.loadFromFile("fonts/MouldyCheese.ttf");
@@ -267,13 +267,13 @@ bool Game::confirmationScreen() {
   Button no_button("No", Vector(1300, 800), BUTTON_SIZE, QUIT_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
 
   // Screen loop
-  while ((*this->window_ptr).isOpen()) {
+  while (this->window_ptr->isOpen()) {
 
     // Event loop
-    while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+    while (this->window_ptr->pollEvent((*this->event_ptr))) {
       switch ((*this->event_ptr).type) {
       case sf::Event::Closed:
-        (*this->window_ptr).close();
+        this->window_ptr->close();
         break;
 
       case sf::Event::MouseMoved:
@@ -293,7 +293,7 @@ bool Game::confirmationScreen() {
       case sf::Event::MouseButtonPressed:
         if ((yes_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Yes button pressed" << std::endl;
-          this->isGameOver = true;
+          this->is_game_over = true;
           return true;
         }
 
@@ -304,24 +304,24 @@ bool Game::confirmationScreen() {
       }
     }
 
-    (*this->window_ptr).clear();
+    this->window_ptr->clear();
 
-    (*this->window_ptr).draw(sprite);
+    this->window_ptr->draw(sprite);
     yes_button.drawButton(*this->window_ptr);
     no_button.drawButton(*this->window_ptr);
-    (*this->window_ptr).draw(quit_text);
+    this->window_ptr->draw(quit_text);
 
-    (*this->window_ptr).display();
+    this->window_ptr->display();
 
   }
 }
 
-bool Game::pauseScreen() {
+bool Game::pause() {
   sf::Texture texture;
   texture.loadFromFile("images/UI.png");
   sf::Sprite sprite;
   sprite.setTexture(texture);
-  sprite.setTextureRect(sf::IntRect(0, 0, (*this->window_ptr).getSize().x, (*this->window_ptr).getSize().y));
+  sprite.setTextureRect(sf::IntRect(0, 0, this->window_ptr->getSize().x, this->window_ptr->getSize().y));
 
   sf::Font font;
   font.loadFromFile("fonts/MouldyCheese.ttf");
@@ -347,13 +347,13 @@ bool Game::pauseScreen() {
 
 
   // Screen loop
-  while ((*this->window_ptr).isOpen()) {
+  while (this->window_ptr->isOpen()) {
 
     // Event loop
-    while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+    while (this->window_ptr->pollEvent((*this->event_ptr))) {
       switch ((*this->event_ptr).type) {
       case sf::Event::Closed:
-        (*this->window_ptr).close();
+        this->window_ptr->close();
         break;
 
       case sf::Event::MouseMoved:
@@ -378,7 +378,7 @@ bool Game::pauseScreen() {
 
         if ((quit_game_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Quit game button pressed" << std::endl;
-          
+
           if (this->confirmationScreen()) {
             return true;
           }
@@ -387,15 +387,15 @@ bool Game::pauseScreen() {
       }
     }
 
-    (*this->window_ptr).clear();
+    this->window_ptr->clear();
 
-    (*this->window_ptr).draw(sprite);
-    (*this->window_ptr).draw(pause_text);
+    this->window_ptr->draw(sprite);
+    this->window_ptr->draw(pause_text);
     resume_button.drawButton(*this->window_ptr);
     quit_game_button.drawButton(*this->window_ptr);
-    (*this->window_ptr).draw(resume_text);
-    
-    (*this->window_ptr).display();
+    this->window_ptr->draw(resume_text);
+
+    this->window_ptr->display();
   }
 }
 

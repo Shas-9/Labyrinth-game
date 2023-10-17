@@ -24,12 +24,6 @@ std::string Item::getType() {
   return this->type;
 }
 
-int Item::getValue() {
-  return 0;
-}
-
-// void Item::use(Player* player) {}
-
 bool Item::isInObstacle(Obstacle* obstacles, int obstacles_num) {
   // Loop over all obstacles and check if player is running into them
   for (int i = 0; i < obstacles_num; i++) {
