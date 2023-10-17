@@ -12,7 +12,7 @@ class Utility {
 private:
   sf::Texture* obstacles_texture;
   sf::Texture* ground_texture;
-  sf::Texture* health_texture;
+  sf::Texture* potion_texture;
   sf::Texture* enemies_texture;
   sf::Texture* iron_spider_texture;
   sf::Texture* player_texture;
@@ -44,6 +44,9 @@ public:
 
   void loadGroundTexture();
   sf::Texture* getGroundTexture();
+  
+  void loadPotionTexture();
+  sf::Texture* getPotionTexture();
 };
 
 #endif

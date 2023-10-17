@@ -17,11 +17,12 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   util->loadGroundTexture();
   util->loadPlayerTexture();
   util->loadIronSpiderTexture();
+  util->loadPotionTexture();
 
   this->window_ptr = window_ptr;
   this->environment = new Environment(
     util->getObstacleTexture(),
-    util->getIronSpiderTexture(),
+    util->getPotionTexture(),
     util->getIronSpiderTexture()
   );
   this->isGamePaused = false;
@@ -49,7 +50,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   hp_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   // Loading ground textures
-  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, 60000, 60000);
+  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, MAP_BOUNDS/3, MAP_BOUNDS/3);
   sf::Sprite* ground_sprite = new sf::Sprite();
   ground_sprite->setTexture(*util->getGroundTexture());
   ground_sprite->setTextureRect(*rectSourceSprite);
@@ -168,12 +169,22 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
         this->environment->getEnemies()[i].moveDown();
       }
 
-      if (this->environment->getEnemies()[i].collidingWith(&this->player)) {
+      if (this->environment->getEnemies()[i].isCollidingWithObject(&this->player)) {
         player.loseHealth(this->environment->getEnemies()[i].getAttackDamage());
       }
 
       this->environment->getEnemies()[i].render(this->window_ptr, camera_position);
       this->environment->getEnemies()[i].update();
+    }
+
+    // Render and update all enemies
+    for (int i = 0; i < this->environment->getItemsNum(); i++) {
+      if (this->environment->getItems()[i].isCollidingWithObject(&this->player)) {
+        // Use item
+        // player.gainHealth(this->environment->getItems()[i]());
+      }
+
+      this->environment->getItems()[i].render(this->window_ptr, camera_position);
     }
 
     // Render the player

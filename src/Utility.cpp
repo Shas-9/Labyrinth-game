@@ -174,3 +174,13 @@ void Utility::loadObstacleTexture() {
 sf::Texture* Utility::getObstacleTexture() {
   return this->obstacles_texture;
 }
+
+void Utility::loadPotionTexture() {
+  this->potion_texture = new sf::Texture();
+  potion_texture->loadFromFile("textures/potion.png");
+  potion_texture->setRepeated(true);
+}
+
+sf::Texture* Utility::getPotionTexture() {
+  return this->potion_texture;
+}

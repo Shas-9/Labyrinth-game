@@ -14,20 +14,12 @@ public:
   IronSpider();
   IronSpider(
     Vector position,
-    int movement_speed,
-    int health,
-    int attack_damage,
     Obstacle* obstacles,
     int obstacles_num,
-    int sight_distance,
     sf::Texture* iron_spider_texture
   );
 
-  // void trackPlayer();
-  // void update();
-  // void render(sf::RenderWindow *window, Vector screen_dimensions, Vector camera_position);
-
-  void takeDamage(int damage);
+  // void takeDamage(int damage);
 };
 
 #endif

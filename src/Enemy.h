@@ -24,7 +24,6 @@ public:
       );
       // void trackPlayer();
       void update();
-      void setPosition(Vector new_position);
 
       void takeDamage(int damage);
 };
