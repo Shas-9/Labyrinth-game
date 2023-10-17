@@ -161,19 +161,26 @@ int Entity::getHealth() {
   return (((double)this->health / this->max_health) * 100);
 }
 
-void Entity::loseHealth(int lost_health) {
-  if ((this->health + lost_health) < 0) {
-    this->health = 0;
-    cout << "huh" << endl;
-  } else {
-    this->health = this->health + lost_health;
+void Entity::loseHealth(int damage) {
+  if (damage > 0) {
+    if ((this->health - damage) < 0) {
+      this->health = 0;
+    } else {
+      this->health = this->health - damage;
+    }
   }
 }
 
 void Entity::gainHealth(int extra_health) {
-  if ((this->health + extra_health) > this->max_health) {
-    this->health = this->max_health;
-  } else {
-    this->health += extra_health;
+  if (extra_health > 0) {
+    if ((this->health + extra_health) > this->max_health) {
+      this->health = this->max_health;
+    } else {
+      this->health += extra_health;
+    }
   }
+}
+
+int Entity::getAttackDamage() {
+  return this->attack_damage;
 }

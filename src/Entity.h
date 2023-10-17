@@ -64,6 +64,8 @@ public:
        bool canMove();
 
        void render(sf::RenderWindow *window, Vector camera_position);
+
+       int getAttackDamage();
 };
 
 #endif
