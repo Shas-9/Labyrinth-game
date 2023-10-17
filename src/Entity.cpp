@@ -137,6 +137,27 @@ int Entity::getMovementDirection(int direction) {
   }
 }
 
+void Entity::render(sf::RenderWindow *window, Vector camera_position) {
+  Utility::frames_handler(
+    this->sprite,
+    &this->current_frames_index,
+    &this->current_animation_frame,
+    walking_frames,
+    moving_left,
+    moving_right,
+    moving_up,
+    moving_down,
+    20
+  );
+
+  this->sprite->setPosition(
+    this->position.getX() - camera_position.getX(),
+    this->position.getY() - camera_position.getY()
+  );
+  window->draw(*this->sprite);
+
+}
+
 int Entity::getHealth() {
   return this->health;
 }

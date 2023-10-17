@@ -64,6 +64,8 @@ public:
        int getMovementDirection(int direction);
 
        bool canMove();
+
+       void render(sf::RenderWindow *window, Vector camera_position);
 };
 
 #endif

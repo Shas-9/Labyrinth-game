@@ -27,4 +27,42 @@ void Enemy::takeDamage(int damage) {
   this->health -= damage;
 }
 
-void Enemy::update() {}
+void Enemy::update() {
+  int random_int = rand() % 5000;
+  if (random_int <= 7) {
+    if (random_int == 0) {
+      this->setMovementDirection(0, true);
+      this->setMovementDirection(1, false);
+      this->setMovementDirection(2, false);
+      this->setMovementDirection(3, false);
+    }
+    if (random_int == 1) {
+      this->setMovementDirection(0, false);
+      this->setMovementDirection(1, true);
+      this->setMovementDirection(2, false);
+      this->setMovementDirection(3, false);
+    }
+    if (random_int == 2) {
+      this->setMovementDirection(0, false);
+      this->setMovementDirection(1, false);
+      this->setMovementDirection(2, true);
+      this->setMovementDirection(3, false);
+    }
+    if (random_int == 3) {
+      this->setMovementDirection(0, false);
+      this->setMovementDirection(1, false);
+      this->setMovementDirection(2, false);
+      this->setMovementDirection(3, true);
+    }
+    if (random_int >= 4) {
+      this->setMovementDirection(0, false);
+      this->setMovementDirection(1, false);
+      this->setMovementDirection(2, false);
+      this->setMovementDirection(3, false);
+    }
+  }
+}
+
+void Enemy::setPosition(Vector new_position) {
+  this->position = new_position;
+}

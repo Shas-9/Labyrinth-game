@@ -23,7 +23,8 @@ public:
             int sight_distance
       );
       // void trackPlayer();
-      void update() override;
+      void update();
+      void setPosition(Vector new_position);
 
       void takeDamage(int damage);
 };

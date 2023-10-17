@@ -22,8 +22,8 @@ Player::Player(
   environment->getObstacles(),
   environment->getObstaclesNum()
 ), environment(environment) {
-  int scale = 4;
-  this->walking_frames = Utility::getIronSpiderWalkingFrames(this->getDimensions(), scale);
+  int scale = 10;
+  this->walking_frames = Utility::getPlayerWalkingFrames(this->getDimensions(), scale);
   sprite->scale(sf::Vector2f(scale, scale));
   sprite->setTexture(*player_texture);
   sprite->setTextureRect(*this->walking_frames[0][0]);
@@ -97,8 +97,7 @@ void Player::getNearbyItem() {
   }
 }
 
-
-void Player::render(sf::RenderWindow *window) {
+void Player::render(sf::RenderWindow *window, Vector screen_dimensions) {
   Utility::frames_handler(
     this->sprite,
     &this->current_frames_index,
@@ -111,7 +110,12 @@ void Player::render(sf::RenderWindow *window) {
     20
   );
 
-  this->sprite->setPosition(sf::Vector2f(500, 400));
+  this->sprite->setPosition(
+    sf::Vector2f(
+      (screen_dimensions.getX() - this->getDimensions().getX()) / 2,
+      (screen_dimensions.getY() - this->getDimensions().getY()) / 2
+    )
+  );
   window->draw(*this->sprite);
 }
 
