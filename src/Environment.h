@@ -26,7 +26,7 @@ public:
   Environment(
     sf::Texture* obstacles_texture,
     sf::Texture* items_textures,
-    sf::Texture* enemies_textures
+    sf::Texture* iron_spider_textures
   );
   void render(sf::RenderWindow *window_ptr);
 

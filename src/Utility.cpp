@@ -95,25 +95,25 @@ vector<vector<sf::IntRect*>> Utility::getIronSpiderWalkingFrames(Vector dimensio
 }
 
 vector<vector<sf::IntRect*>> Utility::getPlayerWalkingFrames(Vector dimensions, int scale) {
-  sf::IntRect* front_frame_1 = new sf::IntRect(3, 2, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* front_frame_2 = new sf::IntRect(3 + 21, 2, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* front_frame_3 = new sf::IntRect(2 + 41, 2, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* front_frame_4 = new sf::IntRect(1 + 61, 2, dimensions.getX() / 10, dimensions.getY() / 10);
+  sf::IntRect* front_frame_1 = new sf::IntRect(3, 2, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* front_frame_2 = new sf::IntRect(3 + 21, 2, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* front_frame_3 = new sf::IntRect(2 + 41, 2, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* front_frame_4 = new sf::IntRect(1 + 61, 2, dimensions.getX() / scale, dimensions.getY() / scale);
 
-  sf::IntRect* back_frame_1 = new sf::IntRect(3, 21, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* back_frame_2 = new sf::IntRect(3 + 21, 21, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* back_frame_3 = new sf::IntRect(2 + 41, 21, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* back_frame_4 = new sf::IntRect(1 + 61, 21, dimensions.getX() / 10, dimensions.getY() / 10);
+  sf::IntRect* back_frame_1 = new sf::IntRect(3, 21, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* back_frame_2 = new sf::IntRect(3 + 21, 21, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* back_frame_3 = new sf::IntRect(2 + 41, 21, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* back_frame_4 = new sf::IntRect(1 + 61, 21, dimensions.getX() / scale, dimensions.getY() / scale);
 
-  sf::IntRect* left_frame_1 = new sf::IntRect(3, 41, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* left_frame_2 = new sf::IntRect(3 + 20, 41, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* left_frame_3 = new sf::IntRect(2 + 41, 41, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* left_frame_4 = new sf::IntRect(1 + 61, 41, dimensions.getX() / 10, dimensions.getY() / 10);
+  sf::IntRect* left_frame_1 = new sf::IntRect(3, 41, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* left_frame_2 = new sf::IntRect(3 + 20, 41, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* left_frame_3 = new sf::IntRect(2 + 41, 41, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* left_frame_4 = new sf::IntRect(1 + 61, 41, dimensions.getX() / scale, dimensions.getY() / scale);
 
-  sf::IntRect* right_frame_1 = new sf::IntRect(3, 60, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* right_frame_2 = new sf::IntRect(3 + 20, 60, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* right_frame_3 = new sf::IntRect(2 + 41, 60, dimensions.getX() / 10, dimensions.getY() / 10);
-  sf::IntRect* right_frame_4 = new sf::IntRect(1 + 61, 60, dimensions.getX() / 10, dimensions.getY() / 10);
+  sf::IntRect* right_frame_1 = new sf::IntRect(3, 60, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* right_frame_2 = new sf::IntRect(3 + 20, 60, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* right_frame_3 = new sf::IntRect(2 + 41, 60, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* right_frame_4 = new sf::IntRect(1 + 61, 60, dimensions.getX() / scale, dimensions.getY() / scale);
 
   vector<vector<sf::IntRect*>> walking_frames = {
     {

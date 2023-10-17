@@ -16,8 +16,7 @@ Entity::Entity(
 movement_speed(movement_speed),
 health(health),
 attack_damage(attack_damage) {
-  this->max_health = 100;
-  this->health = this->max_health;
+  this->max_health = health;
 
   // Obstacles awareness
   this->obstacles = obstacles;
@@ -159,17 +158,22 @@ void Entity::render(sf::RenderWindow *window, Vector camera_position) {
 }
 
 int Entity::getHealth() {
-  return this->health;
+  return (((double)this->health / this->max_health) * 100);
 }
 
-int Entity::getMaxHealth() {
-  return this->max_health;
+void Entity::loseHealth(int lost_health) {
+  if ((this->health + lost_health) < 0) {
+    this->health = 0;
+    cout << "huh" << endl;
+  } else {
+    this->health = this->health + lost_health;
+  }
 }
 
-void Entity::setHealth(int health) {
-  this->health = health;
-}
-
-void Entity::setMaxHealth(int max_health) {
-  this->max_health = max_health;
+void Entity::gainHealth(int extra_health) {
+  if ((this->health + extra_health) > this->max_health) {
+    this->health = this->max_health;
+  } else {
+    this->health += extra_health;
+  }
 }

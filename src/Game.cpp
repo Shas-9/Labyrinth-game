@@ -30,10 +30,10 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   // Create the player object
   this->player = Player(
     Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
-    Vector(140, 180),
+    Vector(140/2, 180/2),
     "player",
     4,
-    100,
+    9000,
     10,
     this->environment,
     util->getPlayerTexture()
@@ -166,6 +166,10 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
       }
       if (this->environment->getEnemies()[i].getMovementDirection(3)) {
         this->environment->getEnemies()[i].moveDown();
+      }
+
+      if (this->environment->getEnemies()[i].collidingWith(&this->player)) {
+        player.loseHealth(-1);
       }
 
       this->environment->getEnemies()[i].render(this->window_ptr, camera_position);

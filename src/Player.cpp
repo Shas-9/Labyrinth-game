@@ -22,7 +22,7 @@ Player::Player(
   environment->getObstacles(),
   environment->getObstaclesNum()
 ), environment(environment) {
-  int scale = 10;
+  int scale = dimensions.getX()/14;
   this->walking_frames = Utility::getPlayerWalkingFrames(this->getDimensions(), scale);
   sprite->scale(sf::Vector2f(scale, scale));
   sprite->setTexture(*player_texture);

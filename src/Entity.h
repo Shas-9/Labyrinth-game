@@ -27,7 +27,7 @@ protected:
        int current_frames_index;
        int current_animation_frame;
 
-       // Features
+       // Properties
        int health;
        int max_health;
        int attack_damage;
@@ -47,10 +47,8 @@ public:
 
        // Health
        int getHealth();
-       int getMaxHealth();
-
-       void setHealth(int health);
-       void setMaxHealth(int max_health);
+       void loseHealth(int lost_health);
+       void gainHealth(int extra_health);
 
        virtual void update() = 0;
 

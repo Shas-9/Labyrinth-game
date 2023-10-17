@@ -3,7 +3,7 @@
 Environment::Environment(
   sf::Texture* obstacles_texture,
   sf::Texture* items_textures,
-  sf::Texture* enemies_textures
+  sf::Texture* iron_spider_texture
 ) {
   // Generate the paths
   MazeGenerator* maze_generator = new MazeGenerator(obstacles_texture);
@@ -47,7 +47,7 @@ Environment::Environment(
       this->getObstacles(),
       this->getObstaclesNum(),
       30,
-      enemies_textures
+      iron_spider_texture
     );
 
     // If spider was randomly generated in an obstacle, keep randomizing spawn position until a valid location is found
