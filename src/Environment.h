@@ -24,6 +24,7 @@ private:
   sf::RenderWindow *window_ptr;
 
 public:
+  Environment();
   Environment(
     sf::Texture* obstacles_texture,
     sf::Texture* potion_texture,
