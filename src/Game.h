@@ -2,6 +2,7 @@
 #define GAME_INCLUDE
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 
 #include "Player.h"
 #include "Environment.h"
@@ -20,12 +21,14 @@ class Game {
 
  public:
   Game();
-  Game(sf::RenderWindow *window, sf::Event* event_ptr, Vector screen_dimensions);
+  Game(sf::RenderWindow *window, sf::Event* event_ptr, Vector screen_dimensions, sf::Clock* clock);
+  
   void updateAll();
   void renderAll();
   void pause();
   void endGame();
   bool pauseScreen();
+  bool confirmationScreen();
 };
 
 #endif

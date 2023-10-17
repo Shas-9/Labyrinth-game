@@ -9,7 +9,8 @@
 // Default Game constructer does nothing (window object required)
 Game::Game() {}
 
-Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dimensions) {
+
+Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dimensions, sf::Clock* clock) {
   srand(time(NULL));
 
   Utility* util = new Utility();
@@ -41,12 +42,17 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
   this->event_ptr = event_ptr;
 
-  Button pause_button("Pause Game", Vector(1600, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
-    BUTTON_TEXT_SIZE, 10);
+
+  Button pause_button("Pause Game", Vector(1570, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
+                      BUTTON_TEXT_SIZE, 10);
 
   std::string hp_string = "HP: ";
   Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color(0, 0, 0, 0), sf::Color::White, 44, 5);
   hp_text.setCustomFont("fonts/MouldyCheese.ttf");
+
+  std::string time_string = "Time: ";
+  Button time_text(time_string, Vector(900, 50), Vector(100, 30), sf::Color(0,0,0,0), sf::Color::White, 44, 5);
+  time_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   // Loading ground textures
   sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, 60000, 60000);
@@ -54,6 +60,8 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   ground_sprite->setTexture(*util->getGroundTexture());
   ground_sprite->setTextureRect(*rectSourceSprite);
   ground_sprite->scale(sf::Vector2f(3, 3));
+
+  int time_elapsed = 0;
 
   // Screen loop
   while ((*this->window_ptr).isOpen() && !(this->isGameOver)) {
@@ -106,12 +114,15 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
       case sf::Event::MouseButtonPressed:
         if ((pause_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Pause button pressed" << std::endl;
+          time_elapsed = (int)clock->getElapsedTime().asSeconds();
           bool resume_button_pressed = false;
 
           while (!(resume_button_pressed)) {
             resume_button_pressed = this->pauseScreen();
           }
         }
+        clock->restart();
+
         break;
       }
     }
@@ -187,6 +198,11 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     hp_text.setString(hp_string);
     hp_text.drawButton(*this->window_ptr);
 
+    // Render the time text
+    time_string = "Time: " + std::to_string((int)clock->getElapsedTime().asSeconds() + time_elapsed) + "s";
+    time_text.setString(time_string);
+    time_text.drawButton(*this->window_ptr);
+
     // Display the current frame
     (*this->window_ptr).display();
 
@@ -199,6 +215,75 @@ void Game::renderAll() {
 
 void Game::updateAll() {
   if (!this->isGamePaused) {
+  }
+}
+
+bool Game::confirmationScreen() {
+  sf::Texture texture;
+  texture.loadFromFile("images/UI.png");
+  sf::Sprite sprite;
+  sprite.setTexture(texture);
+  sprite.setTextureRect(sf::IntRect(0, 0, (*this->window_ptr).getSize().x, (*this->window_ptr).getSize().y));
+
+  sf::Font font;
+  font.loadFromFile("fonts/MouldyCheese.ttf");
+  sf::Text quit_text;
+  quit_text.setFont(font);
+  quit_text.setString("Are you sure you want to quit?");
+  quit_text.setCharacterSize(46);
+  quit_text.setFillColor(sf::Color::White);
+  quit_text.setPosition(sf::Vector2f(580, 650));
+
+  Button yes_button("Yes", Vector(300, 800), BUTTON_SIZE, PAUSE_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
+  Button no_button("No", Vector(1300, 800), BUTTON_SIZE, QUIT_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
+
+  // Screen loop
+  while ((*this->window_ptr).isOpen()) {
+
+    // Event loop
+    while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+      switch ((*this->event_ptr).type) {
+      case sf::Event::Closed:
+        (*this->window_ptr).close();
+        break;
+
+      case sf::Event::MouseMoved:
+        if (yes_button.isMouseOver(*this->window_ptr)) {
+          yes_button.setBackToColor(MOUSE_OVER_COLOR);
+        } else {
+          yes_button.setBackToColor(PAUSE_BUTTON_COLOR);
+        }
+
+        if (no_button.isMouseOver(*this->window_ptr)) {
+          no_button.setBackToColor(MOUSE_OVER_COLOR);
+        } else {
+          no_button.setBackToColor(QUIT_BUTTON_COLOR);
+        }
+        break;
+
+      case sf::Event::MouseButtonPressed:
+        if ((yes_button.isMouseOver(*this->window_ptr))) {
+          std::cout << "Yes button pressed" << std::endl;
+          this->isGameOver = true;
+          return true;
+        }
+
+        if ((no_button.isMouseOver(*this->window_ptr))) {
+          std::cout << "No button pressed" << std::endl;
+          return false;
+        }
+      }
+    }
+
+    (*this->window_ptr).clear();
+
+    (*this->window_ptr).draw(sprite);
+    yes_button.drawButton(*this->window_ptr);
+    no_button.drawButton(*this->window_ptr);
+    (*this->window_ptr).draw(quit_text);
+
+    (*this->window_ptr).display();
+
   }
 }
 
@@ -264,19 +349,23 @@ bool Game::pauseScreen() {
 
         if ((quit_game_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Quit game button pressed" << std::endl;
-          this->isGameOver = true;
-          return true;
+          
+          if (this->confirmationScreen()) {
+            return true;
+          }
         }
         break;
       }
     }
 
     (*this->window_ptr).clear();
+
     (*this->window_ptr).draw(sprite);
     (*this->window_ptr).draw(pause_text);
-    (*this->window_ptr).draw(resume_text);
     resume_button.drawButton(*this->window_ptr);
     quit_game_button.drawButton(*this->window_ptr);
+    (*this->window_ptr).draw(resume_text);
+    
     (*this->window_ptr).display();
   }
 }

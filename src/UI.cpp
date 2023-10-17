@@ -313,7 +313,18 @@ bool UI::enterName() {
 }
 
 void UI::startGame() {
-  this->game = Game(this->window_ptr, this->event_ptr, this->screen_dimensions);
+  sf::Clock* clock = new sf::Clock();
+  this->clock = clock;
+  this->game = Game(this->window_ptr, this->event_ptr, this->screen_dimensions this->clock);
+  // this->drawGame();
+  // while ((*this->window_ptr).isOpen()) {
+
+    // Event loop
+    // while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+
+    // }
+  // }
+
 }
 
 void UI::pushHighScore() {
