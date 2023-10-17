@@ -73,7 +73,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   while (this->window_ptr->isOpen() && !(this->is_game_over)) {
 
     if (this->player.getHealth() <= 0) {
-      this->isGameOver = true;
+      this->is_game_over = true;
     }
 
     // Event loop
