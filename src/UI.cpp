@@ -214,7 +214,7 @@ bool UI::enterName() {
   
   int i = 1;
   for (auto& player : this->highscores) {
-    highscores_string += std::to_string(i++) + ". " + player.first + " - " + std::to_string(player.second) + "\n";
+    highscores_string += std::to_string(i++) + ". " + player.first + " - " + std::to_string(player.second) + "s\n";
   }
 
   highscores_text.setString(highscores_string);
@@ -316,6 +316,7 @@ void UI::startGame() {
   sf::Clock* clock = new sf::Clock();
   this->clock = clock;
   this->game = Game(this->window_ptr, this->event_ptr, this->screen_dimensions, this->clock);
+  this->gameWinScreen();
   // this->drawGame();
   // while ((*this->window_ptr).isOpen()) {
 
@@ -332,28 +333,29 @@ void UI::pushHighScore() {
   std::string key;
 
   for (auto& player : this->highscores) {
-    if (player.second < lowest_score) {
+    if (player.second > lowest_score) {
       lowest_score = player.second;
       key = player.first;
     }
   }
 
-  if (this->score >= lowest_score) {
+  if (this->score <= lowest_score) {
     this->highscores.erase(key);
     this->highscores.insert({ this->player_name, this->score });
 
-    std::vector <int> scores;
+    std::vector<int> scores;
     for (auto& player : this->highscores) {
       scores.push_back(player.second);
     }
 
-    // sorting the highscores from highest to lowest
-    std::sort(scores.begin(), scores.end(), std::greater<int>());
+    // Sorting the highscores from lowest to highest
+    std::sort(scores.begin(), scores.end());
 
+    // Create a new map to store the sorted highscores
     std::map<std::string, int> new_highscores;
     for (int i = 0; i < scores.size(); i++) {
       for (auto& player : this->highscores) {
-        if (player.second == scores[i]) {
+        if (scores[i] == player.second) {
           new_highscores.insert({ player.first, player.second });
         }
       }
@@ -364,11 +366,182 @@ void UI::pushHighScore() {
     std::ofstream names_file("highscores/names.txt");
     std::ofstream scores_file("highscores/scores.txt");
 
-    for (auto& player : this->highscores) {
+    // Write the sorted highscores to the files
+    for (auto& player : new_highscores) {
       names_file << player.first << "\n";
       scores_file << player.second << "\n";
 
       std::cout << player.first << " - " << player.second << std::endl;
     }
+  }
+}
+
+
+bool UI::gameOverScreen() {
+  sf::Texture texture;
+  texture.loadFromFile("images/UI.png");
+  sf::Sprite sprite;
+  sprite.setTexture(texture);
+
+  sf::Text game_over_text;
+  game_over_text.setString("Game Over");
+  game_over_text.setCharacterSize(130);
+  game_over_text.setFillColor(sf::Color::White);
+  game_over_text.setPosition(sf::Vector2f(650, 350));
+
+  sf::Font font;
+  font.loadFromFile("fonts/MouldyCheese.ttf");
+  game_over_text.setFont(font);
+
+  sf::Text prompt_text;
+  prompt_text.setString("You died without finding the cat");
+  prompt_text.setCharacterSize(46);
+  prompt_text.setFillColor(sf::Color::White);
+  prompt_text.setPosition(sf::Vector2f(630, 600));
+  prompt_text.setFont(font);
+  
+  Button menu_button("Main Menu", Vector(1300, 800), BUTTON_SIZE, PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
+
+  // Screen loop
+  while ((*this->window_ptr).isOpen()) {
+
+    //event loop
+    while((*this->window_ptr).pollEvent((*this->event_ptr))) {
+      switch ((*this->event_ptr).type) {
+        case sf::Event::Closed:
+          (*this->window_ptr).close();
+          break;
+        
+        case sf::Event::MouseMoved:
+          if (menu_button.isMouseOver(*this->window_ptr)) {
+            menu_button.setBackToColor(MOUSE_OVER_COLOR);
+          } else {
+            menu_button.setBackToColor(PLAY_BUTTON_COLOR);
+          }
+          break;
+        
+        case sf::Event::MouseButtonPressed:
+          if (menu_button.isMouseOver(*this->window_ptr)) {
+            std::cout << "Menu button pressed" << std::endl;
+            return true;
+          }
+          break;
+      }
+    }
+
+    (*this->window_ptr).clear();
+
+    (*this->window_ptr).draw(sprite);
+    (*this->window_ptr).draw(game_over_text);
+    menu_button.drawButton(*this->window_ptr);
+    (*this->window_ptr).draw(prompt_text);
+
+    (*this->window_ptr).display();
+  }
+}
+
+bool UI::gameWinScreen() {
+  sf::Texture texture;
+  sf::Sprite sprite;
+  texture.loadFromFile("images/UI.png");
+  sprite.setTexture(texture);
+
+  sf::Text game_win_text;
+  game_win_text.setString("Meow!");
+  game_win_text.setCharacterSize(180);
+  game_win_text.setFillColor(sf::Color::White);
+  game_win_text.setPosition(sf::Vector2f(650, 100));
+
+  sf::Font cat_font;
+  cat_font.loadFromFile("fonts/cat_font.ttf");
+  game_win_text.setFont(cat_font);
+
+  sf::Text prompt_text;
+  prompt_text.setString("You found the cat!");
+  prompt_text.setCharacterSize(48);
+  prompt_text.setFillColor(sf::Color::White);
+  prompt_text.setPosition(sf::Vector2f(100, 600));
+  
+  sf::Font font;
+  font.loadFromFile("fonts/MouldyCheese.ttf");
+  prompt_text.setFont(font);
+
+  sf::Text time_text;
+  time_text.setString("Time: " + std::to_string((int)this->clock->getElapsedTime().asSeconds()) + "s");
+  time_text.setCharacterSize(46);
+  time_text.setFillColor(sf::Color::White);
+  time_text.setFont(font);
+  time_text.setPosition(sf::Vector2f(155, 700));
+
+  sf::Text new_highscore_text;
+  new_highscore_text.setString("New Highscore!");
+  new_highscore_text.setCharacterSize(70);
+  new_highscore_text.setFillColor(sf::Color::White);
+  new_highscore_text.setFont(font);
+  new_highscore_text.setPosition(sf::Vector2f(680, 340));
+
+  //if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
+    this->pushHighScore();
+  //}
+  
+  sf::Text highscores_text;
+  highscores_text.setFont(font);
+  std::string highscores_string = "Highscores:\n\n";
+  
+  int i = 1;
+  for (auto& player : this->highscores) {
+    highscores_string += std::to_string(i++) + ". " + player.first + " - " + std::to_string(player.second) + "s\n";
+  }
+
+  highscores_text.setString(highscores_string);
+  highscores_text.setCharacterSize(44);
+  highscores_text.setFillColor(sf::Color::White);
+  highscores_text.setPosition(1380, 450);
+  highscores_text.setFont(font);
+
+  Button menu_button("Main Menu", Vector(1400, 850), BUTTON_SIZE, PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
+
+  // Screen loop
+  while ((*this->window_ptr).isOpen()) {
+
+    //event loop
+    while((*this->window_ptr).pollEvent((*this->event_ptr))) {
+      switch ((*this->event_ptr).type) {
+        case sf::Event::Closed:
+          (*this->window_ptr).close();
+          break;
+        
+        case sf::Event::MouseMoved:
+          if (menu_button.isMouseOver(*this->window_ptr)) {
+            menu_button.setBackToColor(MOUSE_OVER_COLOR);
+          } else {
+            menu_button.setBackToColor(PLAY_BUTTON_COLOR);
+          }
+          break;
+        
+        case sf::Event::MouseButtonPressed:
+          if (menu_button.isMouseOver(*this->window_ptr)) {
+            std::cout << "Menu button pressed" << std::endl;
+            return true;
+          }
+          break;
+      }
+    }
+
+  (*this->window_ptr).clear();
+
+  (*this->window_ptr).draw(sprite);
+  (*this->window_ptr).draw(game_win_text);
+  menu_button.drawButton(*this->window_ptr);
+  (*this->window_ptr).draw(prompt_text);
+  (*this->window_ptr).draw(time_text);
+  (*this->window_ptr).draw(highscores_text);
+
+  // if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
+    (*this->window_ptr).draw(new_highscore_text);
+  // }
+
+  (*this->window_ptr).display();
+
   }
 }
