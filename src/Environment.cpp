@@ -60,7 +60,7 @@ Environment::Environment(
     this->enemies[i] = spider;
   }
 
-  this->items[1] = Cat(Vector(800, 800), cat_texture);
+  this->items[1] = Cat(Vector(MAP_BOUNDS - MAZE_BOX_THICKNESS, MAP_BOUNDS - MAZE_BOX_THICKNESS), cat_texture);
 }
 
 void  Environment::removeItem(int index) {

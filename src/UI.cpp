@@ -48,7 +48,7 @@ UI::UI(Vector screen_dimensions) {
           std::cout << "Play button pressed" << std::endl;
           bool menu_button_pressed = false;
 
-          while(!(menu_button_pressed)) {
+          while (!(menu_button_pressed)) {
             menu_button_pressed = this->enterName();
           }
         } else if (tutorial_btn.isMouseOver(*this->window_ptr)) {
@@ -194,7 +194,7 @@ bool UI::drawTutorial() {
 }
 
 void UI::drawGame() {
-  
+
 }
 
 // Entering the name of the player screen
@@ -211,7 +211,7 @@ bool UI::enterName() {
   sf::Text highscores_text;
   highscores_text.setFont(score_font);
   std::string highscores_string = "Highscores:\n\n";
-  
+
   int i = 1;
   for (auto& player : this->highscores) {
     highscores_string += std::to_string(i++) + ". " + player.first + " - " + std::to_string(player.second) + "s\n";
@@ -225,8 +225,8 @@ bool UI::enterName() {
 
   sf::Texture background;
   background.loadFromFile("images/UI.png",
-                          sf::IntRect(0, 0, this->screen_dimensions.getX(),
-                          this->screen_dimensions.getY()));
+    sf::IntRect(0, 0, this->screen_dimensions.getX(),
+      this->screen_dimensions.getY()));
 
   sf::Sprite bg_sprite;
   bg_sprite.setTexture(background);
@@ -242,7 +242,7 @@ bool UI::enterName() {
   to_play.setFillColor(sf::Color::White);
   to_play.setPosition(1230, 650);
 
-  Button menu("Back to Menu", Vector(1344, 840), Vector (300, 110),
+  Button menu("Back to Menu", Vector(1344, 840), Vector(300, 110),
     PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 8);
 
 
@@ -268,7 +268,9 @@ bool UI::enterName() {
         break;
 
       case sf::Event::TextEntered:
-        if ((*this->event_ptr).text.unicode < 128 && (*this->event_ptr).text.unicode != 8 && (*this->event_ptr).text.unicode != 13) {
+        if (
+          (*this->event_ptr).text.unicode < 128 && (*this->event_ptr).text.unicode >= 32
+          ) {
           name += static_cast<char>((*this->event_ptr).text.unicode);
           name_entered.setString(name);
         } else if ((*this->event_ptr).text.unicode == 13) {
@@ -316,7 +318,7 @@ void UI::startGame() {
   sf::Clock* clock = new sf::Clock();
   this->clock = clock;
   this->game = Game(this->window_ptr, this->event_ptr, this->screen_dimensions, this->clock);
-   if (this->game.isGameWon()) {
+  if (this->game.isGameWon()) {
     this->gameWinScreen();
   } else {
     this->gameOverScreen();
@@ -403,33 +405,33 @@ bool UI::gameOverScreen() {
   prompt_text.setFillColor(sf::Color::White);
   prompt_text.setPosition(sf::Vector2f(630, 600));
   prompt_text.setFont(font);
-  
+
   Button menu_button("Main Menu", Vector(1300, 800), BUTTON_SIZE, PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
 
   // Screen loop
   while ((*this->window_ptr).isOpen()) {
 
     //event loop
-    while((*this->window_ptr).pollEvent((*this->event_ptr))) {
+    while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
       switch ((*this->event_ptr).type) {
-        case sf::Event::Closed:
-          (*this->window_ptr).close();
-          break;
-        
-        case sf::Event::MouseMoved:
-          if (menu_button.isMouseOver(*this->window_ptr)) {
-            menu_button.setBackToColor(MOUSE_OVER_COLOR);
-          } else {
-            menu_button.setBackToColor(PLAY_BUTTON_COLOR);
-          }
-          break;
-        
-        case sf::Event::MouseButtonPressed:
-          if (menu_button.isMouseOver(*this->window_ptr)) {
-            std::cout << "Menu button pressed" << std::endl;
-            return true;
-          }
-          break;
+      case sf::Event::Closed:
+        (*this->window_ptr).close();
+        break;
+
+      case sf::Event::MouseMoved:
+        if (menu_button.isMouseOver(*this->window_ptr)) {
+          menu_button.setBackToColor(MOUSE_OVER_COLOR);
+        } else {
+          menu_button.setBackToColor(PLAY_BUTTON_COLOR);
+        }
+        break;
+
+      case sf::Event::MouseButtonPressed:
+        if (menu_button.isMouseOver(*this->window_ptr)) {
+          std::cout << "Menu button pressed" << std::endl;
+          return true;
+        }
+        break;
       }
     }
 
@@ -465,7 +467,7 @@ bool UI::gameWinScreen() {
   prompt_text.setCharacterSize(48);
   prompt_text.setFillColor(sf::Color::White);
   prompt_text.setPosition(sf::Vector2f(100, 600));
-  
+
   sf::Font font;
   font.loadFromFile("fonts/MouldyCheese.ttf");
   prompt_text.setFont(font);
@@ -487,11 +489,11 @@ bool UI::gameWinScreen() {
   if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
     this->pushHighScore();
   }
-  
+
   sf::Text highscores_text;
   highscores_text.setFont(font);
   std::string highscores_string = "Highscores:\n\n";
-  
+
   int i = 1;
   for (auto& player : this->highscores) {
     highscores_string += std::to_string(i++) + ". " + player.first + " - " + std::to_string(player.second) + "s\n";
@@ -509,43 +511,43 @@ bool UI::gameWinScreen() {
   while ((*this->window_ptr).isOpen()) {
 
     //event loop
-    while((*this->window_ptr).pollEvent((*this->event_ptr))) {
+    while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
       switch ((*this->event_ptr).type) {
-        case sf::Event::Closed:
-          (*this->window_ptr).close();
-          break;
-        
-        case sf::Event::MouseMoved:
-          if (menu_button.isMouseOver(*this->window_ptr)) {
-            menu_button.setBackToColor(MOUSE_OVER_COLOR);
-          } else {
-            menu_button.setBackToColor(PLAY_BUTTON_COLOR);
-          }
-          break;
-        
-        case sf::Event::MouseButtonPressed:
-          if (menu_button.isMouseOver(*this->window_ptr)) {
-            std::cout << "Menu button pressed" << std::endl;
-            return true;
-          }
-          break;
+      case sf::Event::Closed:
+        (*this->window_ptr).close();
+        break;
+
+      case sf::Event::MouseMoved:
+        if (menu_button.isMouseOver(*this->window_ptr)) {
+          menu_button.setBackToColor(MOUSE_OVER_COLOR);
+        } else {
+          menu_button.setBackToColor(PLAY_BUTTON_COLOR);
+        }
+        break;
+
+      case sf::Event::MouseButtonPressed:
+        if (menu_button.isMouseOver(*this->window_ptr)) {
+          std::cout << "Menu button pressed" << std::endl;
+          return true;
+        }
+        break;
       }
     }
 
-  (*this->window_ptr).clear();
+    (*this->window_ptr).clear();
 
-  (*this->window_ptr).draw(sprite);
-  (*this->window_ptr).draw(game_win_text);
-  menu_button.drawButton(*this->window_ptr);
-  (*this->window_ptr).draw(prompt_text);
-  (*this->window_ptr).draw(time_text);
-  (*this->window_ptr).draw(highscores_text);
+    (*this->window_ptr).draw(sprite);
+    (*this->window_ptr).draw(game_win_text);
+    menu_button.drawButton(*this->window_ptr);
+    (*this->window_ptr).draw(prompt_text);
+    (*this->window_ptr).draw(time_text);
+    (*this->window_ptr).draw(highscores_text);
 
-  if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
-    (*this->window_ptr).draw(new_highscore_text);
-  }
+    if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
+      (*this->window_ptr).draw(new_highscore_text);
+    }
 
-  (*this->window_ptr).display();
+    (*this->window_ptr).display();
 
   }
 }
