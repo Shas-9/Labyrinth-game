@@ -316,7 +316,11 @@ void UI::startGame() {
   sf::Clock* clock = new sf::Clock();
   this->clock = clock;
   this->game = Game(this->window_ptr, this->event_ptr, this->screen_dimensions, this->clock);
-  this->gameWinScreen();
+   if (this->game.isGameWon()) {
+    this->gameWinScreen();
+  } else {
+    this->gameOverScreen();
+  }
   // this->drawGame();
   // while ((*this->window_ptr).isOpen()) {
 

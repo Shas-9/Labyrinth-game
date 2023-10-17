@@ -37,16 +37,16 @@ private:
   void printGrid(int grid[][MAZE_HEIGHT]);
   void printPointsVisited(PointList points);
   int getOpenSideForPoint(Point target_point, Point reference_point);
-  Obstacle** computeGrid(int x, int y, int gridSize, int boxSize, int thickness, PointConnections connections);
   void findConnectionsForBox(Point point, PointConnections connections, bool sides_of_box[]);
   void saveDataToFile();
-  PointConnections generateMazePathConnections();
   void setValidMazeNeighboringPoints(
     int* possible_visiting_points_num_ptr,
     PointList* possible_visiting_points_ptr,
     PointList* points_visited_ptr, Point current_point
   );
 public:
+  Obstacle** computeGrid(int x, int y, int gridSize, int boxSize, int thickness, PointConnections connections);
+  PointConnections generateMazePathConnections();
   MazeGenerator(sf::Texture* obstacles_texture);
   void generatePaths();
   Obstacle* getObstacles();

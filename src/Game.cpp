@@ -13,6 +13,8 @@ Game::Game() {}
 Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dimensions, sf::Clock* clock) {
   srand(time(NULL));
 
+  this->is_game_won = false;
+
   Utility* util = new Utility();
   util->loadObstacleTexture();
   util->loadGroundTexture();
@@ -69,6 +71,10 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
   // Screen loop
   while (this->window_ptr->isOpen() && !(this->is_game_over)) {
+
+    if (this->player.getHealth() <= 0) {
+      this->isGameOver = true;
+    }
 
     // Event loop
     while (this->window_ptr->pollEvent((*this->event_ptr))) {
@@ -391,4 +397,8 @@ bool Game::pause() {
 
     this->window_ptr->display();
   }
+}
+
+bool Game::isGameWon() {
+  return this->is_game_won;
 }

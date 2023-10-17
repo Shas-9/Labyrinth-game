@@ -19,6 +19,7 @@ class Game {
   bool is_game_over;
   sf::Event* event_ptr;
   sf::RenderWindow *window_ptr;
+  bool is_game_won;
 
  public:
   Game();
@@ -26,6 +27,7 @@ class Game {
   
   bool pause();
   bool confirmationScreen();
+  bool isGameWon();
 };
 
 #endif
