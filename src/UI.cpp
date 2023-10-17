@@ -1,9 +1,5 @@
 #include "UI.h"
 
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <string>
-
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
@@ -27,7 +23,6 @@ UI::UI(Vector screen_dimensions) {
     "CatQuest");
 
   this->window_ptr = &window;
-  // this->game = Game(this->window_ptr);
 
   Button tutorial_btn("How to play", Vector(1344, 810), BUTTON_SIZE,
     TUTORIAL_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
@@ -278,7 +273,11 @@ bool UI::enterName() {
           name_entered.setString(name);
         } else if ((*this->event_ptr).text.unicode == 13) {
           this->player_name = name;
+          // Start timer here
           this->startGame();
+          // End timer
+          // Calculate score
+          // this->showScoreScreen()
           return true;
         }
         break;
@@ -314,15 +313,7 @@ bool UI::enterName() {
 }
 
 void UI::startGame() {
-  this->game = Game(this->window_ptr, this->event_ptr);
-  // this->drawGame();
-  // while ((*this->window_ptr).isOpen()) {
-
-    // Event loop
-    // while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
-
-    // }
-  // }
+  this->game = Game(this->window_ptr, this->event_ptr, this->screen_dimensions);
 }
 
 void UI::pushHighScore() {

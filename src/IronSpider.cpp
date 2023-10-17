@@ -9,11 +9,12 @@ IronSpider::IronSpider(
   int health,
   int attack_damage,
   Obstacle* obstacles,
+  int obstacles_num,
   int sight_distance,
   sf::Texture* iron_spider_texture
 ) : Enemy(
   position,
-  Vector(100, 100),
+  Vector(118, 98),
   "iron_spider",
   movement_speed,
   health,
@@ -29,21 +30,26 @@ IronSpider::IronSpider(
   sprite->setTextureRect(*this->walking_frames[0][0]);
 }
 
-void IronSpider::render(sf::RenderWindow *window) {
-  Utility::frames_handler(
-    this->sprite,
-    &this->current_frames_index,
-    &this->current_animation_frame,
-    walking_frames,
-    moving_left,
-    moving_right,
-    moving_up,
-    moving_down,
-    20
-  );
+// void IronSpider::render(sf::RenderWindow *window, Vector screen_dimensions, Vector camera_position) {
+//   Utility::frames_handler(
+//     this->sprite,
+//     &this->current_frames_index,
+//     &this->current_animation_frame,
+//     walking_frames,
+//     moving_left,
+//     moving_right,
+//     moving_up,
+//     moving_down,
+//     20
+//   );
 
-  this->sprite->setPosition(sf::Vector2f(500, 400));
-  window->draw(*this->sprite);
-}
+//   this->sprite->setPosition(
+//     this->position.getX() - camera_position.getX() + screen_dimensions.getX(),
+//     this->position.getY() - camera_position.getY() + screen_dimensions.getY()
+//   );
+//   window->draw(*this->sprite);
+// }
 
-void IronSpider::update() {}
+// void IronSpider::update() {
+  
+// }

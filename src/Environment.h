@@ -4,13 +4,14 @@
 #include <SFML/Graphics.hpp>
 
 #include "Enemy.h"
+#include "IronSpider.h"
 #include "Item.h"
 #include "Obstacle.h"
 #include "RenderedObject.h"
 #include "MazeGenerator.h"
 
 class Environment {
- private:
+private:
   int obstacles_num;
   int items_num;
   int enemies_num;
@@ -21,8 +22,12 @@ class Environment {
 
   sf::RenderWindow *window_ptr;
 
- public:
-  Environment(sf::Texture* obstacles_texture, sf::Texture* items_textures, sf::Texture* enemies_textures);
+public:
+  Environment(
+    sf::Texture* obstacles_texture,
+    sf::Texture* items_textures,
+    sf::Texture* iron_spider_textures
+  );
   void render(sf::RenderWindow *window_ptr);
 
   int getObstaclesNum();

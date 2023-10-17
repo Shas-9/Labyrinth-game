@@ -37,3 +37,7 @@ void Vector::set(int x, int y) {
   this->x = x;
   this->y = y;
 }
+
+void Vector::print() {
+  cout << "{" << this->getX() << ", " << this->getY() << "}" << endl;
+}

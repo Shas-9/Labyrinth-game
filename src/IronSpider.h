@@ -3,6 +3,8 @@
 
 #include "Enemy.h"
 #include "Utility.h"
+#include <ctime>
+#include <random>
 // #include "Weapon.h"
 
 class IronSpider : public Enemy {
@@ -16,13 +18,14 @@ public:
     int health,
     int attack_damage,
     Obstacle* obstacles,
+    int obstacles_num,
     int sight_distance,
     sf::Texture* iron_spider_texture
   );
 
   // void trackPlayer();
-  void update();
-  void render(sf::RenderWindow *window);
+  // void update();
+  // void render(sf::RenderWindow *window, Vector screen_dimensions, Vector camera_position);
 
   void takeDamage(int damage);
 };

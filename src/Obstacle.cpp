@@ -19,7 +19,10 @@ Obstacle::Obstacle(Vector position, string type, Vector dimensions, sf::Texture*
 // This function takes in the window object and draws the object
 void Obstacle::render(sf::RenderWindow *window, Vector camera_position) {
   this->sprite->setPosition(
-    sf::Vector2f(this->position.getX() - camera_position.getX() + 500, this->position.getY() - camera_position.getY() + 400)
+    sf::Vector2f(
+      this->position.getX() - camera_position.getX(),
+      this->position.getY() - camera_position.getY()
+    )
   );
   window->draw(*this->sprite);
 }

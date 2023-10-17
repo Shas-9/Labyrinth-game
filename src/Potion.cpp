@@ -8,10 +8,7 @@ Potion::Potion(Vector position, Vector dimensions, std::string type,
 }
 
 void Potion::use(Player* player) {
-  player->setHealth(player->getHealth() + this->health_regen);
-  if (player->getHealth() > player->getMaxHealth()) {
-    player->setHealth(player->getMaxHealth());
-  }
+  player->gainHealth(this->health_regen);
 }
 
 void Potion::update() {}
