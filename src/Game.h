@@ -26,6 +26,7 @@ class Game {
   void pause();
   void endGame();
   bool pauseScreen();
+  bool confirmationScreen();
 };
 
 #endif
