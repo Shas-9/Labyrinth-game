@@ -2,20 +2,22 @@
 #define POTION_H
 
 #include "Item.h"
-#include "Player.h"
 
 class Potion : public Item {
- protected:
-  int health_regen;
+protected:
+       int health_regen;
 
- public:
-  Potion();
-  Potion(Vector position, Vector dimensions, std::string type,
-         std::string description, int health_regen);
-
-  void use(Player* player) override;
-
-  virtual void update();
+public:
+       Potion();
+       Potion(
+              Vector position,
+              std::string type,
+              std::string description,
+              int health_regen,
+              sf::Texture* potion_texture
+       );
+       int getValue();
+       int getHealthRegen();
 };
 
 #endif

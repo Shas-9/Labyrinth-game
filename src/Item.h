@@ -2,19 +2,23 @@
 #define ITEM_INCLUDE
 
 #include "RenderedObject.h"
-class Player;
+#include "Obstacle.h"
 
 class Item : public RenderedObject {
 protected:
      std::string description;
+     sf::Sprite* sprite;
 
 public:
      Item();
      Item(Vector position, Vector dimensions, std::string type, std::string description);
 
-     virtual void use(Player* player);
-     virtual void update() override;
+     // virtual void use(Player* player);
+     void update();
+     void render(sf::RenderWindow *window, Vector camera_position);
      std::string getType();
+     virtual int getValue();
+     bool isInObstacle(Obstacle* obstacles, int obstacles_num);
 };
 
 #endif

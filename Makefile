@@ -5,6 +5,7 @@ LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
 SRC_FILES = $(wildcard src/*.cpp)
 O_FILES = $(patsubst src/%.cpp, %.o, $(SRC_FILES))
+TEST_O_FILES = $(patsubst main.o,, $(O_FILES))
 
 all: build run
 
@@ -64,7 +65,7 @@ build: $(O_FILES)
 
 %.test: 
 	g++ -c test/$@.cpp $(CC_FLAGS) $(INCLUDES)
-	g++ $(CC_FLAGS) $@.o MazeGenerator.o Environment.o Obstacle.o Vector.o RenderedObject.o Item.o Enemy.o Entity.o -o test/bin/$@ -Llibs/sfml/lib -lcriterion $(LIBS)
+	g++ $(CC_FLAGS) $@.o $(TEST_O_FILES) -o test/bin/$@ -Llibs/sfml/lib -lcriterion $(LIBS)
 	export LD_LIBRARY_PATH=libs/sfml/lib && ./test/bin/$@ --verbose
 
 clean:

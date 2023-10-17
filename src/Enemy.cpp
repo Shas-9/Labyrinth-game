@@ -62,7 +62,3 @@ void Enemy::update() {
     }
   }
 }
-
-void Enemy::setPosition(Vector new_position) {
-  this->position = new_position;
-}

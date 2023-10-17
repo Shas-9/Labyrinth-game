@@ -6,6 +6,7 @@
 #include "Enemy.h"
 #include "IronSpider.h"
 #include "Item.h"
+#include "Potion.h"
 #include "Obstacle.h"
 #include "RenderedObject.h"
 #include "MazeGenerator.h"
@@ -25,7 +26,7 @@ private:
 public:
   Environment(
     sf::Texture* obstacles_texture,
-    sf::Texture* items_textures,
+    sf::Texture* potion_texture,
     sf::Texture* iron_spider_textures
   );
   void render(sf::RenderWindow *window_ptr);

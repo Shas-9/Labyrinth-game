@@ -7,16 +7,16 @@ Cat::Cat(Vector position, Vector dimensions, std::string type, std::string descr
       this->isWithPlayer = false;
 }
 
-void Cat::render(sf::RenderWindow &window) {
-  window.draw(*this->rectangle);
-}
+// void Cat::render(sf::RenderWindow &window) {
+//   window.draw(*this->rectangle);
+// }
 
-void Cat::use(Player* player) {
-  this->isWithPlayer = true;
-}
+// void Cat::use(Player* player) {
+//   this->isWithPlayer = true;
+// }
 
-bool Cat::getIsWithPlayer() {
-  return this->isWithPlayer;
-}
+// bool Cat::getIsWithPlayer() {
+//   return this->isWithPlayer;
+// }
 
-void Cat::update() {}
+// void Cat::update() {}

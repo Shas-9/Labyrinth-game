@@ -38,7 +38,7 @@ attack_damage(attack_damage) {
 bool Entity::canMove() {
   // Loop over all obstacles and check if player is running into them
   for (int i = 0; i < this->obstacles_num; i++) {
-    if (this->collidingWith(&(this->obstacles[i]))) {
+    if (this->isCollidingWithObject(&(this->obstacles[i]))) {
       // If player is colliding with an obstacle, go back to old position.
       return false;
     }
