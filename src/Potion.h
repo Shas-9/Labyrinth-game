@@ -11,13 +11,8 @@ public:
        Potion();
        Potion(
               Vector position,
-              std::string type,
-              std::string description,
-              int health_regen,
               sf::Texture* potion_texture
        );
-       int getValue();
-       int getHealthRegen();
 };
 
 #endif

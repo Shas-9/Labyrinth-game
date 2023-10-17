@@ -184,3 +184,13 @@ void Utility::loadPotionTexture() {
 sf::Texture* Utility::getPotionTexture() {
   return this->potion_texture;
 }
+
+void Utility::loadCatTexture() {
+  this->cat_texture = new sf::Texture();
+  cat_texture->loadFromFile("textures/cat.png");
+  cat_texture->setRepeated(true);
+}
+
+sf::Texture* Utility::getCatTexture() {
+  return this->cat_texture;
+}

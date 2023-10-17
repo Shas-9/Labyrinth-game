@@ -10,6 +10,7 @@
 #include "Obstacle.h"
 #include "RenderedObject.h"
 #include "MazeGenerator.h"
+#include "Cat.h"
 
 class Environment {
 private:
@@ -27,9 +28,11 @@ public:
   Environment(
     sf::Texture* obstacles_texture,
     sf::Texture* potion_texture,
-    sf::Texture* iron_spider_textures
+    sf::Texture* iron_spider_texture,
+    sf::Texture* cat_texture
   );
-  void render(sf::RenderWindow *window_ptr);
+
+  void removeItem(int index);
 
   int getObstaclesNum();
   int getItemsNum();

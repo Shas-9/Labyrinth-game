@@ -13,7 +13,7 @@ private:
   sf::Texture* obstacles_texture;
   sf::Texture* ground_texture;
   sf::Texture* potion_texture;
-  sf::Texture* enemies_texture;
+  sf::Texture* cat_texture;
   sf::Texture* iron_spider_texture;
   sf::Texture* player_texture;
 
@@ -47,6 +47,9 @@ public:
   
   void loadPotionTexture();
   sf::Texture* getPotionTexture();
+  
+  void loadCatTexture();
+  sf::Texture* getCatTexture();
 };
 
 #endif
