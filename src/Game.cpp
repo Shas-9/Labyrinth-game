@@ -101,6 +101,15 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
         if ((*this->event_ptr).key.code == sf::Keyboard::S) {
           this->player.setMovementDirection(3, false);
         }
+        if ((*this->event_ptr).key.code == sf::Keyboard::Escape) {
+          time_elapsed = clock->getElapsedTime().asSeconds();
+          bool resume_button_pressed = false;
+
+          while (!(resume_button_pressed)) {
+            resume_button_pressed = this->pauseScreen();
+          }
+          clock->restart();
+        }
         break;
 
       case sf::Event::MouseMoved:
@@ -114,14 +123,14 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
       case sf::Event::MouseButtonPressed:
         if ((pause_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Pause button pressed" << std::endl;
-          time_elapsed = (int)clock->getElapsedTime().asSeconds();
+          time_elapsed = clock->getElapsedTime().asSeconds();
           bool resume_button_pressed = false;
 
           while (!(resume_button_pressed)) {
             resume_button_pressed = this->pauseScreen();
           }
-        }
         clock->restart();
+        }
 
         break;
       }
