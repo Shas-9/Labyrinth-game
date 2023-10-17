@@ -333,7 +333,7 @@ void UI::pushHighScore() {
   std::string key;
 
   for (auto& player : this->highscores) {
-    if (player.second > lowest_score) {
+    if (player.second < lowest_score) {
       lowest_score = player.second;
       key = player.first;
     }
@@ -480,9 +480,9 @@ bool UI::gameWinScreen() {
   new_highscore_text.setFont(font);
   new_highscore_text.setPosition(sf::Vector2f(680, 340));
 
-  //if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
+  if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
     this->pushHighScore();
-  //}
+  }
   
   sf::Text highscores_text;
   highscores_text.setFont(font);
@@ -537,9 +537,9 @@ bool UI::gameWinScreen() {
   (*this->window_ptr).draw(time_text);
   (*this->window_ptr).draw(highscores_text);
 
-  // if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
+  if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
     (*this->window_ptr).draw(new_highscore_text);
-  // }
+  }
 
   (*this->window_ptr).display();
 
