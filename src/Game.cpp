@@ -250,7 +250,7 @@ bool Game::confirmationScreen() {
 
         if ((no_button.isMouseOver(*this->window_ptr))) {
           std::cout << "No button pressed" << std::endl;
-          return true;
+          return false;
         }
       }
     }
@@ -298,7 +298,7 @@ bool Game::pauseScreen() {
 
 
   // Screen loop
-  while((*this->window_ptr).isOpen() && !(this->isGameOver)) {
+  while((*this->window_ptr).isOpen()) {
 
     // Event loop
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
@@ -329,12 +329,10 @@ bool Game::pauseScreen() {
 
         if ((quit_game_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Quit game button pressed" << std::endl;
-          bool is_quit_game = false;
-
-          while (!(is_quit_game)) {
-            is_quit_game = this->confirmationScreen();
+          
+          if (this->confirmationScreen()) {
+            return true;
           }
-          return true;
         }
         break;
       }
