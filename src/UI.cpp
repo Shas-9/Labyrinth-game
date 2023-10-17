@@ -314,7 +314,9 @@ bool UI::enterName() {
 }
 
 void UI::startGame() {
-  this->game = Game(this->window_ptr, this->event_ptr);
+  sf::Clock* clock = new sf::Clock();
+  this->clock = clock;
+  this->game = Game(this->window_ptr, this->event_ptr, this->clock);
   // this->drawGame();
   // while ((*this->window_ptr).isOpen()) {
 

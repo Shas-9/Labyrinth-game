@@ -2,6 +2,7 @@
 #define UI_INCLUDE
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 #include <fstream>
 #include <vector>
 #include <map>
@@ -23,6 +24,7 @@ class UI {
   Vector screen_dimensions;
   sf::RenderWindow* window_ptr;
   sf::Event* event_ptr;
+  sf::Clock* clock;
 
   void renderUI();
   bool drawTutorial();

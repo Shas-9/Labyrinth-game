@@ -11,7 +11,7 @@
 // Default Game constructer does nothing (window object required)
 Game::Game() {}
 
-Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
+Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, sf::Clock* clock) {
   Utility* util = new Utility();
   util->loadObstacleTexture();
   util->loadGroundTexture();
@@ -42,12 +42,16 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
 
   this->event_ptr = event_ptr;
 
-  Button pause_button("Pause Game", Vector(1600, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
+  Button pause_button("Pause Game", Vector(1570, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
                       BUTTON_TEXT_SIZE, 10);
 
   std::string hp_string = "HP: ";
   Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color(0,0,0,0), sf::Color::White, 44, 5);
   hp_text.setCustomFont("fonts/MouldyCheese.ttf");
+
+  std::string time_string = "Time: ";
+  Button time_text(time_string, Vector(900, 50), Vector(100, 30), sf::Color(0,0,0,0), sf::Color::White, 44, 5);
+  time_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   // Loading ground textures
   sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, 60000, 60000);
@@ -55,6 +59,8 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
   ground_sprite->setTexture(*util->getGroundTexture());
   ground_sprite->setTextureRect(*rectSourceSprite);
   ground_sprite->scale(sf::Vector2f(3, 3));
+
+  int time_elapsed = 0;
 
   // Screen loop
   while ((*this->window_ptr).isOpen() && !(this->isGameOver)) {
@@ -107,12 +113,15 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
       case sf::Event::MouseButtonPressed:
         if ((pause_button.isMouseOver(*this->window_ptr))) {
           std::cout << "Pause button pressed" << std::endl;
+          time_elapsed = (int)clock->getElapsedTime().asSeconds();
           bool resume_button_pressed = false;
 
           while (!(resume_button_pressed)) {
             resume_button_pressed = this->pauseScreen();
           }
         }
+        clock->restart();
+
         break;
 
         // case sf::Event::MouseButtonPressed:
@@ -168,6 +177,11 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr) {
     hp_string = "Health: " + std::to_string(this->player.getHealth());
     hp_text.setString(hp_string);
     hp_text.drawButton(*this->window_ptr);
+
+    // Render the time text
+    time_string = "Time: " + std::to_string((int)clock->getElapsedTime().asSeconds() + time_elapsed) + "s";
+    time_text.setString(time_string);
+    time_text.drawButton(*this->window_ptr);
 
     // Display the current frame
     (*this->window_ptr).display();
