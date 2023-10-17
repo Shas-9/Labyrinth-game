@@ -8,7 +8,7 @@ Potion::Potion(
   std::string description,
   int health_regen,
   sf::Texture* texture
-) : Item(position, Vector(45, 60), type, description),
+) : Item(position, Vector(45, 60), "health", description),
 health_regen(health_regen) {
   this->dimensions = Vector(45, 60);
   sf::IntRect* rectSourceSprite = new sf::IntRect(4, 0, this->getDimensions().getX() / 2, this->getDimensions().getY() / 2);
@@ -19,6 +19,10 @@ health_regen(health_regen) {
 
 int Potion::getHealthRegen() {
   return this->health_regen;
+}
+
+int Potion::getValue() {
+  return this->getHealthRegen();
 }
 
 // void Potion::update() {}

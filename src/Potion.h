@@ -16,7 +16,7 @@ public:
               int health_regen,
               sf::Texture* potion_texture
        );
-
+       int getValue();
        int getHealthRegen();
 };
 

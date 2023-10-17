@@ -181,6 +181,9 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     for (int i = 0; i < this->environment->getItemsNum(); i++) {
       if (this->environment->getItems()[i].isCollidingWithObject(&this->player)) {
         // Use item
+        if (this->environment->getItems()[i].getType() == "health") {
+          this->player.gainHealth(this->environment->getItems()[i].getValue());
+        }
         // player.gainHealth(this->environment->getItems()[i]());
       }
 

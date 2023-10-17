@@ -24,6 +24,10 @@ std::string Item::getType() {
   return this->type;
 }
 
+int Item::getValue() {
+  return 0;
+}
+
 // void Item::use(Player* player) {}
 
 bool Item::isInObstacle(Obstacle* obstacles, int obstacles_num) {
