@@ -6,12 +6,12 @@
 #include <fstream>
 #include <vector>
 #include <map>
-#include <string>
+#include <iostream>
 
 #include "Game.h"
 #include "Vector.h"
 #include "Button.h"
-
+#include "Utility.h"
 
 class UI {
  private:

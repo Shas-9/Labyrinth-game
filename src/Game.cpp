@@ -1,6 +1,4 @@
 #include "Game.h"
-#include "Utility.h"
-#include "Button.h"
 
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
 #define PAUSE_BUTTON_COLOR sf::Color (22, 30, 43)
@@ -11,7 +9,10 @@
 // Default Game constructer does nothing (window object required)
 Game::Game() {}
 
-Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, sf::Clock* clock) {
+
+Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dimensions, sf::Clock* clock) {
+  srand(time(NULL));
+
   Utility* util = new Utility();
   util->loadObstacleTexture();
   util->loadGroundTexture();
@@ -21,8 +22,8 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, sf::Clock* clock)
   this->window_ptr = window_ptr;
   this->environment = new Environment(
     util->getObstacleTexture(),
-    util->getObstacleTexture(),
-    util->getObstacleTexture()
+    util->getIronSpiderTexture(),
+    util->getIronSpiderTexture()
   );
   this->isGamePaused = false;
   this->isGameOver = false;
@@ -30,23 +31,23 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, sf::Clock* clock)
   // Create the player object
   this->player = Player(
     Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
-    // Vector(140, 180),
-    Vector(118, 98),
+    Vector(140/2, 180/2),
     "player",
     4,
-    100,
+    9000,
     10,
     this->environment,
-    util->getIronSpiderTexture()
+    util->getPlayerTexture()
   );
 
   this->event_ptr = event_ptr;
+
 
   Button pause_button("Pause Game", Vector(1570, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
                       BUTTON_TEXT_SIZE, 10);
 
   std::string hp_string = "HP: ";
-  Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color(0,0,0,0), sf::Color::White, 44, 5);
+  Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color(0, 0, 0, 0), sf::Color::White, 44, 5);
   hp_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   std::string time_string = "Time: ";
@@ -123,22 +124,6 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, sf::Clock* clock)
         clock->restart();
 
         break;
-
-        // case sf::Event::MouseButtonPressed:
-        //   if ((pause_button.isMouseOver(*this->window_ptr))) {
-        //     std::cout << "Menu button pressed" << std::endl;
-        //     // menu_button_pressed = true;
-        //     return;
-        //   }
-        //   break;
-
-        // case sf::Event::MouseMoved:
-        //   if (pause_button.isMouseOver(*this->window_ptr)) {
-        //     pause_button.setBackToColor(sf::Color::Red);
-        //   } else {
-        //     pause_button.setBackToColor(sf::Color::Blue);
-        //   }
-        //   break;
       }
     }
 
@@ -157,18 +142,53 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, sf::Clock* clock)
 
     (*this->window_ptr).clear();
 
+    // Calculate the camera position for all rendered objects
+    Vector camera_position = Vector(
+      player.getPosition().getX() - ((screen_dimensions.getX() - player.getDimensions().getX()) / 2),
+      player.getPosition().getY() - ((screen_dimensions.getY() - player.getDimensions().getY()) / 2)
+    );
+
+    // Update the ground's position relative to the player
+    ground_sprite->setPosition(
+      sf::Vector2f(
+        -camera_position.getX(),
+        -camera_position.getY()
+      )
+    );
 
     // Render the ground
-    ground_sprite->setPosition(sf::Vector2f(-player.getPosition().getX() + 500, -player.getPosition().getY() + 400));
     this->window_ptr->draw(*ground_sprite);
-
-    // Render the player
-    this->player.render(this->window_ptr);
 
     // Render all obstacles/walls of the cave
     for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
-      this->environment->getObstacles()[i].render(this->window_ptr, player.getPosition());
+      this->environment->getObstacles()[i].render(this->window_ptr, camera_position);
     }
+
+    // Render and update all enemies
+    for (int i = 0; i < this->environment->getEnemiesNum(); i++) {
+      if (this->environment->getEnemies()[i].getMovementDirection(0)) {
+        this->environment->getEnemies()[i].moveLeft();
+      }
+      if (this->environment->getEnemies()[i].getMovementDirection(1)) {
+        this->environment->getEnemies()[i].moveRight();
+      }
+      if (this->environment->getEnemies()[i].getMovementDirection(2)) {
+        this->environment->getEnemies()[i].moveUp();
+      }
+      if (this->environment->getEnemies()[i].getMovementDirection(3)) {
+        this->environment->getEnemies()[i].moveDown();
+      }
+
+      if (this->environment->getEnemies()[i].collidingWith(&this->player)) {
+        player.loseHealth(this->environment->getEnemies()[i].getAttackDamage());
+      }
+
+      this->environment->getEnemies()[i].render(this->window_ptr, camera_position);
+      this->environment->getEnemies()[i].update();
+    }
+
+    // Render the player
+    this->player.render(this->window_ptr, screen_dimensions);
 
     // Render the pause button
     pause_button.drawButton(*this->window_ptr);
@@ -298,7 +318,7 @@ bool Game::pauseScreen() {
 
 
   // Screen loop
-  while((*this->window_ptr).isOpen()) {
+  while ((*this->window_ptr).isOpen()) {
 
     // Event loop
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {

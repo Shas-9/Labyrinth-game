@@ -8,6 +8,7 @@
 #include "Environment.h"
 #include "Utility.h"
 #include "Button.h"
+#include "IronSpider.h"
 
 class Game {
  private:
@@ -20,7 +21,8 @@ class Game {
 
  public:
   Game();
-  Game(sf::RenderWindow *window, sf::Event* event_ptr, sf::Clock* clock);
+  Game(sf::RenderWindow *window, sf::Event* event_ptr, Vector screen_dimensions, sf::Clock* clock);
+  
   void updateAll();
   void renderAll();
   void pause();

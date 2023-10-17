@@ -35,7 +35,7 @@ public:
 
        void getNearbyItem();
 
-       void render(sf::RenderWindow *window);
+       void render(sf::RenderWindow *window, Vector screen_dimensions);
        void update() override;
 };
 
