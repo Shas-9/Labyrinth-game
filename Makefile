@@ -1,5 +1,5 @@
 BIN_NAME = main.out
-CC_FLAGS = -Wall -Wextra
+CC_FLAGS = 
 INCLUDES = -Ilibs/sfml/include
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 

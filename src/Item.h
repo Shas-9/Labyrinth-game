@@ -16,6 +16,7 @@ public:
      void update();
      void render(sf::RenderWindow *window, Vector camera_position);
      std::string getType();
+     virtual int getValue();
      bool isInObstacle(Obstacle* obstacles, int obstacles_num);
 };
 

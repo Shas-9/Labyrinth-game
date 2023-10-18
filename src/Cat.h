@@ -12,6 +12,7 @@ public:
     Vector position,
     sf::Texture* cat_texture
   );
+  int getValue();
 };
 
 #endif

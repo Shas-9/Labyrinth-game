@@ -18,7 +18,7 @@ Environment::Environment(
   this->obstacles = map_obstacles;
 
   // Add the items based on the map generated
-  this->items_num = 31;
+  this->items_num = 30;
   this->items = new Item[this->items_num];
 
   // Add health items
@@ -67,7 +67,7 @@ Environment::Environment(
 
   // Set the first item to be the cat item, which the player needs to find
   // Always positioned at the bottom right corner of the map
-  this->items[0] = Cat(Vector(MAP_BOUNDS - MAZE_BOX_THICKNESS, MAP_BOUNDS - MAZE_BOX_THICKNESS), cat_texture);
+  this->cat = Cat(Vector(MAP_BOUNDS - MAZE_BOX_THICKNESS, MAP_BOUNDS - MAZE_BOX_THICKNESS), cat_texture);
 }
 
 // Remove an item from the map (after the player picked it up)
@@ -107,6 +107,11 @@ Obstacle* Environment::getObstacles() {
 // Get the pointer to the items array
 Item* Environment::getItems() {
   return this->items;
+}
+
+// Get the pointer to the items array
+Cat Environment::getCat() {
+  return this->cat;
 }
 
 // Get the pointer to the enemies array

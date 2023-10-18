@@ -23,6 +23,7 @@ private:
   Obstacle* obstacles;
   Item* items;
   Enemy* enemies;
+  Cat cat;
 
   sf::RenderWindow *window_ptr;
 
@@ -42,6 +43,7 @@ public:
   int getEnemiesNum();
 
   Item* getItems();
+  Cat getCat();
   Enemy* getEnemies();
   Obstacle* getObstacles();
 };
