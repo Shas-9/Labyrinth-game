@@ -8,7 +8,8 @@
 Test(game_suite, test_constructor_default) {
     // Test the default constructor
     sf::RenderWindow window;
-    Environment environment;
+    sf::Texture* texture;
+    Environment environment(texture, texture, texture, texture);
     sf::Clock clock;
 
     Game game(&window, nullptr, Vector(800, 600), &clock);
