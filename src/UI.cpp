@@ -191,6 +191,7 @@ bool UI::drawTutorial() {
     menu.drawButton(*this->window_ptr);
     (*this->window_ptr).display();
   }
+  return true;
 }
 
 void UI::drawGame() {
@@ -312,6 +313,7 @@ bool UI::enterName() {
     menu.drawButton(*this->window_ptr);
     (*this->window_ptr).display();
   }
+  return true;
 }
 
 void UI::startGame() {
@@ -376,8 +378,6 @@ void UI::pushHighScore() {
     for (auto& player : new_highscores) {
       names_file << player.first << "\n";
       scores_file << player.second << "\n";
-
-      std::cout << player.first << " - " << player.second << std::endl;
     }
   }
 }
@@ -444,6 +444,7 @@ bool UI::gameOverScreen() {
 
     (*this->window_ptr).display();
   }
+  return true;
 }
 
 bool UI::gameWinScreen() {
@@ -550,4 +551,5 @@ bool UI::gameWinScreen() {
     (*this->window_ptr).display();
 
   }
+  return true;
 }
