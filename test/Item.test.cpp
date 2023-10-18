@@ -9,14 +9,13 @@ Test(item_suite, test_constructor) {
     Item item(position, dimensions, "health", "Health Potion");
 
     cr_assert_eq(item.getType(), "health", "Item should have type 'health'");
-    // Add more assertions for other constructor parameters if necessary.
 }
 
 Test(item_suite, test_obstacle_check) {
     // Test the obstacle check method
     Vector position(100, 100);
     Vector dimensions(30, 30);
-    Obstacle obstacles[1]; // You might need to create a real Obstacle object
+    Obstacle obstacles[1];
     int obstacles_num = 1;
     Item item(position, dimensions, "health", "Health Potion");
 

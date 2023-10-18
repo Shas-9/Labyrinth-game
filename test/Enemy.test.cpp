@@ -3,6 +3,9 @@
 #include "../src/Enemy.h"
 #include <criterion/criterion.h>
 
+// test for RenderedObject and Entity also in this file
+// since RenderedObject and Entity are abstract classes
+
 // Test for RenderedObject
 Test(rendered_object_suite, test_rendered_object) {
     Vector position(10, 20);

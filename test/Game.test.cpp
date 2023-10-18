@@ -14,7 +14,7 @@ Test(game_suite, test_game) {
 }
 
 // Test the game pause functionality
-// This is done through the screen itself
+// This is done through the screen itself to see if the buttons lead to the correct screens
 Test(game_suite, test_game_pause) {
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "Test Game Window");
     sf::Event event;
