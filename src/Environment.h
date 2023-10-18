@@ -12,6 +12,8 @@
 #include "MazeGenerator.h"
 #include "Cat.h"
 
+// Environment class: Handles the generation, allocation, storage, and management of all objects in the 
+// surroundings of the player, including Obstacles/Walls, Enemies, items.
 class Environment {
 private:
   int obstacles_num;
@@ -21,17 +23,18 @@ private:
   Obstacle* obstacles;
   Item* items;
   Enemy* enemies;
+  Cat cat;
 
   sf::RenderWindow *window_ptr;
 
 public:
-  Environment();
   Environment(
     sf::Texture* obstacles_texture,
     sf::Texture* potion_texture,
     sf::Texture* iron_spider_texture,
     sf::Texture* cat_texture
   );
+  ~Environment();
 
   void removeItem(int index);
 
@@ -40,6 +43,7 @@ public:
   int getEnemiesNum();
 
   Item* getItems();
+  Cat getCat();
   Enemy* getEnemies();
   Obstacle* getObstacles();
 };

@@ -17,3 +17,7 @@ Cat::Cat(Vector position, sf::Texture* cat_texture) : Item(position, Vector(200,
   sprite->setTextureRect(*rectSourceSprite);
   sprite->scale(sf::Vector2f(scale, scale));
 }
+
+int Cat::getValue() {
+  return 123;
+}

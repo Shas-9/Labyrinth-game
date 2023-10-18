@@ -209,21 +209,24 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
     // Render and update all enemies
     for (int i = 0; i < this->environment->getItemsNum(); i++) {
-      this->environment->getItems()[i].render(this->window_ptr, camera_position);
+      Item* current_item = &(this->environment->getItems()[i]);
+      current_item->render(this->window_ptr, camera_position);
 
-      if (this->environment->getItems()[i].isCollidingWithObject(&this->player)) {
+      if (current_item->isCollidingWithObject(&this->player)) {
         // Use item
-        if (this->environment->getItems()[i].getType() == "health") {
+        if (current_item->getType() == "health") {
           this->player.gainHealth(400);
           this->environment->removeItem(i);
-        } else if (this->environment->getItems()[i].getType() == "cat") {
-          this->is_game_won = true;
-          this->is_game_over = true;
         }
-
-        // player.gainHealth(this->environment->getItems()[i]());
       }
+    }
 
+    Cat cat_item = (this->environment->getCat());
+    Item* cat_ptr = &cat_item;
+    cat_ptr->render(this->window_ptr, camera_position);
+    if (cat_ptr->isCollidingWithObject(&this->player)) {
+      this->is_game_won = true;
+      this->is_game_over = true;
     }
 
     // Render the player
