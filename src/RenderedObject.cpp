@@ -41,3 +41,7 @@ void RenderedObject::render(sf::RenderWindow* window) {
 void RenderedObject::setPosition(Vector new_position) {
   this->position = new_position;
 }
+
+sf::RectangleShape* RenderedObject::getRectangle() {
+  return this->rectangle;
+}

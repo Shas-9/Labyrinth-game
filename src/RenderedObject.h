@@ -29,6 +29,8 @@ class RenderedObject {
 
   void render(sf::RenderWindow* window);
   virtual void update() = 0;
+
+  sf::RectangleShape* getRectangle();
 };
 
 #endif

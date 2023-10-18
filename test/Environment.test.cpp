@@ -9,7 +9,7 @@ Test(environment_suite, test_constructor) {
   sf::Texture potion_texture;
   sf::Texture iron_spider_texture;
 
-  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture);
+  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture, &potion_texture);
 
   // Check that the number of obstacles, items, and enemies are greater than 0
   cr_assert(environment.getObstaclesNum() > 0, "Obstacles not initialized.");
@@ -23,7 +23,7 @@ Test(environment_suite, test_get_obstacles) {
   sf::Texture potion_texture;
   sf::Texture iron_spider_texture;
 
-  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture);
+  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture, &potion_texture);
 
   Obstacle* obstacles = environment.getObstacles();
 
@@ -37,7 +37,7 @@ Test(environment_suite, test_get_items) {
   sf::Texture potion_texture;
   sf::Texture iron_spider_texture;
 
-  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture);
+  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture, &potion_texture);
 
   Item* items = environment.getItems();
 
@@ -51,7 +51,7 @@ Test(environment_suite, test_get_enemies) {
   sf::Texture potion_texture;
   sf::Texture iron_spider_texture;
 
-  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture);
+  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture, &potion_texture);
 
   Enemy* enemies = environment.getEnemies();
 
@@ -65,7 +65,7 @@ Test(environment_suite, test_get_counts) {
   sf::Texture potion_texture;
   sf::Texture iron_spider_texture;
 
-  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture);
+  Environment environment(&obstacles_texture, &potion_texture, &iron_spider_texture, &potion_texture);
 
   // Check that the number of obstacles, items, and enemies are greater than or equal to 0
   cr_assert(environment.getObstaclesNum() >= 0, "Invalid number of obstacles.");
