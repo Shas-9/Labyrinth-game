@@ -74,22 +74,3 @@ Test(utility_suite, test_get_iron_spider_walking_frames) {
   cr_assert(walking_frames[2].size() == 4, "Invalid number of back walking frames.");
   cr_assert(walking_frames[3].size() == 4, "Invalid number of front walking frames.");
 }
-
-// // Test the frames_handler method to ensure it updates sprite frames correctly.
-// Test(utility_suite, test_frames_handler) {
-//   Utility utility;
-//   sf::Sprite sprite;
-//   int current_frames_index = 0;
-//   int current_animation_frame = 0;
-//   vector<vector<sf::IntRect*>> walking_frames(4, vector<sf::IntRect*>(4));
-//   bool moving_left = false;
-//   bool moving_right = false;
-//   bool moving_up = false;
-//   bool moving_down = false;
-//   int speed_factor = 1;
-
-//   utility.frames_handler(&sprite, &current_frames_index, &current_animation_frame, walking_frames,
-//                         moving_left, moving_right, moving_up, moving_down, speed_factor);
-
-//   cr_assert(sprite.getTextureRect() == *walking_frames[0][0], "Sprite frames are not updated correctly.");
-// }
