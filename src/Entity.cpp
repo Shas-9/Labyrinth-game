@@ -1,8 +1,9 @@
 #include "Entity.h"
 
+// Default constructor
 Entity::Entity() {}
 
-// The constructor for the object
+// Constructor for entity that sets the properties
 Entity::Entity(
   Vector position,
   Vector dimensions,
@@ -31,63 +32,82 @@ attack_damage(attack_damage) {
   // Loading textures
   this->current_frames_index = 0;
   this->current_animation_frame = 0;
-
   this->sprite = new sf::Sprite();
 }
 
+// Checks whether the entity can move or not by 
+// detecting whether it's inside any of the obstacles in the map or not
 bool Entity::canMove() {
-  // Loop over all obstacles and check if player is running into them
+  // Loop over all obstacles and check if entity is running into them
   for (int i = 0; i < this->obstacles_num; i++) {
     if (this->isCollidingWithObject(&(this->obstacles[i]))) {
-      // If player is colliding with an obstacle, go back to old position.
+      // If entity is colliding with an obstacle, go back to old position.
       return false;
     }
   }
+  // If no obstacles is deetected to be colliding with entity return true
   return true;
 }
 
-// Move player up
+// Move entity up
 void Entity::moveUp() {
+  // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
+  // Move the entity to new position
   this->position.set(this->position.getX(), this->position.getY() - movement_speed);
 
+  // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
+    // If entity moved into an obstacle, move it back to the old position
+    // to prevent walking into the obstacle
     this->position.set(this->position.getX(), old_position.getY());
   }
 }
 
-// Move player down
+// Move entity down
 void Entity::moveDown() {
+  // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
+  // Move the entity to new position
   this->position.set(this->position.getX(), this->position.getY() + movement_speed);
 
+  // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
+    // If entity moved into an obstacle, move it back to the old position
+    // to prevent walking into the obstacle
     this->position.set(this->position.getX(), old_position.getY());
   }
 }
 
-// Move player right
+// Move entity right
 void Entity::moveRight() {
+  // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
+  // Move the entity to new position
   this->position.set(this->position.getX() + movement_speed, this->position.getY());
 
+  // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
+    // If entity moved into an obstacle, move it back to the old position
+    // to prevent walking into the obstacle
     this->position.set(old_position.getX(), this->position.getY());
   }
 }
 
-// Move player left
+// Move entity left
 void Entity::moveLeft() {
-  // Save old position
+  // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
-  // Move to new position
+  // Move the entity to new position
   this->position.set(this->position.getX() - movement_speed, this->position.getY());
 
+  // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
+    // If entity moved into an obstacle, move it back to the old position
+    // to prevent walking into the obstacle
     this->position.set(old_position.getX(), this->position.getY());
   }
 }
-
 
 // Set whether the player is moving in a given direction or not
 // 0 = left
@@ -115,6 +135,10 @@ void Entity::setMovementDirection(int direction, bool is_moving) {
 }
 
 // Get whether the entity is moving in a current direction or not
+// 0 = left
+// 1 = right
+// 2 = up
+// 3 = down
 int Entity::getMovementDirection(int direction) {
   switch (direction) {
   case 0:
@@ -136,7 +160,9 @@ int Entity::getMovementDirection(int direction) {
   }
 }
 
+// Render the entity (also handles movement animation)
 void Entity::render(sf::RenderWindow *window, Vector camera_position) {
+  // Use the utility function "frames handles" to handle frames of walking
   Utility::frames_handler(
     this->sprite,
     &this->current_frames_index,
@@ -149,18 +175,20 @@ void Entity::render(sf::RenderWindow *window, Vector camera_position) {
     20
   );
 
+  // Sets the new position for the sprite of the entity and renders it on the screen
   this->sprite->setPosition(
     this->position.getX() - camera_position.getX(),
     this->position.getY() - camera_position.getY()
   );
   window->draw(*this->sprite);
-
 }
 
+// Get the health of the entity as a percentage
 int Entity::getHealth() {
   return (((double)this->health / this->max_health) * 100);
 }
 
+// Make entity lose health (resitricted to zero)
 void Entity::loseHealth(int damage) {
   if (damage > 0) {
     if ((this->health - damage) < 0) {
@@ -171,6 +199,7 @@ void Entity::loseHealth(int damage) {
   }
 }
 
+// Make entity gain health (restricted to max_health)
 void Entity::gainHealth(int extra_health) {
   if (extra_health > 0) {
     if ((this->health + extra_health) > this->max_health) {
@@ -181,6 +210,7 @@ void Entity::gainHealth(int extra_health) {
   }
 }
 
+// Get the attack_damage of the entity
 int Entity::getAttackDamage() {
   return this->attack_damage;
 }
