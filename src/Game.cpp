@@ -317,6 +317,8 @@ bool Game::confirmationScreen() {
     this->window_ptr->display();
 
   }
+
+  return true;
 }
 
 bool Game::pause() {
@@ -400,6 +402,8 @@ bool Game::pause() {
 
     this->window_ptr->display();
   }
+
+  return true;
 }
 
 bool Game::isGameWon() {

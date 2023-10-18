@@ -10,7 +10,5 @@ int main() {
   Vector vector = Vector(1920, 1080);
   UI* ui = new UI(vector);
 
-  ui->pushHighScore();
-
   return 0;
 }
