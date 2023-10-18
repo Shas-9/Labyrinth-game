@@ -9,7 +9,6 @@ Test(player_suite, test_constructor_default) {
   Player player;
 
   cr_assert(player.getScore() == 0, "Default Constructor: Score is not 0.");
-  // You can add more assertions for other default values if necessary.
 }
 
 // Test the parameterized constructor for Player
@@ -26,6 +25,6 @@ Test(player_suite, test_constructor_parameterized) {
 
   Player player(position, dimensions, type, movement_speed, health, attack_damage, &environment, &player_texture);
 
+  // Check if default score is 0
   cr_assert(player.getScore() == 0, "Parameterized Constructor: Score is not 0.");
-  // Add more assertions for other attributes if needed.
 }
