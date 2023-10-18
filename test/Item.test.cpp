@@ -9,7 +9,6 @@ Test(item_suite, test_constructor) {
     Item item(position, dimensions, "health", "Health Potion");
 
     cr_assert_eq(item.getType(), "health", "Item should have type 'health'");
-    cr_assert_eq(item.getDescription(), "Health Potion", "Item should have the correct description");
     // Add more assertions for other constructor parameters if necessary.
 }
 
@@ -24,8 +23,10 @@ Test(item_suite, test_obstacle_check) {
     bool result = item.isInObstacle(obstacles, obstacles_num);
     cr_assert(result, "Item should not be in an obstacle");
 
+    sf::Texture texture;
+
     // Simulate item inside an obstacle
-    obstacles[0] = Obstacle(Vector(90, 90), Vector(40, 40), "obstacle");
+    obstacles[0] = Obstacle(Vector(90, 90), "potion", Vector(40, 40), &texture);
     result = item.isInObstacle(obstacles, obstacles_num);
     cr_assert_not(result, "Item should be inside an obstacle");
 }

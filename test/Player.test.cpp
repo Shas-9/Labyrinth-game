@@ -20,7 +20,8 @@ Test(player_suite, test_constructor_parameterized) {
   int movement_speed = 5;
   int health = 100;
   int attack_damage = 10;
-  Environment environment;
+  sf::Texture* texture;
+  Environment environment(texture, texture, texture, texture);
   sf::Texture player_texture;
 
   Player player(position, dimensions, type, movement_speed, health, attack_damage, &environment, &player_texture);
