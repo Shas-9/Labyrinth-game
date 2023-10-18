@@ -9,6 +9,7 @@ using std::endl;
 #include "Obstacle.h"
 #include "Utility.h"
 
+// Entity class: Base class for any object that is considered "alive" (moves around, has health, etc..)
 class Entity : public RenderedObject {
 protected:
        // Movement
@@ -18,6 +19,7 @@ protected:
        bool moving_down;
        int movement_speed;
 
+       // Obstacles in map that the entity needs to be aware of (so that it cant run into them)
        Obstacle* obstacles;
        int obstacles_num;
 
@@ -45,14 +47,10 @@ public:
               int obstacles_num
        );
 
-       // Health
        int getHealth();
        void loseHealth(int lost_health);
        void gainHealth(int extra_health);
 
-       virtual void update() = 0;
-
-       // Movement
        void moveUp();
        void moveDown();
        void moveRight();
@@ -60,12 +58,12 @@ public:
 
        void setMovementDirection(int direction, bool is_moving);
        int getMovementDirection(int direction);
+       int getAttackDamage();
 
        bool canMove();
 
+       virtual void update() = 0;
        void render(sf::RenderWindow *window, Vector camera_position);
-
-       int getAttackDamage();
 };
 
 #endif

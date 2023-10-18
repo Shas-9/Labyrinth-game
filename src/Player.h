@@ -7,12 +7,10 @@
 #include "Entity.h"
 #include "Environment.h"
 #include "Enemy.h"
-// #include "Weapon.h"
 
 class Player : public Entity {
 protected:
        int score;
-       // Weapon* current_item;
        Environment* environment;
 
 public:
@@ -27,13 +25,7 @@ public:
               Environment* environment,
               sf::Texture* player_texture
        );
-       void attack();  // If Player has Weapon, use it instead
-       void pickUpItem();
-       void dropItem();
        int getScore();
-       // Item* getNearbyItem();
-
-       void getNearbyItem();
 
        void render(sf::RenderWindow *window, Vector screen_dimensions);
        void update() override;

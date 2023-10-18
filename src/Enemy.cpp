@@ -1,7 +1,9 @@
 #include "Enemy.h"
 
+// Empty default constructor
 Enemy::Enemy() {}
 
+// Constructor that sets the properties of the enemy
 Enemy::Enemy(
   Vector position,
   Vector dimensions,
@@ -21,39 +23,53 @@ Enemy::Enemy(
   attack_damage,
   obstacles,
   obstacles_num
-), sight_distance(sight_distance) {}
+) {}
 
-void Enemy::takeDamage(int damage) {
-  this->health -= damage;
-}
-
+// Update function that handles the random movement in the enemy object
 void Enemy::update() {
+  // With every tick in the game, this function is fired
+
+  // A random number is generated between 0 and 5000
   int random_int = rand() % 5000;
+
+  // If the number is 7 or smaller (0.14% chance)
+  // The enemy updates its current movement state
   if (random_int <= 7) {
+    // random_int = 0: Start moving left
+    // random_int = 1: Start moving right
+    // random_int = 2: Start moving up
+    // random_int = 3: Start moving down
+    // random_int >= 4: Stop moving
+
+    // Left
     if (random_int == 0) {
       this->setMovementDirection(0, true);
       this->setMovementDirection(1, false);
       this->setMovementDirection(2, false);
       this->setMovementDirection(3, false);
     }
+    // right
     if (random_int == 1) {
       this->setMovementDirection(0, false);
       this->setMovementDirection(1, true);
       this->setMovementDirection(2, false);
       this->setMovementDirection(3, false);
     }
+    // up
     if (random_int == 2) {
       this->setMovementDirection(0, false);
       this->setMovementDirection(1, false);
       this->setMovementDirection(2, true);
       this->setMovementDirection(3, false);
     }
+    // down
     if (random_int == 3) {
       this->setMovementDirection(0, false);
       this->setMovementDirection(1, false);
       this->setMovementDirection(2, false);
       this->setMovementDirection(3, true);
     }
+    // no movement
     if (random_int >= 4) {
       this->setMovementDirection(0, false);
       this->setMovementDirection(1, false);

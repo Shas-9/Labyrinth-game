@@ -3,16 +3,15 @@
 
 #include "Item.h"
 
+// Cat class: The item that the player needs to pick up to end and win the game
 class Cat : public Item {
-protected:
-       bool isWithPlayer;
 
 public:
-       Cat();
-       Cat(
-              Vector position,
-              sf::Texture* cat_texture
-       );
+  Cat();
+  Cat(
+    Vector position,
+    sf::Texture* cat_texture
+  );
 };
 
 #endif
