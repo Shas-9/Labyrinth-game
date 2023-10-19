@@ -37,10 +37,11 @@ class UI {
   void fetchHighScores();
   void startGame();
   void drawGame();
-  void renderScreen();
+  
   void pushHighScore();
   bool gameOverScreen();
   bool gameWinScreen();
+  
 };
 
 #endif

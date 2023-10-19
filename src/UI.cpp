@@ -321,7 +321,9 @@ void UI::startGame() {
   this->clock = clock;
   this->game = Game(this->window_ptr, this->event_ptr, this->screen_dimensions, this->clock);
   if (this->game.isGameWon()) {
+    this->score = this->game.getScore();
     this->gameWinScreen();
+
   } else {
     this->gameOverScreen();
   }
