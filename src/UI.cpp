@@ -123,7 +123,7 @@ void UI::fetchHighScores() {
   while (getline(names_file, name)) {
     getline(scores_file, score);
 
-    this->highscores.insert({ name, std::stoi(score) });
+    this->highscores.insert({ std::stoi(score), name });
     i++;
   }
 
@@ -215,7 +215,7 @@ bool UI::enterName() {
 
   int i = 1;
   for (auto& player : this->highscores) {
-    highscores_string += std::to_string(i++) + ". " + player.first + " - " + std::to_string(player.second) + "s\n";
+    highscores_string += std::to_string(i++) + ". " + player.second + " - " + std::to_string(player.first) + "s\n";
   }
 
   highscores_text.setString(highscores_string);
@@ -339,33 +339,33 @@ void UI::startGame() {
 }
 
 void UI::pushHighScore() {
-  int lowest_score = this->highscores.begin()->second;
-  std::string key;
+  int lowest_score = this->highscores.begin()->first;
+  int key;
 
   for (auto& player : this->highscores) {
-    if (player.second < lowest_score) {
-      lowest_score = player.second;
+    if (player.first < lowest_score) {
+      lowest_score = player.first;
       key = player.first;
     }
   }
 
   if (this->score <= lowest_score) {
     this->highscores.erase(key);
-    this->highscores.insert({ this->player_name, this->score });
+    this->highscores.insert({ this->score, this->player_name });
 
     std::vector<int> scores;
     for (auto& player : this->highscores) {
-      scores.push_back(player.second);
+      scores.push_back(player.first);
     }
 
     // Sorting the highscores from lowest to highest
     std::sort(scores.begin(), scores.end());
 
     // Create a new map to store the sorted highscores
-    std::map<std::string, int> new_highscores;
+    std::map<int, std::string> new_highscores;
     for (int i = 0; i < scores.size(); i++) {
       for (auto& player : this->highscores) {
-        if (scores[i] == player.second) {
+        if (scores[i] == player.first) {
           new_highscores.insert({ player.first, player.second });
         }
       }
@@ -489,7 +489,7 @@ bool UI::gameWinScreen() {
   new_highscore_text.setFont(font);
   new_highscore_text.setPosition(sf::Vector2f(680, 340));
 
-  if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
+  if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->first) {
     this->pushHighScore();
   }
 
@@ -499,7 +499,7 @@ bool UI::gameWinScreen() {
 
   int i = 1;
   for (auto& player : this->highscores) {
-    highscores_string += std::to_string(i++) + ". " + player.first + " - " + std::to_string(player.second) + "s\n";
+    highscores_string += std::to_string(i++) + ". " + player.second + " - " + std::to_string(player.first) + "s\n";
   }
 
   highscores_text.setString(highscores_string);
@@ -546,7 +546,7 @@ bool UI::gameWinScreen() {
     (*this->window_ptr).draw(time_text);
     (*this->window_ptr).draw(highscores_text);
 
-    if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->second) {
+    if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->first) {
       (*this->window_ptr).draw(new_highscore_text);
     }
 

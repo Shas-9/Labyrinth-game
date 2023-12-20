@@ -17,7 +17,7 @@ class UI {
  private:
   int score;
   std::string player_name;
-  std::map<std::string, int> highscores;
+  std::map<int, std::string> highscores;
   int num_highscores;
   std::string current_state;
   Game game;
