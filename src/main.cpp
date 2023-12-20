@@ -4,11 +4,11 @@
 #include "Vector.h"
 #include "Environment.h"
 
-int main() {
-  Vector vector = Vector(1000, 800);
-  UI* ui = new UI(vector);
+#include <iostream>
 
-  ui->fetchHighScores();
+int main() {
+  Vector vector = Vector(1920, 1080);
+  UI* ui = new UI(vector);
 
   return 0;
 }

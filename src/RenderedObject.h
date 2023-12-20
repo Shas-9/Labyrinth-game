@@ -19,15 +19,18 @@ class RenderedObject {
   RenderedObject();
   RenderedObject(Vector position, Vector dimensions, string type);
 
-  /** NEWLY ADDED FUNCTIONS*/
-  bool collidingWith(RenderedObject* rendered_object);
+  
+  bool isCollidingWithObject(RenderedObject* rendered_object);
 
   Vector getPosition();
+  void setPosition(Vector new_position);
+  
   Vector getDimensions();
-  /** */
 
   void render(sf::RenderWindow* window);
   virtual void update() = 0;
+
+  sf::RectangleShape* getRectangle();
 };
 
 #endif

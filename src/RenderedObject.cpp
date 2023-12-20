@@ -18,7 +18,7 @@ RenderedObject::RenderedObject(Vector position, Vector dimensions, string type)
 Vector RenderedObject::getPosition() { return this->position; }
 Vector RenderedObject::getDimensions() { return this->dimensions; }
 
-bool RenderedObject::collidingWith(RenderedObject* rendered_object) {
+bool RenderedObject::isCollidingWithObject(RenderedObject* rendered_object) {
   bool object_A_above_B = rendered_object->getPosition().getY() >= this->getPosition().getY() + this->getDimensions().getY();
 
   bool object_A_below_B = rendered_object->getPosition().getY() + rendered_object->getDimensions().getY() <= this->getPosition().getY();
@@ -36,4 +36,12 @@ bool RenderedObject::collidingWith(RenderedObject* rendered_object) {
 
 void RenderedObject::render(sf::RenderWindow* window) {
   window->draw(*this->rectangle);
+}
+
+void RenderedObject::setPosition(Vector new_position) {
+  this->position = new_position;
+}
+
+sf::RectangleShape* RenderedObject::getRectangle() {
+  return this->rectangle;
 }

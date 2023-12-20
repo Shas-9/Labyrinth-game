@@ -3,12 +3,9 @@
 
 #include "Entity.h"
 #include "Obstacle.h"
-// #include "Weapon.h"
 
+// Enemy class: Base class for all enemy classes and handles the logic of moving across the map
 class Enemy : public Entity {
-protected:
-      Obstacle* obstacles;
-      int sight_distance;
 
 public:
       Enemy();
@@ -16,19 +13,15 @@ public:
             Vector position,
             Vector dimensions,
             string type,
-            string movement_animation,
             int movement_speed,
             int health,
             int attack_damage,
-            string attack_animation,
-            string death_animation,
             Obstacle* obstacles,
+            int obstacles_num,
             int sight_distance
       );
-      // void trackPlayer();
-      void update() override;
 
-      void takeDamage(int damage);
+      void update();
 };
 
 #endif

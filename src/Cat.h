@@ -3,18 +3,16 @@
 
 #include "Item.h"
 
+// Cat class: The item that the player needs to pick up to end and win the game
 class Cat : public Item {
- protected:
-  bool isWithPlayer;
 
- public:
+public:
   Cat();
-  Cat(Vector position, Vector dimensions, std::string type,
-         std::string description);
-  void use(Player* player);
-  void render(sf::RenderWindow &window);
-  void update();
-  bool getIsWithPlayer();
+  Cat(
+    Vector position,
+    sf::Texture* cat_texture
+  );
+  int getValue();
 };
 
 #endif
