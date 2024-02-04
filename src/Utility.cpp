@@ -194,3 +194,13 @@ void Utility::loadCatTexture() {
 sf::Texture* Utility::getCatTexture() {
   return this->cat_texture;
 }
+
+void Utility::loadFastPotionTexture() {
+  this->fast_texture = new sf::Texture();
+  fast_texture->loadFromFile("textures/fast.jpg");
+  fast_texture->setRepeated(true);
+}
+
+sf::Texture* Utility::getFastPotionTexture() {
+  return this->fast_texture;
+}

@@ -210,6 +210,10 @@ void Entity::gainHealth(int extra_health) {
   }
 }
 
+void Entity::addSpeed(int speed){
+  this->movement_speed += speed;
+}
+
 // Get the attack_damage of the entity
 int Entity::getAttackDamage() {
   return this->attack_damage;

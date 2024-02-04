@@ -22,13 +22,15 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   util->loadIronSpiderTexture();
   util->loadPotionTexture();
   util->loadCatTexture();
+  util->loadFastPotionTexture();
 
   this->window_ptr = window_ptr;
   this->environment = new Environment(
     util->getObstacleTexture(),
     util->getPotionTexture(),
     util->getIronSpiderTexture(),
-    util->getCatTexture()
+    util->getCatTexture(),
+    util->getFastPotionTexture()
   );
   this->is_game_won = false;
   this->is_game_paused = false;
@@ -207,7 +209,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
       this->environment->getEnemies()[i].update();
     }
 
-    // Render and update all enemies
+    // Render and update all items
     for (int i = 0; i < this->environment->getItemsNum(); i++) {
       Item* current_item = &(this->environment->getItems()[i]);
       current_item->render(this->window_ptr, camera_position);
@@ -216,6 +218,11 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
         // Use item
         if (current_item->getType() == "health") {
           this->player.gainHealth(400);
+          this->environment->removeItem(i);
+        }
+        // Increase speed by 2 (default is 4)
+        if (current_item->getType() == "fast") {
+          this->player.addSpeed(2);
           this->environment->removeItem(i);
         }
       }

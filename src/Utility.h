@@ -16,6 +16,7 @@ private:
   sf::Texture* cat_texture;
   sf::Texture* iron_spider_texture;
   sf::Texture* player_texture;
+  sf::Texture* fast_texture;
 
 public:
   static void frames_handler(
@@ -50,6 +51,9 @@ public:
   
   void loadCatTexture();
   sf::Texture* getCatTexture();
+
+  void loadFastPotionTexture();
+  sf::Texture* getFastPotionTexture();
 };
 
 #endif

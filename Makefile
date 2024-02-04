@@ -15,6 +15,9 @@ IronSpider.o: src/IronSpider.cpp
 Potion.o: src/Potion.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
+FastPotion.o: src/FastPotion.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
 RenderedObject.o: src/RenderedObject.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 

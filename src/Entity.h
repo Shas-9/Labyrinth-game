@@ -50,6 +50,7 @@ public:
   int getHealth();
   void loseHealth(int lost_health);
   void gainHealth(int extra_health);
+  void addSpeed(int speed);
 
   void moveUp();
   void moveDown();

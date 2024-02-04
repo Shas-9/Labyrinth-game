@@ -7,6 +7,7 @@
 #include "IronSpider.h"
 #include "Item.h"
 #include "Potion.h"
+#include "FastPotion.h"
 #include "Obstacle.h"
 #include "RenderedObject.h"
 #include "MazeGenerator.h"
@@ -33,6 +34,13 @@ public:
     sf::Texture* potion_texture,
     sf::Texture* iron_spider_texture,
     sf::Texture* cat_texture
+  );
+  Environment(
+    sf::Texture* obstacles_texture,
+    sf::Texture* potion_texture,
+    sf::Texture* iron_spider_texture,
+    sf::Texture* cat_texture,
+    sf::Texture* fast_texture
   );
   ~Environment();
 
