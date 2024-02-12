@@ -6,12 +6,21 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <iostream>
 
 #include "Game.h"
 #include "Vector.h"
 #include "Button.h"
 #include "Utility.h"
+
+// TODO: 
+/*
+
+1. PUT ALL TEXTURES IN AN UNORDEREDMAP SO THAT WE DONT LOAD THE SAME TEXTURE MULTIPLE TIMES
+2. ADD DIFFERENT FUNCTIONS FOR ALL SCREENS TO LOAD EVERYHTING REQUIRED FOR THE SCREEN
+
+*/
 
 class UI {
  private:
@@ -25,6 +34,10 @@ class UI {
   sf::RenderWindow* window_ptr;
   sf::Event* event_ptr;
   sf::Clock* clock;
+  std::unordered_map<std::string, sf::Texture> textures_map;
+  std::unordered_map<std::string, sf::Sprite> sprites_map;
+  std::unordered_map<std::string, sf::Font> fonts_map;
+
 
   void renderUI();
   bool drawTutorial();
