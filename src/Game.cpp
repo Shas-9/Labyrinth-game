@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "TexturesHandler.hpp"
 
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
 #define PAUSE_BUTTON_COLOR sf::Color (22, 30, 43)
@@ -9,27 +10,13 @@
 // Default Game constructer does nothing (window object required)
 Game::Game() {}
 
-
 Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dimensions, sf::Clock* clock) {
   srand(time(NULL));
 
   this->is_game_won = false;
 
-  Utility* util = new Utility();
-  util->loadObstacleTexture();
-  util->loadGroundTexture();
-  util->loadPlayerTexture();
-  util->loadIronSpiderTexture();
-  util->loadPotionTexture();
-  util->loadCatTexture();
-
   this->window_ptr = window_ptr;
-  this->environment = new Environment(
-    util->getObstacleTexture(),
-    util->getPotionTexture(),
-    util->getIronSpiderTexture(),
-    util->getCatTexture()
-  );
+  this->environment = new Environment();
   this->is_game_won = false;
   this->is_game_paused = false;
   this->is_game_over = false;
@@ -39,15 +26,13 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
     Vector(140 / 2, 180 / 2),
     "player",
-    4,
+    3,
     10000,
     10,
-    this->environment,
-    util->getPlayerTexture()
+    this->environment
   );
 
   this->event_ptr = event_ptr;
-
 
   Button pause_button("Pause Game", Vector(1570, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
     BUTTON_TEXT_SIZE, 10);
@@ -63,7 +48,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   // Loading ground textures
   sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, MAP_BOUNDS / 3, MAP_BOUNDS / 3);
   sf::Sprite* ground_sprite = new sf::Sprite();
-  ground_sprite->setTexture(*util->getGroundTexture());
+  ground_sprite->setTexture(*LOADTEXTURE("textures/stone_ground.png"));
   ground_sprite->setTextureRect(*rectSourceSprite);
   ground_sprite->scale(sf::Vector2f(3, 3));
 
@@ -71,6 +56,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
   // Screen loop
   while (this->window_ptr->isOpen() && !(this->is_game_over)) {
+    UTIL_CLASS.setDT();
 
     if (this->player.getHealth() <= 0) {
       this->is_game_over = true;
@@ -179,6 +165,15 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     // Render the ground
     this->window_ptr->draw(*ground_sprite);
 
+    // Render obstacles' walls (for 3D illusion)
+    for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
+      this->environment->getObstacles()[i].render_right_wall(this->window_ptr, camera_position);
+    }
+    // Render obstacles' walls (for 3D illusion)
+    for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
+      this->environment->getObstacles()[i].render_bottom_wall(this->window_ptr, camera_position);
+    }
+
     // Render all obstacles/walls of the cave
     for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
       this->environment->getObstacles()[i].render(this->window_ptr, camera_position);
@@ -200,7 +195,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
       }
 
       if (this->environment->getEnemies()[i].isCollidingWithObject(&this->player)) {
-        player.loseHealth(this->environment->getEnemies()[i].getAttackDamage());
+        player.loseHealth(this->environment->getEnemies()[i].getAttackDamage()*UTIL_CLASS.getTimeFactor());
       }
 
       this->environment->getEnemies()[i].render(this->window_ptr, camera_position);
@@ -248,7 +243,6 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     time_text.drawButton(*this->window_ptr);
 
     this->window_ptr->display();
-
   }
 }
 

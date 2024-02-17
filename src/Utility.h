@@ -1,6 +1,8 @@
 #ifndef UTILITY_INCLUDE
 #define UTILITY_INCLUDE
 
+#define UTIL_CLASS Utility::getInstance()
+
 #include <SFML/Graphics.hpp>
 
 #include "Vector.h"
@@ -10,14 +12,15 @@ using std::vector;
 
 class Utility {
 private:
-  sf::Texture* obstacles_texture;
-  sf::Texture* ground_texture;
-  sf::Texture* potion_texture;
-  sf::Texture* cat_texture;
-  sf::Texture* iron_spider_texture;
-  sf::Texture* player_texture;
+  sf::Clock deltaClock;
+  sf::Time dt = deltaClock.restart();
+  Utility();
 
 public:
+  static Utility& getInstance();
+  Utility(Utility const&) = delete;
+  void operator=(Utility const&) = delete;
+
   static void frames_handler(
     sf::Sprite * sprite,
     int* current_frames_index,
@@ -30,26 +33,12 @@ public:
     int speed_factor
   );
 
+  void setDT();
+  long getDT();
+  int getTimeFactor();
+
   static vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions, int scale);
   static vector<vector<sf::IntRect*>> getIronSpiderWalkingFrames(Vector dimensions, int scale);
-
-  void loadPlayerTexture();
-  sf::Texture* getPlayerTexture();
-
-  void loadIronSpiderTexture();
-  sf::Texture* getIronSpiderTexture();
-
-  void loadObstacleTexture();
-  sf::Texture* getObstacleTexture();
-
-  void loadGroundTexture();
-  sf::Texture* getGroundTexture();
-  
-  void loadPotionTexture();
-  sf::Texture* getPotionTexture();
-  
-  void loadCatTexture();
-  sf::Texture* getCatTexture();
 };
 
 #endif

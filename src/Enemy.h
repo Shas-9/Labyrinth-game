@@ -8,20 +8,20 @@
 class Enemy : public Entity {
 
 public:
-      Enemy();
-      Enemy(
-            Vector position,
-            Vector dimensions,
-            string type,
-            int movement_speed,
-            int health,
-            int attack_damage,
-            Obstacle* obstacles,
-            int obstacles_num,
-            int sight_distance
-      );
+  Enemy();
+  Enemy(
+    Vector position,
+    Vector dimensions,
+    string type,
+    int movement_speed,
+    int health,
+    int attack_damage,
+    Obstacle* obstacles,
+    int obstacles_num,
+    int sight_distance
+  );
 
-      void update();
+  void update();
 };
 
 #endif

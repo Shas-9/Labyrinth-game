@@ -54,7 +54,7 @@ void Entity::moveUp() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX(), this->position.getY() - movement_speed);
+  this->position.set(this->position.getX(), this->position.getY() - (movement_speed*UTIL_CLASS.getTimeFactor()));
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
@@ -69,7 +69,7 @@ void Entity::moveDown() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX(), this->position.getY() + movement_speed);
+  this->position.set(this->position.getX(), this->position.getY() + (movement_speed*UTIL_CLASS.getTimeFactor()));
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
@@ -84,7 +84,7 @@ void Entity::moveRight() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX() + movement_speed, this->position.getY());
+  this->position.set(this->position.getX() + (movement_speed*UTIL_CLASS.getTimeFactor()), this->position.getY());
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
@@ -99,7 +99,7 @@ void Entity::moveLeft() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX() - movement_speed, this->position.getY());
+  this->position.set(this->position.getX() - (movement_speed*UTIL_CLASS.getTimeFactor()), this->position.getY());
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {

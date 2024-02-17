@@ -5,14 +5,11 @@
 
 class Potion : public Item {
 protected:
-       int health_regen;
+  int health_regen;
 
 public:
-       Potion();
-       Potion(
-              Vector position,
-              sf::Texture* potion_texture
-       );
+  Potion();
+  Potion(Vector position);
 };
 
 #endif

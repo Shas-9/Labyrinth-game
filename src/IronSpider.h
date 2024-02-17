@@ -15,8 +15,7 @@ public:
   IronSpider(
     Vector position,
     Obstacle* obstacles,
-    int obstacles_num,
-    sf::Texture* iron_spider_texture
+    int obstacles_num
   );
 
   // void takeDamage(int damage);
