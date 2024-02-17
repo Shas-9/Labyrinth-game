@@ -23,6 +23,26 @@ sprite->setTexture(*texture);
 
 For a real example, take a look at [the Cat.cpp class](src/Cat.cpp).
 
+### Getting a time-factor constant
+A time factor constant can be obtained based on how much time passed between the current and the last frame. This can be used to adjust things like the speed of entities, etc..
+
+#### How to use
+Include file
+```c++
+#include "Utility.h"
+```
+Access time factor using:
+```c++
+UTIL_CLASS.getTimeFactor();
+```
+
+Real example from the [Entity.cpp class](src/Entity.cpp).
+```c++
+// Move the entity to new position
+int factor = UTIL_CLASS.getTimeFactor();
+this->position.set(this->position.getX() + (movement_speed*factor), this->position.getY());
+```
+
 ## Testing
 
 We're using the Criterion framework for testing in this project: https://github.com/Snaipe/Criterion
