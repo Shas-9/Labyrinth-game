@@ -27,6 +27,7 @@ class Game {
   bool pause();
   bool confirmationScreen();
   bool isGameWon();
+  int getScore();
 };
 
 #endif

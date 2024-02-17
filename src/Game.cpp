@@ -220,8 +220,10 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     Item* cat_ptr = &cat_item;
     cat_ptr->render(this->window_ptr, camera_position);
     if (cat_ptr->isCollidingWithObject(&this->player)) {
-      this->is_game_won = true;
-      this->is_game_over = true;
+      if (cat_ptr->getValue() == 123) {
+        this->is_game_won = true;
+        this->is_game_over = true;
+      }
     }
 
     // Render the player
@@ -311,6 +313,8 @@ bool Game::confirmationScreen() {
     this->window_ptr->display();
 
   }
+
+  return true;
 }
 
 bool Game::pause() {
@@ -394,8 +398,14 @@ bool Game::pause() {
 
     this->window_ptr->display();
   }
+
+  return true;
 }
 
 bool Game::isGameWon() {
   return this->is_game_won;
+}
+
+int Game::getScore() {
+  return this->player.getScore();
 }
