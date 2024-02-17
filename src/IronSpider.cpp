@@ -10,7 +10,7 @@ IronSpider::IronSpider(Vector position, Obstacle* obstacles, int obstacles_num) 
   "iron_spider",
   2,                // Speed
   30,               // Health
-  10,               // Attack damage
+  5,                // Attack damage
   obstacles,
   obstacles_num,
   40                // Sight distance

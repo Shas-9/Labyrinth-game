@@ -10,24 +10,24 @@
 
 class Player : public Entity {
 protected:
-       int score;
-       Environment* environment;
+  int score;
+  Environment* environment;
 
 public:
-       Player();
-       Player(
-              Vector position,
-              Vector dimensions,
-              string type,
-              int movement_speed,
-              int health,
-              int attack_damage,
-              Environment* environment
-       );
-       int getScore();
+  Player();
+  Player(
+    Vector position,
+    Vector dimensions,
+    string type,
+    int movement_speed,
+    int health,
+    int attack_damage,
+    Environment* environment
+  );
+  int getScore();
 
-       void render(sf::RenderWindow *window, Vector screen_dimensions);
-       void update() override;
+  void render(sf::RenderWindow *window, Vector screen_dimensions);
+  void update() override;
 };
 
 #endif

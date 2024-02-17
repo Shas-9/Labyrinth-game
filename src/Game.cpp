@@ -195,7 +195,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
       }
 
       if (this->environment->getEnemies()[i].isCollidingWithObject(&this->player)) {
-        player.loseHealth(this->environment->getEnemies()[i].getAttackDamage());
+        player.loseHealth(this->environment->getEnemies()[i].getAttackDamage()*UTIL_CLASS.getTimeFactor());
       }
 
       this->environment->getEnemies()[i].render(this->window_ptr, camera_position);
