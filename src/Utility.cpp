@@ -26,8 +26,10 @@ void Utility::frames_handler(
   }
 
   if (is_moving) {
-    (*current_animation_frame) = (*current_animation_frame) == (3999 / speed_factor) ? 0 : (*current_animation_frame) + 1;
-    sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / (1000 / speed_factor)]);
+    *current_animation_frame += speed_factor*UTIL_CLASS.getTimeFactor();
+    if (*current_animation_frame >= 4000) *current_animation_frame = 0;
+
+    sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / 1000]);
   } else {
     sprite->setTextureRect(*walking_frames[(*current_frames_index)][0]);
   }
@@ -49,7 +51,7 @@ vector<vector<sf::IntRect*>> Utility::getIronSpiderWalkingFrames(Vector dimensio
   sf::IntRect* right_frame_3 = new sf::IntRect(7 + 39 * 2, 88, dimensions.getX() / scale, dimensions.getY() / scale);
   sf::IntRect* right_frame_4 = new sf::IntRect(7 + 39 * 3, 88, dimensions.getX() / scale, dimensions.getY() / scale);
 
-  sf::IntRect* left_frame_1 = new sf::IntRect(7 , 126, dimensions.getX() / scale, dimensions.getY() / scale);
+  sf::IntRect* left_frame_1 = new sf::IntRect(7, 126, dimensions.getX() / scale, dimensions.getY() / scale);
   sf::IntRect* left_frame_2 = new sf::IntRect(7 + 39 * 1, 126, dimensions.getX() / scale, dimensions.getY() / scale);
   sf::IntRect* left_frame_3 = new sf::IntRect(7 + 39 * 2, 126, dimensions.getX() / scale, dimensions.getY() / scale);
   sf::IntRect* left_frame_4 = new sf::IntRect(7 + 39 * 3, 126, dimensions.getX() / scale, dimensions.getY() / scale);
@@ -133,4 +135,30 @@ vector<vector<sf::IntRect*>> Utility::getPlayerWalkingFrames(Vector dimensions, 
   };
 
   return walking_frames;
+}
+
+Utility& Utility::getInstance() {
+  static Utility instance;
+  return instance;
+}
+
+Utility::Utility() {}
+
+void Utility::setDT() {
+  this->dt = this->deltaClock.restart();
+}
+
+long Utility::getDT() {
+  return this->dt.asMicroseconds();
+}
+
+int Utility::getTimeFactor() {
+  long delta_time = this->getDT();
+
+  int time_factor;
+  // if delta time is less than five seconds
+  if (delta_time < 5000000) time_factor = (int)(delta_time / 1000 / 2);
+  else time_factor = 0;
+
+  return time_factor;
 }

@@ -9,7 +9,7 @@
 
 class TexturesHandler {
 private:
-  std::unordered_map<std::string, sf::Texture*> hash;
+  std::unordered_map<std::string, sf::Texture*> textures;
   TexturesHandler();
 public:
   static TexturesHandler& getInstance();
