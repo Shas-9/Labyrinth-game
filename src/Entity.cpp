@@ -54,7 +54,8 @@ void Entity::moveUp() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX(), this->position.getY() - movement_speed);
+  int factor = UTIL_CLASS.getTimeFactor();
+  this->position.set(this->position.getX(), this->position.getY() - (movement_speed*factor));
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
@@ -69,7 +70,8 @@ void Entity::moveDown() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX(), this->position.getY() + movement_speed);
+  int factor = UTIL_CLASS.getTimeFactor();
+  this->position.set(this->position.getX(), this->position.getY() + (movement_speed*factor));
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
@@ -84,7 +86,8 @@ void Entity::moveRight() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX() + movement_speed, this->position.getY());
+  int factor = UTIL_CLASS.getTimeFactor();
+  this->position.set(this->position.getX() + (movement_speed*factor), this->position.getY());
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
@@ -99,7 +102,8 @@ void Entity::moveLeft() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX() - movement_speed, this->position.getY());
+  int factor = UTIL_CLASS.getTimeFactor();
+  this->position.set(this->position.getX() - (movement_speed*factor), this->position.getY());
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {

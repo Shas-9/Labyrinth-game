@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "TexturesHandler.hpp"
 #include <iostream>
 
 // Default constructor for player does nothing (Environment required)
@@ -11,8 +12,7 @@ Player::Player(
   int movement_speed,
   int health,
   int attack_damage,
-  Environment* environment,
-  sf::Texture* player_texture
+  Environment* environment
 ) : Entity(
   position,
   dimensions,
@@ -26,7 +26,8 @@ Player::Player(
   int scale = dimensions.getX()/14;
   this->walking_frames = Utility::getPlayerWalkingFrames(this->getDimensions(), scale);
   sprite->scale(sf::Vector2f(scale, scale));
-  sprite->setTexture(*player_texture);
+  sf::Texture* texture = LOADTEXTURE("textures/player.png");
+  sprite->setTexture(*texture);
   sprite->setTextureRect(*this->walking_frames[0][0]);
 }
 

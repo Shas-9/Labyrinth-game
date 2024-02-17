@@ -22,8 +22,7 @@ public:
               int movement_speed,
               int health,
               int attack_damage,
-              Environment* environment,
-              sf::Texture* player_texture
+              Environment* environment
        );
        int getScore();
 

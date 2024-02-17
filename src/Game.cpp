@@ -10,7 +10,6 @@
 // Default Game constructer does nothing (window object required)
 Game::Game() {}
 
-
 Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dimensions, sf::Clock* clock) {
   srand(time(NULL));
 
@@ -27,15 +26,13 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
     Vector(140 / 2, 180 / 2),
     "player",
-    4,
+    2,
     10000,
     10,
-    this->environment,
-    LOADTEXTURE("textures/player.png")
+    this->environment
   );
 
   this->event_ptr = event_ptr;
-
 
   Button pause_button("Pause Game", Vector(1570, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
     BUTTON_TEXT_SIZE, 10);
@@ -59,6 +56,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
   // Screen loop
   while (this->window_ptr->isOpen() && !(this->is_game_over)) {
+    UTIL_CLASS.setDT();
 
     if (this->player.getHealth() <= 0) {
       this->is_game_over = true;
@@ -167,6 +165,15 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     // Render the ground
     this->window_ptr->draw(*ground_sprite);
 
+    // Render obstacles' walls (for 3D illusion)
+    for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
+      this->environment->getObstacles()[i].render_right_wall(this->window_ptr, camera_position);
+    }
+    // Render obstacles' walls (for 3D illusion)
+    for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
+      this->environment->getObstacles()[i].render_bottom_wall(this->window_ptr, camera_position);
+    }
+
     // Render all obstacles/walls of the cave
     for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
       this->environment->getObstacles()[i].render(this->window_ptr, camera_position);
@@ -234,7 +241,6 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     time_text.drawButton(*this->window_ptr);
 
     this->window_ptr->display();
-
   }
 }
 
