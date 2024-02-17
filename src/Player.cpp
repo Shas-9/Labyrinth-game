@@ -46,7 +46,7 @@ void Player::render(sf::RenderWindow *window, Vector screen_dimensions) {
     moving_right,
     moving_up,
     moving_down,
-    20
+    movement_speed*8
   );
 
   this->sprite->setPosition(

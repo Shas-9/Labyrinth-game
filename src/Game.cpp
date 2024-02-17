@@ -26,7 +26,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
     Vector(140 / 2, 180 / 2),
     "player",
-    2,
+    3,
     10000,
     10,
     this->environment

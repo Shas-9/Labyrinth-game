@@ -34,7 +34,7 @@ Environment::Environment() {
   }
 
   // Add the enemies based on the map generated
-  this->enemies_num = 2000;
+  this->enemies_num = 100;
   this->enemies = new Enemy[this->enemies_num];
 
   // Add enemies

@@ -26,8 +26,10 @@ void Utility::frames_handler(
   }
 
   if (is_moving) {
-    (*current_animation_frame) = (*current_animation_frame) == (3999 / speed_factor) ? 0 : (*current_animation_frame) + 1;
-    sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / (1000 / speed_factor)]);
+    *current_animation_frame += speed_factor*UTIL_CLASS.getTimeFactor();
+    if (*current_animation_frame >= 4000) *current_animation_frame = 0;
+
+    sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / 1000]);
   } else {
     sprite->setTextureRect(*walking_frames[(*current_frames_index)][0]);
   }
@@ -155,7 +157,7 @@ int Utility::getTimeFactor() {
 
   int time_factor;
   // if delta time is less than five seconds
-  if (delta_time < 5000000) time_factor = (int)(delta_time / 1000);
+  if (delta_time < 5000000) time_factor = (int)(delta_time / 1000 / 2);
   else time_factor = 0;
 
   return time_factor;
