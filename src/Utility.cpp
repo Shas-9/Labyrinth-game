@@ -33,16 +33,6 @@ void Utility::frames_handler(
   }
 }
 
-void Utility::loadGroundTexture() {
-  this->ground_texture = new sf::Texture();
-  ground_texture->loadFromFile("textures/stone_ground.png");
-  ground_texture->setRepeated(true);
-}
-
-sf::Texture* Utility::getGroundTexture() {
-  return this->ground_texture;
-}
-
 vector<vector<sf::IntRect*>> Utility::getIronSpiderWalkingFrames(Vector dimensions, int scale) {
   sf::IntRect* front_frame_1 = new sf::IntRect(7, 9, dimensions.getX() / scale, dimensions.getY() / scale);
   sf::IntRect* front_frame_2 = new sf::IntRect(7 + 39, 9, dimensions.getX() / scale, dimensions.getY() / scale);
@@ -143,54 +133,4 @@ vector<vector<sf::IntRect*>> Utility::getPlayerWalkingFrames(Vector dimensions, 
   };
 
   return walking_frames;
-}
-
-void Utility::loadIronSpiderTexture() {
-  this->iron_spider_texture = new sf::Texture();
-  iron_spider_texture->loadFromFile("textures/iron_spider.png");
-  iron_spider_texture->setRepeated(true);
-}
-
-sf::Texture* Utility::getIronSpiderTexture() {
-  return this->iron_spider_texture;
-}
-
-void Utility::loadPlayerTexture() {
-  this->player_texture = new sf::Texture();
-  player_texture->loadFromFile("textures/player.png");
-  player_texture->setRepeated(true);
-}
-
-sf::Texture* Utility::getPlayerTexture() {
-  return this->player_texture;
-}
-
-void Utility::loadObstacleTexture() {
-  this->obstacles_texture = new sf::Texture();
-  obstacles_texture->loadFromFile("textures/stone_wall.png");
-  obstacles_texture->setRepeated(true);
-}
-
-sf::Texture* Utility::getObstacleTexture() {
-  return this->obstacles_texture;
-}
-
-void Utility::loadPotionTexture() {
-  this->potion_texture = new sf::Texture();
-  potion_texture->loadFromFile("textures/potion.png");
-  potion_texture->setRepeated(true);
-}
-
-sf::Texture* Utility::getPotionTexture() {
-  return this->potion_texture;
-}
-
-void Utility::loadCatTexture() {
-  this->cat_texture = new sf::Texture();
-  cat_texture->loadFromFile("textures/cat.png");
-  cat_texture->setRepeated(true);
-}
-
-sf::Texture* Utility::getCatTexture() {
-  return this->cat_texture;
 }

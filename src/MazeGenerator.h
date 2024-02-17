@@ -47,7 +47,6 @@ private:
 public:
   Obstacle** computeGrid(int x, int y, int gridSize, int boxSize, int thickness, PointConnections connections);
   PointConnections generateMazePathConnections();
-  MazeGenerator(sf::Texture* obstacles_texture);
   void generatePaths();
   Obstacle* getObstacles();
   int getObstaclesNum();

@@ -57,6 +57,9 @@ Game.o: src/Game.cpp
 Utility.o: src/Utility.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
+TexturesHandler.o: src/TexturesHandler.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
 main.o: src/main.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 

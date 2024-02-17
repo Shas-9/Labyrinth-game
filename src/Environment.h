@@ -28,12 +28,7 @@ private:
   sf::RenderWindow *window_ptr;
 
 public:
-  Environment(
-    sf::Texture* obstacles_texture,
-    sf::Texture* potion_texture,
-    sf::Texture* iron_spider_texture,
-    sf::Texture* cat_texture
-  );
+  Environment();
   ~Environment();
 
   void removeItem(int index);

@@ -1,14 +1,10 @@
 #include "IronSpider.h"
+#include "TexturesHandler.hpp"
 
 // Default constructor for player does nothing (Environment required)
 IronSpider::IronSpider() {}
 
-IronSpider::IronSpider(
-  Vector position,
-  Obstacle* obstacles,
-  int obstacles_num,
-  sf::Texture* iron_spider_texture
-) : Enemy(
+IronSpider::IronSpider(Vector position, Obstacle* obstacles, int obstacles_num) : Enemy(
   position,
   Vector(118, 98),  // Dimensions
   "iron_spider",
@@ -21,7 +17,8 @@ IronSpider::IronSpider(
 ) {
   int scale = 4;
   this->walking_frames = Utility::getIronSpiderWalkingFrames(this->getDimensions(), scale);
+  sf::Texture* texture = LOADTEXTURE("textures/iron_spider.png");
   sprite->scale(sf::Vector2f(scale, scale));
-  sprite->setTexture(*iron_spider_texture);
+  sprite->setTexture(*texture);
   sprite->setTextureRect(*this->walking_frames[0][0]);
 }

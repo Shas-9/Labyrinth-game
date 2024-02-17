@@ -12,7 +12,7 @@ private:
 
 public:
   Obstacle();
-  Obstacle(Vector position, string type, Vector dimensions, sf::Texture* texture);
+  Obstacle(Vector position, string type, Vector dimensions);
   void update();
   void render(sf::RenderWindow* window, Vector camera_position);
   void printData(std::ofstream* outfile);
