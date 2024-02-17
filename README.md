@@ -4,6 +4,25 @@
 
 Clone the repo and run "make all" in the terminal
 
+## Documentation
+
+### Loading a texture
+Textures can be loaded once and used all over the codebase using a singleton design of the `TexturesHandler` wrapper class
+
+#### How to use
+First include the class:
+```c++
+#include "TexturesHandler.hpp"
+```
+Then, to get the texture see this example:
+```c++
+sf::Texture* texture = LOADTEXTURE("textures/stone_wall.png");
+this->sprite = new sf::Sprite();
+sprite->setTexture(*texture);
+```
+
+For a real example, take a look at [the Cat.cpp class](src/Cat.cpp).
+
 ## Testing
 
 We're using the Criterion framework for testing in this project: https://github.com/Snaipe/Criterion

@@ -14,7 +14,7 @@ Obstacle::Obstacle(Vector position, string type, Vector dimensions) : RenderedOb
   sprite->scale(sf::Vector2f(3, 3));
 
   sf::IntRect* rectSourceSprite2 = new sf::IntRect(0, 0, this->getDimensions().getX() / 3, 20);
-  sf::Texture* texture2 = LOADTEXTURE("textures/stone_wall_2_1 (2).png");
+  sf::Texture* texture2 = LOADTEXTURE("textures/stone_wall_bottom.png");
   this->bottom_wall_sprite = new sf::Sprite();
   bottom_wall_sprite->setTexture(*texture2);
   bottom_wall_sprite->setTextureRect(*rectSourceSprite2);
@@ -22,14 +22,14 @@ Obstacle::Obstacle(Vector position, string type, Vector dimensions) : RenderedOb
 
   sf::IntRect* rectSourceSprite3 = new sf::IntRect(0, 0, 10, this->getDimensions().getY() / 3);
 
-  sf::Texture* texture3 = LOADTEXTURE("textures/stone_wall_2_1 (3).png");
+  sf::Texture* texture3 = LOADTEXTURE("textures/stone_wall_right.png");
   this->right_wall_sprite = new sf::Sprite();
   right_wall_sprite->setTexture(*texture3);
   right_wall_sprite->setTextureRect(*rectSourceSprite3);
   right_wall_sprite->scale(sf::Vector2f(3, 3));
 
   sf::IntRect* rectSourceSprite4 = new sf::IntRect(0, 0, 16, 32);
-  sf::Texture* texture4 = LOADTEXTURE("textures/stone_wall_2_1 (5).png");
+  sf::Texture* texture4 = LOADTEXTURE("textures/stone_wall_corner.png");
   this->border_wall_sprite = new sf::Sprite();
   border_wall_sprite->setTexture(*texture4);
   border_wall_sprite->setTextureRect(*rectSourceSprite4);
@@ -55,6 +55,8 @@ void Obstacle::render_bottom_wall(sf::RenderWindow *window, Vector camera_positi
     )
   );
   window->draw(*this->bottom_wall_sprite);
+
+  // render the border
   border_wall_sprite->setPosition(
     sf::Vector2f(
       this->position.getX() - camera_position.getX() + (this->sprite->getTextureRect().width) * 3,

@@ -1,14 +1,14 @@
 #include "TexturesHandler.hpp"
 
 sf::Texture* TexturesHandler::getTexture(std::string texture_location, bool repeated) {
-  if (this->hash.count(texture_location) != 0) {
-    hash[texture_location]->setRepeated(repeated);
-    return hash[texture_location];
+  if (this->textures.count(texture_location) != 0) {
+    textures[texture_location]->setRepeated(repeated);
+    return textures[texture_location];
   } else {
-    hash[texture_location] = new sf::Texture();
-    hash[texture_location]->loadFromFile(texture_location);
-    hash[texture_location]->setRepeated(repeated);
-    return hash[texture_location];
+    textures[texture_location] = new sf::Texture();
+    textures[texture_location]->loadFromFile(texture_location);
+    textures[texture_location]->setRepeated(repeated);
+    return textures[texture_location];
   }
 }
 
