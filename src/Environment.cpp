@@ -2,14 +2,9 @@
 
 // The constructor for the environment, handles the generation of obstacles, enemies, and items all around the map
 // Takes in the textures for each object
-Environment::Environment(
-  sf::Texture* obstacles_texture,
-  sf::Texture* potion_texture,
-  sf::Texture* iron_spider_texture,
-  sf::Texture* cat_texture
-) {
+Environment::Environment() {
   // Generates the paths using the MazeGenerator class
-  MazeGenerator* maze_generator = new MazeGenerator(obstacles_texture);
+  MazeGenerator* maze_generator = new MazeGenerator();
   maze_generator->generatePaths();
 
   // after generation, point the obstacles pointer to the array of obstacles generated
@@ -25,10 +20,7 @@ Environment::Environment(
   // (items must be inside the map and randomly generated && not inside any obstacles)
   for (int i = 0; i < this->items_num; i++) {
     // Create a potion object at a random location
-    Potion potion = Potion(
-      Vector(rand() % MAP_BOUNDS, rand() % MAP_BOUNDS),
-      potion_texture
-    );
+    Potion potion = Potion(Vector(rand() % MAP_BOUNDS, rand() % MAP_BOUNDS));
 
     // Check if the item is in an obstacle
     while (!potion.isInObstacle(this->obstacles, this->obstacles_num)) {
@@ -52,8 +44,7 @@ Environment::Environment(
     IronSpider spider = IronSpider(
       Vector(rand() % MAP_BOUNDS, rand() % MAP_BOUNDS),
       this->getObstacles(),
-      this->getObstaclesNum(),
-      iron_spider_texture
+      this->getObstaclesNum()
     );
 
     // If spider was randomly generated in an obstacle, keep randomizing spawn position until a valid location is found
@@ -67,7 +58,7 @@ Environment::Environment(
 
   // Set the first item to be the cat item, which the player needs to find
   // Always positioned at the bottom right corner of the map
-  this->cat = Cat(Vector(MAP_BOUNDS - MAZE_BOX_THICKNESS, MAP_BOUNDS - MAZE_BOX_THICKNESS), cat_texture);
+  this->cat = Cat(Vector(MAP_BOUNDS - MAZE_BOX_THICKNESS, MAP_BOUNDS - MAZE_BOX_THICKNESS));
 }
 
 // Remove an item from the map (after the player picked it up)

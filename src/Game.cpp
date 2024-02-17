@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "TexturesHandler.hpp"
 
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
 #define PAUSE_BUTTON_COLOR sf::Color (22, 30, 43)
@@ -15,21 +16,8 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
   this->is_game_won = false;
 
-  Utility* util = new Utility();
-  util->loadObstacleTexture();
-  util->loadGroundTexture();
-  util->loadPlayerTexture();
-  util->loadIronSpiderTexture();
-  util->loadPotionTexture();
-  util->loadCatTexture();
-
   this->window_ptr = window_ptr;
-  this->environment = new Environment(
-    util->getObstacleTexture(),
-    util->getPotionTexture(),
-    util->getIronSpiderTexture(),
-    util->getCatTexture()
-  );
+  this->environment = new Environment();
   this->is_game_won = false;
   this->is_game_paused = false;
   this->is_game_over = false;
@@ -43,7 +31,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     10000,
     10,
     this->environment,
-    util->getPlayerTexture()
+    LOADTEXTURE("textures/player.png")
   );
 
   this->event_ptr = event_ptr;
@@ -63,7 +51,7 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   // Loading ground textures
   sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, MAP_BOUNDS / 3, MAP_BOUNDS / 3);
   sf::Sprite* ground_sprite = new sf::Sprite();
-  ground_sprite->setTexture(*util->getGroundTexture());
+  ground_sprite->setTexture(*LOADTEXTURE("textures/stone_ground.png"));
   ground_sprite->setTextureRect(*rectSourceSprite);
   ground_sprite->scale(sf::Vector2f(3, 3));
 

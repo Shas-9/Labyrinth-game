@@ -8,10 +8,7 @@ class Cat : public Item {
 
 public:
   Cat();
-  Cat(
-    Vector position,
-    sf::Texture* cat_texture
-  );
+  Cat(Vector position);
   int getValue();
 };
 

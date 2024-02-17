@@ -1,5 +1,5 @@
 #include "Obstacle.h"
-
+#include "TexturesHandler.hpp"
 #include <iostream>
 
 
@@ -7,9 +7,9 @@ Obstacle::Obstacle()
   : RenderedObject(Vector(0, 0), Vector(10, 10), "obstacle") {}
 
 // The constructor function for the object
-Obstacle::Obstacle(Vector position, string type, Vector dimensions, sf::Texture* texture)
-  : RenderedObject(position, dimensions, type) {
+Obstacle::Obstacle(Vector position, string type, Vector dimensions) : RenderedObject(position, dimensions, type) {
   sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, this->getDimensions().getX() / 3, this->getDimensions().getY() / 3);
+  sf::Texture* texture = LOADTEXTURE("textures/stone_wall.png");
   this->sprite = new sf::Sprite();
   sprite->setTexture(*texture);
   sprite->setTextureRect(*rectSourceSprite);
