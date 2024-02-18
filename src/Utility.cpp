@@ -162,3 +162,6 @@ int Utility::getTimeFactor() {
 
   return time_factor;
 }
+
+void Utility::setRenderWindow(sf::RenderWindow* window) { this->window = window; }
+sf::RenderWindow* Utility::getRenderWindow() { return this->window; }

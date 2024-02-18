@@ -14,6 +14,7 @@ class Utility {
 private:
   sf::Clock deltaClock;
   sf::Time dt = deltaClock.restart();
+  sf::RenderWindow* window;
   Utility();
 
 public:
@@ -36,6 +37,9 @@ public:
   void setDT();
   long getDT();
   int getTimeFactor();
+
+  void setRenderWindow(sf::RenderWindow* window);
+  sf::RenderWindow* getRenderWindow();
 
   static vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions, int scale);
   static vector<vector<sf::IntRect*>> getIronSpiderWalkingFrames(Vector dimensions, int scale);

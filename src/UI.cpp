@@ -23,6 +23,7 @@ UI::UI(Vector screen_dimensions) {
     "CatQuest");
 
   this->window_ptr = &window;
+  UTIL_CLASS.setRenderWindow(this->window_ptr);
 
   Button tutorial_btn("How to play", Vector(1344, 810), BUTTON_SIZE,
     TUTORIAL_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
