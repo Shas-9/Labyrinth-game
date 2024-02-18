@@ -52,6 +52,9 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   ground_sprite->setTextureRect(*rectSourceSprite);
   ground_sprite->scale(sf::Vector2f(3, 3));
 
+  Vector camera_position;
+  UTIL_CLASS.setCameraPos(&camera_position);
+
   int time_elapsed = 0;
 
   // Screen loop
@@ -149,16 +152,16 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
     }
 
     // Calculate the camera position for all rendered objects
-    Vector camera_position = Vector(
-      player.getPosition().getX() - ((screen_dimensions.getX() - player.getDimensions().getX()) / 2),
-      player.getPosition().getY() - ((screen_dimensions.getY() - player.getDimensions().getY()) / 2)
+    camera_position = Vector(
+      player.getPosition().x - ((screen_dimensions.x - player.getDimensions().x) / 2),
+      player.getPosition().y - ((screen_dimensions.y - player.getDimensions().y) / 2)
     );
 
     // Update the ground's position relative to the player
     ground_sprite->setPosition(
       sf::Vector2f(
-        -camera_position.getX(),
-        -camera_position.getY()
+        -camera_position.x,
+        -camera_position.y
       )
     );
 

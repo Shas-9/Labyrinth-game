@@ -15,6 +15,7 @@ private:
   sf::Clock deltaClock;
   sf::Time dt = deltaClock.restart();
   sf::RenderWindow* window;
+  Vector* camera_position;
   Utility();
 
 public:
@@ -40,6 +41,9 @@ public:
 
   void setRenderWindow(sf::RenderWindow* window);
   sf::RenderWindow* getRenderWindow();
+
+  void setCameraPos(Vector* camera_position);
+  Vector* getCameraPos();
 
   static vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions, int scale);
   static vector<vector<sf::IntRect*>> getIronSpiderWalkingFrames(Vector dimensions, int scale);
