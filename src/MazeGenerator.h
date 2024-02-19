@@ -20,8 +20,8 @@ using std::vector;
 
 #define MAZE_WIDTH 10
 #define MAZE_HEIGHT 10
-#define MAZE_BOX_SIZE 2000
-#define MAZE_BOX_THICKNESS 500
+#define MAZE_BOX_SIZE 1280
+#define MAZE_BOX_THICKNESS 256
 #define MAP_BOUNDS (MAZE_WIDTH*MAZE_BOX_SIZE - (MAZE_WIDTH)*MAZE_BOX_THICKNESS)
 
 #define Point pair<int, int>
