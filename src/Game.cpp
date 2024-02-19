@@ -46,11 +46,11 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
   time_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   // Loading ground textures
-  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, MAP_BOUNDS / 3, MAP_BOUNDS / 3);
+  sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, MAP_BOUNDS / 2, MAP_BOUNDS / 2);
   sf::Sprite* ground_sprite = new sf::Sprite();
   ground_sprite->setTexture(*LOADTEXTURE("textures/stone_ground.png"));
   ground_sprite->setTextureRect(*rectSourceSprite);
-  ground_sprite->scale(sf::Vector2f(3, 3));
+  ground_sprite->scale(sf::Vector2f(2, 2));
 
   int time_elapsed = 0;
 
