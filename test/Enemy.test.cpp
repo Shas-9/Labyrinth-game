@@ -1,6 +1,6 @@
-#include "../src/RenderedObject.h"
-#include "../src/Entity.h"
-#include "../src/Enemy.h"
+#include "../src/RenderedObject.hpp"
+#include "../src/Entity.hpp"
+#include "../src/Enemy.hpp"
 #include <criterion/criterion.h>
 
 // test for RenderedObject and Entity also in this file

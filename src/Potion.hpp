@@ -1,7 +1,7 @@
 #ifndef POTION_H
 #define POTION_H
 
-#include "Item.h"
+#include "Item.hpp"
 
 class Potion : public Item {
 protected:

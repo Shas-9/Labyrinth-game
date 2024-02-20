@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Game.hpp"
 #include "TexturesHandler.hpp"
 
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)

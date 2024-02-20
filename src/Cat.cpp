@@ -1,4 +1,4 @@
-#include "Cat.h"
+#include "Cat.hpp"
 #include "TexturesHandler.hpp"
 
 // Default empty constructor

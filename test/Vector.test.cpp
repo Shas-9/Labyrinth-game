@@ -1,4 +1,4 @@
-#include "../src/Vector.h"
+#include "../src/Vector.hpp"
 
 #include <criterion/criterion.h>
 #include <criterion/logging.h>

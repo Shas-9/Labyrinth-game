@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-#include "Vector.h"
+#include "Vector.hpp"
 
 // Button class for reusable functionality that makes shows buttons on the screen
 class Button {

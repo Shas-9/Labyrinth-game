@@ -13,8 +13,8 @@ Item::Item(Vector position,
 void Item::render(sf::RenderWindow *window, Vector camera_position) {
   this->sprite->setPosition(
     sf::Vector2f(
-      this->position.getX() - camera_position.getX(),
-      this->position.getY() - camera_position.getY()
+      this->position.x - camera_position.x,
+      this->position.y - camera_position.y
     )
   );
   window->draw(*this->sprite);

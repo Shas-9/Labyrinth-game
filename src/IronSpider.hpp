@@ -1,11 +1,11 @@
 #ifndef IRON_SPIDER_INCLUDE
 #define IRON_SPIDER_INCLUDE
 
-#include "Enemy.h"
-#include "Utility.h"
+#include "Enemy.hpp"
+#include "Utility.hpp"
 #include <ctime>
 #include <random>
-// #include "Weapon.h"
+// #include "Weapon.hpp"
 
 class IronSpider : public Enemy {
 private:

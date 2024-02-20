@@ -1,4 +1,4 @@
-#include "Button.h"
+#include "Button.hpp"
 
 // Default constructor that loads the font for the test in the button
 Button::Button() {
@@ -22,7 +22,7 @@ Button::Button(
 
   this->move_text_pixels = move_text_pixels;
 
-  button.setSize(sf::Vector2f(size.getX(), size.getY()));
+  button.setSize(sf::Vector2f(size.x, size.y));
   button.setFillColor(bgcolor);
 
   this->setPosition(position);
@@ -41,11 +41,11 @@ void Button::setTextColor(sf::Color color) {
 // Setting the position of the button and text
 void Button::setPosition(Vector position) {
   this->position = position;
-  this->button.setPosition(this->position.getX(), this->position.getY());
+  this->button.setPosition(this->position.x, this->position.y);
 
   // Formula for centering text in the horizontal and vertical centers of the button
-  float text_x = (this->position.getX() - 4 + (this->button.getSize().x / 2)) - (this->text.getLocalBounds().width / 2);
-  float text_y = (this->position.getY() - this->move_text_pixels + (this->button.getSize().y / 2)) - (this->text.getLocalBounds().height / 2);
+  float text_x = (this->position.x - 4 + (this->button.getSize().x / 2)) - (this->text.getLocalBounds().width / 2);
+  float text_y = (this->position.y - this->move_text_pixels + (this->button.getSize().y / 2)) - (this->text.getLocalBounds().height / 2);
 
   this->text.setPosition(text_x, text_y);
 }

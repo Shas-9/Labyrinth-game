@@ -1,8 +1,8 @@
 #ifndef ENEMY_INCLUDE
 #define ENEMY_INCLUDE
 
-#include "Entity.h"
-#include "Obstacle.h"
+#include "Entity.hpp"
+#include "Obstacle.hpp"
 
 // Enemy class: Base class for all enemy classes and handles the logic of moving across the map
 class Enemy : public Entity {

@@ -49,7 +49,7 @@
 #elif defined(__APPLE__) && defined(__MACH__)
 
     // Apple platform, see which one it is
-    #include "TargetConditionals.h"
+    #include "TargetConditionals.hpp"
 
     #if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 

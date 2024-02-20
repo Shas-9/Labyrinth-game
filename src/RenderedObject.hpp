@@ -6,7 +6,7 @@
 
 using std::string;
 
-#include "Vector.h"
+#include "Vector.hpp"
 
 class RenderedObject {
  protected:

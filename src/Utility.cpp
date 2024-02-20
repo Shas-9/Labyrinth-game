@@ -1,4 +1,4 @@
-#include "Utility.h"
+#include "Utility.hpp"
 
 void Utility::frames_handler(
   sf::Sprite * sprite,

@@ -8,10 +8,10 @@
 #include <map>
 #include <iostream>
 
-#include "Game.h"
-#include "Vector.h"
-#include "Button.h"
-#include "Utility.h"
+#include "Game.hpp"
+#include "Vector.hpp"
+#include "Button.hpp"
+#include "Utility.hpp"
 
 class UI {
  private:

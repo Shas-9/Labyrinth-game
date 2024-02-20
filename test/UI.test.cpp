@@ -1,4 +1,4 @@
-#include "../src/UI.h"
+#include "../src/UI.hpp"
 #include <criterion/criterion.h>
 #include <SFML/Graphics.hpp>
 

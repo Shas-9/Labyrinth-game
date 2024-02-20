@@ -5,12 +5,12 @@
 using std::cout;
 using std::endl;
 
-#include "RenderedObject.h"
-#include "Obstacle.h"
-#include "Utility.h"
+#include "Renderable.hpp"
+#include "Block.hpp"
+#include "Utility.hpp"
 
 // Entity class: Base class for any object that is considered "alive" (moves around, has health, etc..)
-class Entity : public RenderedObject {
+class Entity : public Renderable {
 protected:
   // Movement
   bool moving_left;
@@ -20,8 +20,7 @@ protected:
   int movement_speed;
 
   // Obstacles in map that the entity needs to be aware of (so that it cant run into them)
-  Obstacle* obstacles;
-  int obstacles_num;
+  vector<Block>& blocks;
 
   // Animation
   sf::Sprite* sprite;
@@ -43,8 +42,7 @@ public:
     int movement_speed,
     int health,
     int attack_damage,
-    Obstacle* obstacles,
-    int obstacles_num
+    vector<Block>& blocks
   );
 
   int getHealth();
@@ -63,7 +61,7 @@ public:
   bool canMove();
 
   virtual void update() = 0;
-  void render(sf::RenderWindow *window, Vector camera_position);
+  void render();
 };
 
 #endif

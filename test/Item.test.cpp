@@ -1,4 +1,4 @@
-#include "../src/Item.h"
+#include "../src/Item.hpp"
 #include <criterion/criterion.h>
 #include <SFML/Graphics.hpp>
 

@@ -4,11 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
-#include "Player.h"
-#include "Environment.h"
-#include "Utility.h"
-#include "Button.h"
-#include "IronSpider.h"
+#include "Player.hpp"
+#include "Environment.hpp"
+#include "Utility.hpp"
+#include "Button.hpp"
+#include "IronSpider.hpp"
 
 class Game {
  private:

@@ -1,8 +1,8 @@
 #include <SFML/Graphics.hpp>
 
-#include "UI.h"
-#include "Vector.h"
-#include "Environment.h"
+#include "UI.hpp"
+#include "Vector.hpp"
+#include "Environment.hpp"
 
 #include <iostream>
 

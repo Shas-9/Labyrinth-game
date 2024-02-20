@@ -1,4 +1,4 @@
-#include "../src/Obstacle.h"
+#include "../src/Obstacle.hpp"
 #include <criterion/criterion.h>
 
 // Test for Obstacle

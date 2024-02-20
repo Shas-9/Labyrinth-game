@@ -1,8 +1,6 @@
 #ifndef MAZE_GENERATOR_INCLUDE
 #define MAZE_GENERATOR_INCLUDE
 
-#include "Obstacle.h"
-
 #include <ctime>
 #include <iostream>
 #include <random>
@@ -11,6 +9,7 @@
 #include <vector>
 #include <stack>
 #include <fstream>
+#include <algorithm>
 
 using std::cout;
 using std::endl;
@@ -30,10 +29,6 @@ using std::vector;
 
 class MazeGenerator {
 private:
-  int obstacles_num;
-  Obstacle* obstacles;
-  sf::Texture* obstacles_texture;
-
   void printGrid(int grid[][MAZE_HEIGHT]);
   void printPointsVisited(PointList points);
   int getOpenSideForPoint(Point target_point, Point reference_point);

@@ -1,4 +1,4 @@
-#include "../src/Utility.h"
+#include "../src/Utility.hpp"
 #include <criterion/criterion.h>
 #include <criterion/logging.h>
 

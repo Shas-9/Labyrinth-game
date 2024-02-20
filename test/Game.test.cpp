@@ -1,4 +1,4 @@
-#include "../src/Game.h"
+#include "../src/Game.hpp"
 #include <criterion/criterion.h>
 
 // Test for Game

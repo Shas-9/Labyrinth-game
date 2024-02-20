@@ -27,9 +27,10 @@ using std::string;
 
 // Chunk structure
 struct Chunk {
-  vector<Block*> blocks;
-  vector<Entity*> entities;
-  vector<Item*> items;
+  // vector<Block*> blocks;
+  // vector<Entity*> entities;
+  // vector<Item*> items;
+  vector<Renderable*> renderables;
 };
 
 // MapWrapper file handling class

@@ -1,8 +1,8 @@
-#include "../src/Player.h"
+#include "../src/Player.hpp"
 #include <criterion/criterion.h>
 #include <criterion/logging.h>
 #include <SFML/Graphics.hpp>
-#include "../src/Environment.h"
+#include "../src/Environment.hpp"
 
 // Test the default constructor for Player
 Test(player_suite, test_constructor_default) {

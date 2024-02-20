@@ -1,21 +1,19 @@
 #ifndef ITEM_INCLUDE
 #define ITEM_INCLUDE
 
-#include "RenderedObject.h"
-#include "Obstacle.h"
+#include "Renderable.hpp"
+#include "Obstacle.hpp"
 
-class Item : public RenderedObject {
+class Item : public Renderable {
 protected:
      std::string description;
      sf::Sprite* sprite;
 
 public:
      Item();
-     Item(Vector position, Vector dimensions, std::string type, std::string description);
+     Item(Vector position, Vector dimensions);
 
      void update();
-     void render(sf::RenderWindow *window, Vector camera_position);
-     std::string getType();
      virtual int getValue();
      bool isInObstacle(Obstacle* obstacles, int obstacles_num);
 };

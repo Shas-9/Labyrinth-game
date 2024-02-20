@@ -1,5 +1,5 @@
-#include "criterion/criterion.h"
-#include "../src/Cat.h"
+#include "criterion/criterion.hpp"
+#include "../src/Cat.hpp"
 
 Test(cat_suite, test_cat_creation) {
     // Create a Cat

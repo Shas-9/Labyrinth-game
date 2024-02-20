@@ -1,5 +1,5 @@
-#include "criterion/criterion.h"
-#include "../src/IronSpider.h"
+#include "criterion/criterion.hpp"
+#include "../src/IronSpider.hpp"
 
 // Test the IronSpider constructor
 Test(ironspider_suite, test_ironspider_creation) {

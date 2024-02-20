@@ -1,4 +1,4 @@
-#include "UI.h"
+#include "UI.hpp"
 
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
@@ -18,8 +18,8 @@ UI::UI(Vector screen_dimensions) {
 
   this->screen_dimensions = screen_dimensions;
 
-  sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getX(),
-    this->screen_dimensions.getY()),
+  sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.x,
+    this->screen_dimensions.y),
     "CatQuest");
 
   this->window_ptr = &window;
@@ -92,8 +92,8 @@ UI::UI(Vector screen_dimensions) {
 void UI::renderUI() {
   sf::Texture title;
   title.loadFromFile("images/UI.png",
-    sf::IntRect(0, 0, this->screen_dimensions.getX(),
-      this->screen_dimensions.getY()));
+    sf::IntRect(0, 0, this->screen_dimensions.x,
+      this->screen_dimensions.y));
 
   sf::Text cat_title;
   sf::Font cat_font;
@@ -145,8 +145,8 @@ bool UI::drawTutorial() {
 
   sf::Texture background;
   background.loadFromFile("images/UI.png",
-    sf::IntRect(0, 0, this->screen_dimensions.getX(),
-      this->screen_dimensions.getY()));
+    sf::IntRect(0, 0, this->screen_dimensions.x,
+      this->screen_dimensions.y));
 
   sf::Sprite bg_sprite;
   bg_sprite.setTexture(background);
@@ -227,8 +227,8 @@ bool UI::enterName() {
 
   sf::Texture background;
   background.loadFromFile("images/UI.png",
-    sf::IntRect(0, 0, this->screen_dimensions.getX(),
-      this->screen_dimensions.getY()));
+    sf::IntRect(0, 0, this->screen_dimensions.x,
+      this->screen_dimensions.y));
 
   sf::Sprite bg_sprite;
   bg_sprite.setTexture(background);

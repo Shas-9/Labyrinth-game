@@ -1,4 +1,4 @@
-#include "MazeGenerator.h"
+#include "MazeGenerator.hpp"
 
 void MazeGenerator::setValidMazeNeighboringPoints(
   int* possible_visiting_points_num_ptr,
@@ -15,9 +15,10 @@ void MazeGenerator::setValidMazeNeighboringPoints(
 
   // Add left neighboring element if it exists & not already vistied
   Point left_neighboring_point = { current_point.first - 1, current_point.second };
-  if (left_neighboring_point.first >= 0 &&
-    !(std::count(points_visited.begin(), points_visited.end(),
-      left_neighboring_point))) {
+  if (
+    left_neighboring_point.first >= 0 &&
+    !std::count(points_visited.begin(), points_visited.end(), left_neighboring_point)
+    ) {
     possible_visiting_points_ptr->push_back(left_neighboring_point);
     (*possible_visiting_points_num_ptr) += 1;
   }

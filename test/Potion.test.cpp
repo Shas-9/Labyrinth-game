@@ -1,5 +1,5 @@
-#include "criterion/criterion.h"
-#include "../src/Potion.h"
+#include "criterion/criterion.hpp"
+#include "../src/Potion.hpp"
 
 Test(potion_suite, test_potion_creation) {
     // Create a potion

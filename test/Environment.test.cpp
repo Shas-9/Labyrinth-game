@@ -1,4 +1,4 @@
-#include "../src/Environment.h"
+#include "../src/Environment.hpp"
 
 #include <criterion/criterion.h>
 

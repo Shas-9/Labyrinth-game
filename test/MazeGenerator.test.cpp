@@ -1,4 +1,4 @@
-#include "../src/MazeGenerator.h"
+#include "../src/MazeGenerator.hpp"
 #include <criterion/criterion.h>
 #include <criterion/logging.h>
 

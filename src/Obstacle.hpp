@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <fstream>
 
-#include "RenderedObject.h"
+#include "RenderedObject.hpp"
 
 class Obstacle : public RenderedObject {
 private:

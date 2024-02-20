@@ -5,7 +5,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Vector.h"
+#include "Vector.hpp"
 #include <vector>
 
 using std::vector;

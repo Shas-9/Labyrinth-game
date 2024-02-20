@@ -3,10 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Utility.h"
-#include "Entity.h"
-#include "Environment.h"
-#include "Enemy.h"
+#include "Utility.hpp"
+#include "Entity.hpp"
+#include "Environment.hpp"
+#include "Enemy.hpp"
 
 class Player : public Entity {
 protected:

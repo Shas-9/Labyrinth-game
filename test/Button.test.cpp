@@ -1,4 +1,4 @@
-#include "../src/Button.h"
+#include "../src/Button.hpp"
 
 #include <criterion/criterion.h>
 #include <criterion/logging.h>

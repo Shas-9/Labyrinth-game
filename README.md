@@ -29,7 +29,7 @@ A time factor constant can be obtained based on how much time passed between the
 #### How to use
 Include file
 ```c++
-#include "Utility.h"
+#include "Utility.hpp"
 ```
 Access time factor using:
 ```c++
@@ -66,7 +66,7 @@ touch test/ExampleClass.test.cpp
 In this file, all the testing for the class should be implemented in the following format.
 
 ```c++
-#include "../src/ExampleClass.h"
+#include "../src/ExampleClass.hpp"
 
 #include <criterion/criterion.h>
 #include <criterion/logging.h>

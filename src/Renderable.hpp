@@ -2,9 +2,9 @@
 #define RENDERABLE_INCLUDE
 
 #include <SFML/Graphics.hpp>
-#include "Utility.h"
+#include "Utility.hpp"
 #include "TexturesHandler.hpp"
-#include "Vector.h"
+#include "Vector.hpp"
 
 using std::string;
 

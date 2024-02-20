@@ -1,4 +1,4 @@
-#include "Potion.h"
+#include "Potion.hpp"
 #include "TexturesHandler.hpp"
 
 Potion::Potion() {}

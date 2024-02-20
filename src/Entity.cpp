@@ -1,7 +1,4 @@
-#include "Entity.h"
-
-// Default constructor
-Entity::Entity() {}
+#include "Entity.hpp"
 
 // Constructor for entity that sets the properties
 Entity::Entity(
@@ -11,17 +8,13 @@ Entity::Entity(
   int movement_speed,
   int health,
   int attack_damage,
-  Obstacle* obstacles,
-  int obstacles_num
-) : RenderedObject(position, dimensions, type),
+  vector<Block>& blocks
+) : Renderable(position, dimensions),
 movement_speed(movement_speed),
 health(health),
-attack_damage(attack_damage) {
+attack_damage(attack_damage),
+blocks(blocks) {
   this->max_health = health;
-
-  // Obstacles awareness
-  this->obstacles = obstacles;
-  this->obstacles_num = obstacles_num;
 
   // Movement
   this->moving_left = false;
@@ -39,8 +32,8 @@ attack_damage(attack_damage) {
 // detecting whether it's inside any of the obstacles in the map or not
 bool Entity::canMove() {
   // Loop over all obstacles and check if entity is running into them
-  for (int i = 0; i < this->obstacles_num; i++) {
-    if (this->isCollidingWithObject(&(this->obstacles[i]))) {
+  for (int i = 0; i < this->blocks.size(); i++) {
+    if (this->isCollidingWithObject(&(this->blocks[i]))) {
       // If entity is colliding with an obstacle, go back to old position.
       return false;
     }
@@ -54,13 +47,13 @@ void Entity::moveUp() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX(), this->position.getY() - (movement_speed*UTIL_CLASS.getTimeFactor()));
+  this->position.y = this->position.y - (movement_speed * UTIL_CLASS.getTimeFactor());
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
     // If entity moved into an obstacle, move it back to the old position
     // to prevent walking into the obstacle
-    this->position.set(this->position.getX(), old_position.getY());
+    this->position.y = old_position.y;
   }
 }
 
@@ -69,13 +62,13 @@ void Entity::moveDown() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX(), this->position.getY() + (movement_speed*UTIL_CLASS.getTimeFactor()));
+  this->position.y = this->position.y + (movement_speed * UTIL_CLASS.getTimeFactor());
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
     // If entity moved into an obstacle, move it back to the old position
     // to prevent walking into the obstacle
-    this->position.set(this->position.getX(), old_position.getY());
+    this->position.y = old_position.y;
   }
 }
 
@@ -84,13 +77,13 @@ void Entity::moveRight() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX() + (movement_speed*UTIL_CLASS.getTimeFactor()), this->position.getY());
+  this->position.x = this->position.x + (movement_speed * UTIL_CLASS.getTimeFactor());
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
     // If entity moved into an obstacle, move it back to the old position
     // to prevent walking into the obstacle
-    this->position.set(old_position.getX(), this->position.getY());
+    this->position.x = old_position.x;
   }
 }
 
@@ -99,13 +92,13 @@ void Entity::moveLeft() {
   // Save the old position of the entity before doing the movement
   Vector old_position = this->position;
   // Move the entity to new position
-  this->position.set(this->position.getX() - (movement_speed*UTIL_CLASS.getTimeFactor()), this->position.getY());
+  this->position.x = this->position.x - (movement_speed * UTIL_CLASS.getTimeFactor());
 
   // Check if entity can move (to know where it's in an obstacle or not)
   if (!this->canMove()) {
     // If entity moved into an obstacle, move it back to the old position
     // to prevent walking into the obstacle
-    this->position.set(old_position.getX(), this->position.getY());
+    this->position.x = old_position.x;
   }
 }
 
@@ -161,7 +154,7 @@ int Entity::getMovementDirection(int direction) {
 }
 
 // Render the entity (also handles movement animation)
-void Entity::render(sf::RenderWindow *window, Vector camera_position) {
+void Entity::render() {
   // Use the utility function "frames handles" to handle frames of walking
   Utility::frames_handler(
     this->sprite,
@@ -177,10 +170,12 @@ void Entity::render(sf::RenderWindow *window, Vector camera_position) {
 
   // Sets the new position for the sprite of the entity and renders it on the screen
   this->sprite->setPosition(
-    this->position.getX() - camera_position.getX(),
-    this->position.getY() - camera_position.getY()
+    sf::Vector2f(
+      this->position.x - UTIL_CLASS.getCameraPos()->x,
+      this->position.y - UTIL_CLASS.getCameraPos()->y
+    )
   );
-  window->draw(*this->sprite);
+  UTIL_CLASS.getRenderWindow()->draw(*this->sprite);
 }
 
 // Get the health of the entity as a percentage

@@ -1,4 +1,4 @@
-#include "IronSpider.h"
+#include "IronSpider.hpp"
 #include "TexturesHandler.hpp"
 
 // Default constructor for player does nothing (Environment required)
