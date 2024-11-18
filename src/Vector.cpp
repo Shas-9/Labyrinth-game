@@ -11,6 +11,13 @@ Vector::Vector(int x, int y) {
   this->x = x;
   this->y = y;
 }
+
+// Overloaded constructor with unsigned int values
+Vector::Vector(unsigned int x, unsigned int y) {
+  this->x = x;
+  this->y = y;
+}
+
 // Default constructor
 Vector::Vector() {
   this->x = 0;

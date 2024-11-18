@@ -15,6 +15,7 @@ public:
   Vector();
   Vector(double x, double y);
   Vector(int x, int y);
+  Vector(unsigned int x, unsigned int y);
   void moveHorizontal(double value);
   void moveVertical(double value);
 

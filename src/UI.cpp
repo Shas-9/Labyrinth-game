@@ -3,11 +3,15 @@
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
-#define BUTTON_TEXT_SIZE int (40)
-#define BUTTON_SIZE Vector (250, 110)
+
+// TODO:
+// needs to be responsive.. cant use macros for this
+// maybe move to the utils class?
+#define BUTTON_TEXT_SIZE int (30)
+#define BUTTON_SIZE UTIL_CLASS.ratioVector(Vector(0.2, 0.1))
 
 // Default constructor
-UI::UI() { UI(Vector(600, 600)); }
+UI::UI() { UI(Vector(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height)); }
 
 // Overloaded constructor with width and height
 UI::UI(int width, int height) { UI(Vector(width, height)); }
@@ -92,20 +96,22 @@ UI::UI(Vector screen_dimensions) {
 void UI::renderUI() {
   sf::Texture title;
   title.loadFromFile("images/UI.png",
-    sf::IntRect(0, 0, this->screen_dimensions.getX(),
-      this->screen_dimensions.getY()));
+    sf::IntRect(0, 0, 1920,
+      1080));
 
   sf::Text cat_title;
   sf::Font cat_font;
   cat_font.loadFromFile("fonts/cat_font.ttf");
   cat_title.setFont(cat_font);
   cat_title.setString("CatQuest");
-  cat_title.setCharacterSize(200);
+  cat_title.setCharacterSize(this->screen_dimensions.getX()/8);
   cat_title.setFillColor(sf::Color::White);
-  cat_title.setPosition(480, 350);
+  Vector cat_title_pos = UTIL_CLASS.ratioVector(Vector(0.2, 0.1));
+  cat_title.setPosition(cat_title_pos.getX(), cat_title_pos.getY());
 
 
   sf::Sprite ui_title;
+  ui_title.setScale(this->screen_dimensions.getY()/1080, this->screen_dimensions.getY()/1080);
   ui_title.setTexture(title);
   (*this->window_ptr).draw(ui_title);
   (*this->window_ptr).draw(cat_title);
