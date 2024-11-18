@@ -8,6 +8,7 @@
 
 int main() {
   Vector vector = Vector(1920, 1080);
+  // Vector vector = Vector(1366, 768);
   UI* ui = new UI(vector);
 
   return 0;

@@ -17,6 +17,7 @@ UI::UI(Vector screen_dimensions) {
   this->fetchHighScores();
 
   this->screen_dimensions = screen_dimensions;
+  UTIL_CLASS.setScreenDimensions(screen_dimensions);
 
   sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getX(),
     this->screen_dimensions.getY()),
@@ -24,10 +25,10 @@ UI::UI(Vector screen_dimensions) {
 
   this->window_ptr = &window;
 
-  Button tutorial_btn("How to play", Vector(1344, 810), BUTTON_SIZE,
+  Button tutorial_btn("How to play", UTIL_CLASS.ratioVector(Vector(0.2, 0.6)), BUTTON_SIZE,
     TUTORIAL_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
 
-  Button play_button("Play Game", Vector(288, 810), BUTTON_SIZE,
+  Button play_button("Play Game", UTIL_CLASS.ratioVector(Vector(0.6, 0.6)), BUTTON_SIZE,
     PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
 
   sf::Event event;

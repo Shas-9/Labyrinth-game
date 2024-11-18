@@ -15,6 +15,7 @@ private:
   sf::Clock deltaClock;
   sf::Time dt = deltaClock.restart();
   Utility();
+  Vector screen_dimensions;
 
 public:
   static Utility& getInstance();
@@ -39,6 +40,11 @@ public:
 
   static vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions, int scale);
   static vector<vector<sf::IntRect*>> getIronSpiderWalkingFrames(Vector dimensions, int scale);
+
+  void setScreenDimensions(Vector dimensions) { this->screen_dimensions = dimensions; }
+  Vector ratioVector(Vector ratio) {
+    return Vector(ratio.getX() * this->screen_dimensions.getX(), ratio.getY() * this->screen_dimensions.getY()); 
+  }
 };
 
 #endif
