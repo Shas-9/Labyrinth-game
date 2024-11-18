@@ -4,11 +4,13 @@
 #define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
 
+#define XVEC UTIL_CLASS.ratioVector
+
 // TODO:
 // needs to be responsive.. cant use macros for this
 // maybe move to the utils class?
 #define BUTTON_TEXT_SIZE int (30)
-#define BUTTON_SIZE UTIL_CLASS.ratioVector(Vector(0.2, 0.1))
+#define BUTTON_SIZE XVEC(Vector(0.2, 0.1))
 
 // Default constructor
 UI::UI() { UI(Vector(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height)); }
@@ -29,10 +31,10 @@ UI::UI(Vector screen_dimensions) {
 
   this->window_ptr = &window;
 
-  Button tutorial_btn("How to play", UTIL_CLASS.ratioVector(Vector(0.2, 0.6)), BUTTON_SIZE,
+  Button tutorial_btn("How to play", XVEC(Vector(0.2, 0.6)), BUTTON_SIZE,
     TUTORIAL_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
 
-  Button play_button("Play Game", UTIL_CLASS.ratioVector(Vector(0.6, 0.6)), BUTTON_SIZE,
+  Button play_button("Play Game", XVEC(Vector(0.6, 0.6)), BUTTON_SIZE,
     PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
 
   sf::Event event;
@@ -94,10 +96,8 @@ UI::UI(Vector screen_dimensions) {
 
 // Rendering the UI image
 void UI::renderUI() {
-  sf::Texture title;
-  title.loadFromFile("images/UI.png",
-    sf::IntRect(0, 0, 1920,
-      1080));
+  sf::Texture background;
+  background.loadFromFile("images/UI.png", sf::IntRect(0, 0, 1920, 1080));
 
   sf::Text cat_title;
   sf::Font cat_font;
@@ -106,14 +106,14 @@ void UI::renderUI() {
   cat_title.setString("CatQuest");
   cat_title.setCharacterSize(this->screen_dimensions.getX()/8);
   cat_title.setFillColor(sf::Color::White);
-  Vector cat_title_pos = UTIL_CLASS.ratioVector(Vector(0.2, 0.1));
+  Vector cat_title_pos = XVEC(Vector(0.2, 0.1));
   cat_title.setPosition(cat_title_pos.getX(), cat_title_pos.getY());
 
 
-  sf::Sprite ui_title;
-  ui_title.setScale(this->screen_dimensions.getY()/1080, this->screen_dimensions.getY()/1080);
-  ui_title.setTexture(title);
-  (*this->window_ptr).draw(ui_title);
+  sf::Sprite bg_sprite;
+  bg_sprite.setScale(this->screen_dimensions.getY()/1080, this->screen_dimensions.getY()/1080);
+  bg_sprite.setTexture(background);
+  (*this->window_ptr).draw(bg_sprite);
   (*this->window_ptr).draw(cat_title);
 }
 
@@ -150,18 +150,17 @@ bool UI::drawTutorial() {
     "Press the menu button to return to the menu.");
 
   sf::Texture background;
-  background.loadFromFile("images/UI.png",
-    sf::IntRect(0, 0, this->screen_dimensions.getX(),
-      this->screen_dimensions.getY()));
+  background.loadFromFile("images/UI.png", sf::IntRect(0, 0, 1920, 1080));
 
   sf::Sprite bg_sprite;
   bg_sprite.setTexture(background);
+  bg_sprite.setScale(this->screen_dimensions.getY()/1080, this->screen_dimensions.getY()/1080);
 
-  Button game_instructions(how_to_play, Vector(590, 420), Vector(650, 270),
-    sf::Color::Black, sf::Color::White, 32);
+  Button game_instructions(how_to_play, XVEC(Vector(0.05, 0.2)), XVEC(Vector(0.8, 0.4)),
+    sf::Color::Transparent, sf::Color::White, this->screen_dimensions.getX()/60);
 
-  Button menu("Back to Menu", Vector(1382, 810), Vector(290, 120),
-    PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
+  Button menu("Back to Menu", XVEC(Vector(0.6, 0.70)), XVEC(Vector(0.22, 0.09)),
+    PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
 
   // Screen loop
   while ((*this->window_ptr).isOpen()) {
