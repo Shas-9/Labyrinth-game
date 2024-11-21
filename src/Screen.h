@@ -4,6 +4,7 @@
 #include "global.h"
 #include "Button.h"
 #include <vector>
+#include <memory>
 
 using std::vector;
 using std::pair;
@@ -16,19 +17,39 @@ struct ScreenButton {
 };
 
 struct ScreenImage {
-  ScreenImage(string location, Vector image_dimensions, Vector scale): location(location), image_dimensions(image_dimensions), scale(scale) {}
-  string location;
-  Vector image_location;
-  Vector image_dimensions;
-  Vector scale;
+  ScreenImage(string location, Vector position, Vector dimensions, Vector scale) {
+    this->texture = std::make_shared<sf::Texture>();
+    this->sprite = std::make_shared<sf::Sprite>();
+
+    texture->loadFromFile(location, sf::IntRect(
+      position.getX(), position.getY(), position.getX() + dimensions.getX(), position.getY() + dimensions.getY()
+    ));
+
+    sprite->setScale(scale.getX(), scale.getY());
+    sprite->setTexture(*texture);
+  }
+  
+  std::shared_ptr<sf::Texture> texture;
+  std::shared_ptr<sf::Sprite> sprite;
 };
 
 struct ScreenText {
-  ScreenText(string text, string text_location, int text_size, string font_location): text(text), text_location(text_location), text_size(text_size), font_location(font_location) {}
-  string text;
-  string text_location;
-  int text_size;
-  string font_location;
+  ScreenText(string text, Vector text_position, int text_size, string font_location, double screen_width) {
+    this->text = std::make_shared<sf::Text>();
+    this->text_font = std::make_shared<sf::Font>();
+
+    this->text_font->loadFromFile(font_location);
+    this->text->setFont(*text_font);
+    this->text->setString(text);
+    this->text->setCharacterSize(screen_width*text_size/100);
+    this->text->setFillColor(sf::Color::White);
+    
+    this->text->setPosition(text_position.getX(), text_position.getY());
+  }
+
+  std::shared_ptr<sf::Text> text;
+  std::shared_ptr<sf::Font> text_font;
+  
 };
 
 class Screen {

@@ -14,21 +14,23 @@
 #define SWITCH_SCREEN(screen_name) []() { ScreenManager::getInstance().switchScreen(screen_name); }
 
 Screen ScreenFactory::mainScreen() {
-  Button* tutorial_btn = new Button("How to play", XVEC(Vector(0.2, 0.6)), BUTTON_SIZE,
+  Button* tutorial_btn = new Button("How to play", XVEC(Vector(0.1, 0.72)), BUTTON_SIZE,
     TUTORIAL_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
   
-  Button* play_button = new Button("Play Game", XVEC(Vector(0.6, 0.6)), BUTTON_SIZE,
+  Button* play_button = new Button("Play Game", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
     PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
-  
+
   return Screen("main_screen", 
     vector<ScreenButton>({
       ScreenButton(play_button, SWITCH_SCREEN("play_screen")),
       ScreenButton(tutorial_btn, SWITCH_SCREEN("test_screen"))
     }), 
-    vector<ScreenText>(
-      ScreenText
-    ),
-    vector<ScreenImage>()
+    vector<ScreenText>({
+      ScreenText("CatQuest", XVEC(Vector(0.25, 0.3)), 10, "fonts/cat_font.ttf", UTIL_CLASS.screen_dimensions.getX())
+    }),
+    vector<ScreenImage>({
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(UTIL_CLASS.screen_dimensions.getY()/1080, UTIL_CLASS.screen_dimensions.getY()/1080))
+    })
   );
 }
 

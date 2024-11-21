@@ -13,14 +13,20 @@
 Screen::Screen(string screen_name, vector<ScreenButton> buttons, vector<ScreenText> texts, vector<ScreenImage> images): screen_name(screen_name), buttons(buttons), texts(texts), images(images) {}
 
 void Screen::render() {
+  // render the images
+  for (ScreenImage& image : this->images) {
+    (*UTIL_CLASS.window_ptr).draw(*image.sprite);
+  }
+
+  // render the text
+  for (ScreenText& text : this->texts) {
+    (*UTIL_CLASS.window_ptr).draw(*text.text);
+  }
+
   // render all the buttons
   for (ScreenButton& button : this->buttons) {
     button.button->drawButton(*UTIL_CLASS.window_ptr);
   }
-
-  // render the images
-
-  // render the text
 }
 
 void Screen::update(sf::Event event) {
