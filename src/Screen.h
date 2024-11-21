@@ -34,17 +34,20 @@ struct ScreenImage {
 };
 
 struct ScreenText {
-  ScreenText(string text, Vector text_position, int text_size, string font_location, double screen_width) {
+  ScreenText(string text, Vector text_position, double text_size, string font_location, double screen_width) {  
     this->text = std::make_shared<sf::Text>();
-    this->text_font = std::make_shared<sf::Font>();
-
-    this->text_font->loadFromFile(font_location);
-    this->text->setFont(*text_font);
+    
     this->text->setString(text);
     this->text->setCharacterSize(screen_width*text_size/100);
     this->text->setFillColor(sf::Color::White);
     
     this->text->setPosition(text_position.getX(), text_position.getY());
+    
+    if (font_location != "no_font") {
+      this->text_font = std::make_shared<sf::Font>();
+      this->text_font->loadFromFile(font_location);
+      this->text->setFont(*text_font);
+    }
   }
 
   std::shared_ptr<sf::Text> text;

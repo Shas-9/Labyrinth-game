@@ -16,13 +16,19 @@ private:
   sf::Font arial;
   int move_text_pixels;
 
+  sf::Color text_color;
+  sf::Color text_hover_color;
+
+  sf::Color bg_color;
+  sf::Color bg_hover_color;
 public:
   Button();
-  Button(std::string text, Vector position, Vector size, sf::Color bgcolor,
-    sf::Color textcolor, int charsize, int move_text_pixels = 0);
+  Button(std::string text, Vector position, Vector size, sf::Color text_color, 
+    sf::Color bg_color, sf::Color text_hover_color, sf::Color bg_hover_color, 
+    int charsize, int move_text_pixels = 0);
 
-  void setBackToColor(sf::Color color);
-  void setTextColor(sf::Color color);
+  void setDefaultColor();
+  void setHoverColor();
 
   void setPosition(Vector position);
   void drawButton(sf::RenderWindow &window);

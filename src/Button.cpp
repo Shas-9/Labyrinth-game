@@ -10,32 +10,39 @@ Button::Button(
   std::string text,
   Vector position,
   Vector size,
-  sf::Color bgcolor,
-  sf::Color textcolor,
+  sf::Color text_color,
+  sf::Color bg_color,
+  sf::Color text_hover_color,
+  sf::Color bg_hover_color,
   int charsize,
   int move_text_pixels
 ) : Button() {
+  this->text_color = text_color;
+  this->bg_color = bg_color;
+  this->text_hover_color = text_hover_color;
+  this->bg_hover_color = bg_hover_color;
+
   this->text.setString(text);
-  this->text.setColor(textcolor);
+  this->text.setFillColor(text_color);
   this->text.setFont(this->arial);
   this->text.setCharacterSize(charsize);
 
   this->move_text_pixels = move_text_pixels;
 
   button.setSize(sf::Vector2f(size.getX(), size.getY()));
-  button.setFillColor(bgcolor);
+  button.setFillColor(bg_color);
 
   this->setPosition(position);
 }
 
-// Changing the color of the button
-void Button::setBackToColor(sf::Color color) {
-  this->button.setFillColor(color);
+void Button::setDefaultColor() {
+  this->button.setFillColor(this->bg_color);
+  this->text.setFillColor(this->text_color);
 }
 
-// Set the color fo the text for the button
-void Button::setTextColor(sf::Color color) {
-  this->text.setColor(color);
+void Button::setHoverColor() {
+  this->button.setFillColor(this->bg_hover_color);
+  this->text.setFillColor(this->text_hover_color);
 }
 
 // Setting the position of the button and text

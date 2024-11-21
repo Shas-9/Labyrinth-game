@@ -34,15 +34,17 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
   this->event_ptr = event_ptr;
 
-  Button pause_button("Pause Game", Vector(1570, 20), Vector(270, 100), PAUSE_BUTTON_COLOR, sf::Color::White,
-    BUTTON_TEXT_SIZE, 10);
+  Button pause_button("Pause Game", Vector(1570, 20), Vector(270, 100), sf::Color::White, PAUSE_BUTTON_COLOR, 
+    sf::Color::White, PAUSE_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
 
   std::string hp_string = "HP: ";
-  Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color(0, 0, 0, 0), sf::Color::White, 44, 5);
+  Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color::White, sf::Color::Transparent, 
+    sf::Color::White, sf::Color::Transparent, 44, 5);
   hp_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   std::string time_string = "Time: ";
-  Button time_text(time_string, Vector(900, 50), Vector(100, 30), sf::Color(0, 0, 0, 0), sf::Color::White, 44, 5);
+  Button time_text(time_string, Vector(900, 50), Vector(100, 30), sf::Color::White, sf::Color::Transparent, 
+    sf::Color::White, sf::Color::Transparent, 44, 5);
   time_text.setCustomFont("fonts/MouldyCheese.ttf");
 
   // Loading ground textures
@@ -110,9 +112,9 @@ Game::Game(sf::RenderWindow *window_ptr, sf::Event* event_ptr, Vector screen_dim
 
       case sf::Event::MouseMoved:
         if (pause_button.isMouseOver(*this->window_ptr)) {
-          pause_button.setBackToColor(MOUSE_OVER_COLOR);
+          pause_button.setHoverColor();
         } else {
-          pause_button.setBackToColor(PAUSE_BUTTON_COLOR);
+          pause_button.setDefaultColor();
         }
         break;
 
@@ -262,8 +264,8 @@ bool Game::confirmationScreen() {
   quit_text.setFillColor(sf::Color::White);
   quit_text.setPosition(sf::Vector2f(580, 650));
 
-  Button yes_button("Yes", Vector(300, 800), BUTTON_SIZE, PAUSE_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
-  Button no_button("No", Vector(1300, 800), BUTTON_SIZE, QUIT_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
+  Button yes_button("Yes", Vector(300, 800), BUTTON_SIZE, sf::Color::White, PAUSE_BUTTON_COLOR, sf::Color::White, PAUSE_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
+  Button no_button("No", Vector(1300, 800), BUTTON_SIZE, sf::Color::White, QUIT_BUTTON_COLOR, sf::Color::White, QUIT_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
 
   // Screen loop
   while (this->window_ptr->isOpen()) {
@@ -277,15 +279,15 @@ bool Game::confirmationScreen() {
 
       case sf::Event::MouseMoved:
         if (yes_button.isMouseOver(*this->window_ptr)) {
-          yes_button.setBackToColor(MOUSE_OVER_COLOR);
+          yes_button.setHoverColor();
         } else {
-          yes_button.setBackToColor(PAUSE_BUTTON_COLOR);
+          yes_button.setDefaultColor();
         }
 
         if (no_button.isMouseOver(*this->window_ptr)) {
-          no_button.setBackToColor(MOUSE_OVER_COLOR);
+          no_button.setHoverColor();
         } else {
-          no_button.setBackToColor(QUIT_BUTTON_COLOR);
+          no_button.setDefaultColor();
         }
         break;
 
@@ -343,8 +345,8 @@ bool Game::pause() {
   resume_text.setFillColor(sf::Color::White);
   resume_text.setPosition(sf::Vector2f(580, 650));
 
-  Button resume_button("Resume", Vector(300, 800), BUTTON_SIZE, PAUSE_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
-  Button quit_game_button("Quit Game", Vector(1300, 800), BUTTON_SIZE, QUIT_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
+  Button resume_button("Resume", Vector(300, 800), BUTTON_SIZE, sf::Color::White, PAUSE_BUTTON_COLOR, sf::Color::White, PAUSE_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
+  Button quit_game_button("Quit Game", Vector(1300, 800), BUTTON_SIZE, sf::Color::White, QUIT_BUTTON_COLOR, sf::Color::White, QUIT_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
 
 
   // Screen loop
@@ -359,15 +361,15 @@ bool Game::pause() {
 
       case sf::Event::MouseMoved:
         if (resume_button.isMouseOver(*this->window_ptr)) {
-          resume_button.setBackToColor(MOUSE_OVER_COLOR);
+          resume_button.setHoverColor();
         } else {
-          resume_button.setBackToColor(PAUSE_BUTTON_COLOR);
+          resume_button.setDefaultColor();
         }
 
         if (quit_game_button.isMouseOver(*this->window_ptr)) {
-          quit_game_button.setBackToColor(MOUSE_OVER_COLOR);
+          quit_game_button.setHoverColor();
         } else {
-          quit_game_button.setBackToColor(QUIT_BUTTON_COLOR);
+          quit_game_button.setDefaultColor();
         }
         break;
 

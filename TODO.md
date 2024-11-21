@@ -1,0 +1,1 @@
+* Create a singleton class "FontManager" and use it for all fonts (to never load the same font more than once)

@@ -46,9 +46,9 @@ void Screen::update(sf::Event event) {
     case sf::Event::MouseMoved:
       for (ScreenButton& button : this->buttons) {
         if (button.button->isMouseOver(*UTIL_CLASS.window_ptr)) {
-          button.button->setBackToColor(MOUSE_OVER_COLOR);
+          button.button->setHoverColor();
         } else {
-          button.button->setBackToColor(PLAY_BUTTON_COLOR);
+          button.button->setDefaultColor();
         }
       }
       break;
