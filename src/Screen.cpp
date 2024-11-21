@@ -9,8 +9,11 @@
 #define BUTTON_TEXT_SIZE int (30)
 #define BUTTON_SIZE XVEC(Vector(0.2, 0.1))
 
-
-Screen::Screen(string screen_name, vector<ScreenButton> buttons, vector<ScreenText> texts, vector<ScreenImage> images): screen_name(screen_name), buttons(buttons), texts(texts), images(images) {}
+Screen::Screen(string screen_name, vector<ScreenButton> buttons, vector<ScreenText> texts, vector<ScreenImage> images): screen_name(screen_name), buttons(buttons), texts(texts), images(images) {
+  // by default set keypressed handlers to do nothing
+  this->keyPressedHandler = [](sf::Event event) {};
+  this->textEnteredHandler = [](sf::Event event) {};
+}
 
 void Screen::render() {
   // render the images
@@ -38,6 +41,7 @@ void Screen::update(sf::Event event) {
     case sf::Event::MouseButtonPressed:
       for (ScreenButton& button : this->buttons) {
         if ((button.button->isMouseOver(*UTIL_CLASS.window_ptr))) {
+          button.button->setDefaultColor();
           button.func();
         }
       }

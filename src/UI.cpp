@@ -53,7 +53,7 @@ UI::UI(Vector screen_dimensions) {
       ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i].update(event);
     }
 
-    // Display on the screen
+    // Rendering
     (*this->window_ptr).clear();
     ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i].render();
     (*this->window_ptr).display();

@@ -91,7 +91,8 @@ Screen ScreenFactory::highscoresScreen() {
     if (allowed_chars.find(c) != string::npos && UTIL_CLASS.player_name.length() <= 20) {
       UTIL_CLASS.player_name += static_cast<char>(event.text.unicode);
       name_button->setString(UTIL_CLASS.player_name);
-    } else if (event.text.unicode == 13) {
+    } else if (event.text.unicode == 13 && UTIL_CLASS.player_name.length() > 0) {
+      ScreenManager::getInstance().switchScreen("main_screen");
       // // Start timer here
       // this->startGame();
       // // End timer
