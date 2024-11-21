@@ -3,8 +3,8 @@ CC_FLAGS =
 INCLUDES = -Ilibs/sfml/include
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
-SRC_FILES = $(wildcard src/*.cpp)
-O_FILES = $(patsubst src/%.cpp, %.o, $(SRC_FILES))
+SRC_FILES = $(wildcard src/*.cpp) $(wildcard src/singleton/*.cpp)
+O_FILES = $(patsubst src/%.cpp, %.o, $(patsubst src/singleton/%.cpp, %.o, $(SRC_FILES)) )
 TEST_O_FILES = $(patsubst main.o,, $(O_FILES))
 
 all: build run
@@ -54,9 +54,6 @@ MazeGenerator.o: src/MazeGenerator.cpp
 Game.o: src/Game.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
-Utility.o: src/Utility.cpp
-	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
-
 TexturesHandler.o: src/TexturesHandler.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
@@ -66,13 +63,19 @@ Screen.o: src/Screen.cpp
 ScreenFactory.o: src/ScreenFactory.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
-ScreenManager.o: src/ScreenManager.cpp
-	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
-
 HighscoresManager.o: src/HighscoresManager.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
 main.o: src/main.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
+Utility.o: src/singleton/Utility.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
+Singleton.o: src/singleton/Singleton.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
+ScreenManager.o: src/singleton/ScreenManager.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
 build: $(O_FILES)

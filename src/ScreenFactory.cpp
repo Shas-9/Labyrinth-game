@@ -1,5 +1,6 @@
 #include "ScreenFactory.h"
 #include "HighscoresManager.h"
+#include "singleton/ScreenManager.h"
 
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define DEFAULT_BUTTON_COLOT sf::Color (22, 30, 43)

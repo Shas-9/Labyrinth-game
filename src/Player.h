@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Utility.h"
+#include "singleton/Utility.h"
 #include "Entity.h"
 #include "Environment.h"
 #include "Enemy.h"

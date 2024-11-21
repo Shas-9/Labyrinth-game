@@ -6,7 +6,7 @@
 
 #include "Player.h"
 #include "Environment.h"
-#include "Utility.h"
+#include "singleton/Utility.h"
 #include "Button.h"
 #include "IronSpider.h"
 

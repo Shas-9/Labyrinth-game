@@ -7,7 +7,7 @@ using std::endl;
 
 #include "RenderedObject.h"
 #include "Obstacle.h"
-#include "Utility.h"
+#include "singleton/Utility.h"
 
 // Entity class: Base class for any object that is considered "alive" (moves around, has health, etc..)
 class Entity : public RenderedObject {

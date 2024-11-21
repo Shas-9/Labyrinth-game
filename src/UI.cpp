@@ -1,4 +1,6 @@
 #include "UI.h"
+
+#include "global.h"
 #include "ScreenFactory.h"
 
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)

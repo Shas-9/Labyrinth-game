@@ -11,7 +11,6 @@
 #include "Game.h"
 #include "Vector.h"
 #include "Button.h"
-#include "Utility.h"
 #include "Screen.h"
 
 class UI {

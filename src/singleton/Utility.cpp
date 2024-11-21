@@ -137,11 +137,6 @@ vector<vector<sf::IntRect*>> Utility::getPlayerWalkingFrames(Vector dimensions, 
   return walking_frames;
 }
 
-Utility& Utility::getInstance() {
-  static Utility instance;
-  return instance;
-}
-
 Utility::Utility() {
   this->player_name = "";
 }

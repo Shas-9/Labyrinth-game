@@ -29,7 +29,7 @@ A time factor constant can be obtained based on how much time passed between the
 #### How to use
 Include file
 ```c++
-#include "Utility.h"
+#include "singleton/Utility.h"
 ```
 Access time factor using:
 ```c++

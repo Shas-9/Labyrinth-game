@@ -5,28 +5,22 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Vector.h"
-#include "Screen.h"
+#include "Singleton.h"
+
+#include "../Vector.h"
 #include <vector>
 #include <string>
 
 using std::vector;
 using std::string;
 
-class Utility {
+class Utility : public Singleton {
 private:
   sf::Clock deltaClock;
   sf::Time dt = deltaClock.restart();
   Utility();
 
 public:
-  // for access inside rendering functions
-  sf::RenderWindow* window_ptr;
-  
-  static Utility& getInstance();
-  Utility(Utility const&) = delete;
-  void operator=(Utility const&) = delete;
-
   static void frames_handler(
     sf::Sprite * sprite,
     int* current_frames_index,
@@ -45,14 +39,6 @@ public:
 
   static vector<vector<sf::IntRect*>> getPlayerWalkingFrames(Vector dimensions, int scale);
   static vector<vector<sf::IntRect*>> getIronSpiderWalkingFrames(Vector dimensions, int scale);
-
-  Vector screen_dimensions;
-  void setScreenDimensions(Vector dimensions) { this->screen_dimensions = dimensions; }
-  Vector ratioVector(Vector ratio) {
-    return Vector(ratio.getX() * this->screen_dimensions.getX(), ratio.getY() * this->screen_dimensions.getY()); 
-  }
-
-  void setWindowObject(sf::RenderWindow* window_ptr) { this->window_ptr = window_ptr; }
 
   string player_name;
 };

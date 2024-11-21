@@ -3,7 +3,6 @@
 
 #include "global.h"
 #include "Screen.h"
-#include "ScreenManager.h"
 
 class ScreenFactory {
 public:
