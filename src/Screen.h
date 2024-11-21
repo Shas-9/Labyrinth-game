@@ -5,6 +5,7 @@
 #include "Button.h"
 #include <vector>
 #include <memory>
+#include <functional>
 
 using std::vector;
 using std::pair;
@@ -62,6 +63,8 @@ private:
   vector<ScreenImage> images;
 public:
   string screen_name;
+  std::function<void(sf::Event)> textEnteredHandler;
+  std::function<void(sf::Event)> keyPressedHandler;
 
   Screen(string screen_name, vector<ScreenButton> buttons, vector<ScreenText> texts, vector<ScreenImage> images);
   void render();

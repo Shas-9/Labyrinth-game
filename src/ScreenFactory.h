@@ -10,7 +10,6 @@ public:
   static Screen mainScreen();
   static Screen tutorialScreen();
   static Screen highscoresScreen();
-  static Screen testScreen();
 };
 
 #endif

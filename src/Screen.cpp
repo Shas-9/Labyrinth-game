@@ -52,5 +52,20 @@ void Screen::update(sf::Event event) {
         }
       }
       break;
+
+    case sf::Event::KeyPressed:
+      this->keyPressedHandler(event);
+    //   if ((*this->event_ptr).key.code == sf::Keyboard::BackSpace) {
+    //     if (name.size() < 1) {
+    //       break;
+    //     }
+    //     name.pop_back();
+    //     name_entered.setString(name);
+    //   }
+      break;
+
+    case sf::Event::TextEntered:
+      this->textEnteredHandler(event);
+      break;
   }
 }

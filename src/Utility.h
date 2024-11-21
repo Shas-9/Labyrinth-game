@@ -11,6 +11,7 @@
 #include <string>
 
 using std::vector;
+using std::string;
 
 class Utility {
 private:
@@ -52,6 +53,8 @@ public:
   }
 
   void setWindowObject(sf::RenderWindow* window_ptr) { this->window_ptr = window_ptr; }
+
+  string player_name;
 };
 
 #endif

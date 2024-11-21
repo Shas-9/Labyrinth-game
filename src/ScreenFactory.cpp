@@ -65,15 +65,15 @@ Screen ScreenFactory::highscoresScreen() {
   Button* back_button = new Button("Back to Menu", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
     sf::Color::White, DEFAULT_BUTTON_COLOT, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
   
-  Button* name = new Button("", XVEC(Vector(0.645, 0.47)), BUTTON_SIZE,
-    sf::Color::Black, sf::Color::White, sf::Color::Black, sf::Color::White, BUTTON_TEXT_SIZE, 10);
+  Button* name_button = new Button("", XVEC(Vector(0.645, 0.47)), BUTTON_SIZE,
+    sf::Color::Black, sf::Color::White, sf::Color::Black, sf::Color::White, BUTTON_TEXT_SIZE-10, 6);
 
   std::string highscores = HighscoresManager::getInstance().formatHighscores();
 
-  return Screen("highscores_screen", 
+  Screen scr("highscores_screen", 
     vector<ScreenButton>({
       ScreenButton(back_button, SWITCH_SCREEN("main_screen")),
-      ScreenButton(name, do_nothing),
+      ScreenButton(name_button, do_nothing),
     }), 
     vector<ScreenText>({
       ScreenText(highscores, XVEC(Vector(0.1, 0.4)), 3, "fonts/MouldyCheese.ttf", UTIL_CLASS.screen_dimensions.getX()),
@@ -84,11 +84,29 @@ Screen ScreenFactory::highscoresScreen() {
       ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(UTIL_CLASS.screen_dimensions.getY()/1080, UTIL_CLASS.screen_dimensions.getY()/1080))
     })
   );
-}
 
-Screen ScreenFactory::testScreen() {  
-  Button* play_button = new Button("Lol button", XVEC(Vector(0.4, 0.6)), BUTTON_SIZE,
-    sf::Color::White, DEFAULT_BUTTON_COLOT, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 5);
-  
-  return Screen("test_screen", vector<ScreenButton>({ScreenButton(play_button, SWITCH_SCREEN("main_screen"))}), vector<ScreenText>(), vector<ScreenImage>());
+  scr.textEnteredHandler = [name_button](sf::Event event) {
+    string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._";
+    char c = static_cast<char>(event.text.unicode);
+    if (allowed_chars.find(c) != string::npos && UTIL_CLASS.player_name.length() <= 20) {
+      UTIL_CLASS.player_name += static_cast<char>(event.text.unicode);
+      name_button->setString(UTIL_CLASS.player_name);
+    } else if (event.text.unicode == 13) {
+      // // Start timer here
+      // this->startGame();
+      // // End timer
+      // // Calculate score
+      // this->showScoreScreen()
+      // return true;
+    }
+  };
+
+  scr.keyPressedHandler = [name_button](sf::Event event) {
+    if (event.key.code == sf::Keyboard::BackSpace && UTIL_CLASS.player_name.length() > 0) {
+      UTIL_CLASS.player_name.pop_back();
+      name_button->setString(UTIL_CLASS.player_name);
+    }
+  };
+
+  return scr;
 }

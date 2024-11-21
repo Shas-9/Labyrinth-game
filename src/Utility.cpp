@@ -142,7 +142,9 @@ Utility& Utility::getInstance() {
   return instance;
 }
 
-Utility::Utility() {}
+Utility::Utility() {
+  this->player_name = "";
+}
 
 void Utility::setDT() {
   this->dt = this->deltaClock.restart();
