@@ -6,7 +6,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "Vector.h"
+#include "Screen.h"
 #include <vector>
+#include <string>
 
 using std::vector;
 
@@ -18,6 +20,9 @@ private:
   Vector screen_dimensions;
 
 public:
+  // for access inside rendering functions
+  sf::RenderWindow* window_ptr;
+  
   static Utility& getInstance();
   Utility(Utility const&) = delete;
   void operator=(Utility const&) = delete;
@@ -45,6 +50,8 @@ public:
   Vector ratioVector(Vector ratio) {
     return Vector(ratio.getX() * this->screen_dimensions.getX(), ratio.getY() * this->screen_dimensions.getY()); 
   }
+
+  void setWindowObject(sf::RenderWindow* window_ptr) { this->window_ptr = window_ptr; }
 };
 
 #endif

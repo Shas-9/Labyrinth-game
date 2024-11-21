@@ -12,6 +12,7 @@
 #include "Vector.h"
 #include "Button.h"
 #include "Utility.h"
+#include "Screen.h"
 
 class UI {
  private:
@@ -41,7 +42,6 @@ class UI {
   void pushHighScore();
   bool gameOverScreen();
   bool gameWinScreen();
-  
 };
 
 #endif

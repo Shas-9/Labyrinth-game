@@ -1,10 +1,9 @@
 #include "UI.h"
+#include "ScreenFactory.h"
 
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
-
-#define XVEC UTIL_CLASS.ratioVector
 
 // TODO:
 // needs to be responsive.. cant use macros for this
@@ -20,6 +19,7 @@ UI::UI(int width, int height) { UI(Vector(width, height)); }
 
 // Overloaded constructor with Vector
 UI::UI(Vector screen_dimensions) {
+  ScreenManager::getInstance().current_screen_i = 0;
   this->fetchHighScores();
 
   this->screen_dimensions = screen_dimensions;
@@ -30,66 +30,34 @@ UI::UI(Vector screen_dimensions) {
     "CatQuest");
 
   this->window_ptr = &window;
+  UTIL_CLASS.setWindowObject(this->window_ptr);
 
-  Button tutorial_btn("How to play", XVEC(Vector(0.2, 0.6)), BUTTON_SIZE,
-    TUTORIAL_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
-
-  Button play_button("Play Game", XVEC(Vector(0.6, 0.6)), BUTTON_SIZE,
-    PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 5);
-
+  // registerMainScreen()
+  // registerTutorialScreen()
+  // registerEnterNameScreen()
+  // registerGameScreen()
+  // registerPauseGameScreen()
+  // registerQuitScreen()
+  // registerConfirmationScreen()
+  ScreenManager::getInstance().screens.push_back(ScreenFactory::mainScreen());
+  ScreenManager::getInstance().screens.push_back(ScreenFactory::testScreen());
+  
   sf::Event event;
   this->event_ptr = &event;
 
   // Screen loop
   while ((*this->window_ptr).isOpen()) {
-
     // Event loop
     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
-      switch (event.type) {
-      case sf::Event::Closed:
-        (*this->window_ptr).close();
-        break;
-
-      case sf::Event::MouseButtonPressed:
-        if ((play_button.isMouseOver(*this->window_ptr))) {
-          std::cout << "Play button pressed" << std::endl;
-          bool menu_button_pressed = false;
-
-          while (!(menu_button_pressed)) {
-            menu_button_pressed = this->enterName();
-          }
-        } else if (tutorial_btn.isMouseOver(*this->window_ptr)) {
-
-          std::cout << "Tutorial button pressed" << std::endl;
-          bool menu_button_pressed = false;
-
-          while (!(menu_button_pressed)) {
-            menu_button_pressed = this->drawTutorial();
-          }
-        }
-        break;
-
-      case sf::Event::MouseMoved:
-        if (play_button.isMouseOver(*this->window_ptr)) {
-          play_button.setBackToColor(MOUSE_OVER_COLOR);
-        } else {
-          play_button.setBackToColor(PLAY_BUTTON_COLOR);
-        }
-
-        if (tutorial_btn.isMouseOver(*this->window_ptr)) {
-          tutorial_btn.setBackToColor(MOUSE_OVER_COLOR);
-        } else {
-          tutorial_btn.setBackToColor(TUTORIAL_BUTTON_COLOR);
-        }
-        break;
-      }
+      ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i].update(event);
     }
 
     // Display on the screen
     (*this->window_ptr).clear();
-    this->renderUI();
-    play_button.drawButton(*this->window_ptr);
-    tutorial_btn.drawButton(*this->window_ptr);
+    // this->renderUI();
+    // play_button.drawButton(*this->window_ptr);
+    // tutorial_btn.drawButton(*this->window_ptr);
+    ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i].render();
     (*this->window_ptr).display();
   }
 }
@@ -198,10 +166,6 @@ bool UI::drawTutorial() {
     (*this->window_ptr).display();
   }
   return true;
-}
-
-void UI::drawGame() {
-
 }
 
 // Entering the name of the player screen
@@ -329,19 +293,9 @@ void UI::startGame() {
   if (this->game.isGameWon()) {
     this->score = this->game.getScore();
     this->gameWinScreen();
-
   } else {
     this->gameOverScreen();
   }
-  // this->drawGame();
-  // while ((*this->window_ptr).isOpen()) {
-
-    // Event loop
-    // while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
-
-    // }
-  // }
-
 }
 
 void UI::pushHighScore() {

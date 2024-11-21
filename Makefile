@@ -60,6 +60,15 @@ Utility.o: src/Utility.cpp
 TexturesHandler.o: src/TexturesHandler.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
+Screen.o: src/Screen.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
+ScreenFactory.o: src/ScreenFactory.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
+ScreenManager.o: src/ScreenManager.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
 main.o: src/main.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
