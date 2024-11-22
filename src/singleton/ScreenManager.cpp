@@ -1,5 +1,9 @@
 #include "ScreenManager.h"
 
+ScreenManager::ScreenManager() {
+  this->current_screen_i = 0;
+}
+
 void ScreenManager::switchScreen(std::string screen_name) {
   for (int i = 0; i < this->screens.size(); i++) {
     Screen &screen = this->screens[i];

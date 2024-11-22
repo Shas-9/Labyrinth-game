@@ -21,9 +21,6 @@ class UI {
   int num_highscores;
   std::string current_state;
   Game game;
-  Vector screen_dimensions;
-  sf::RenderWindow* window_ptr;
-  sf::Event* event_ptr;
   sf::Clock* clock;
 
   void renderUI();

@@ -14,6 +14,9 @@ using std::pair;
 using std::string;
 
 class ScreenManager : public Singleton<ScreenManager> {
+private:
+  ScreenManager();
+  friend class Singleton<ScreenManager>;
 public:
   // Window pointer
   sf::RenderWindow* window_ptr;

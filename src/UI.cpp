@@ -22,18 +22,10 @@ UI::UI(int width, int height) { UI(Vector(width, height)); }
 
 // Overloaded constructor with Vector
 UI::UI(Vector screen_dimensions) {
-  ScreenManager::getInstance().current_screen_i = 0;
-  // this->fetchHighScores();
-
-  this->screen_dimensions = screen_dimensions;
   ScreenManager::getInstance().setScreenDimensions(screen_dimensions);
 
-  sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getX(),
-    this->screen_dimensions.getY()),
-    "CatQuest");
-
-  this->window_ptr = &window;
-  ScreenManager::getInstance().setWindowObject(this->window_ptr);
+  sf::RenderWindow window(sf::VideoMode(screen_dimensions.getX(), screen_dimensions.getY()), "CatQuest");
+  ScreenManager::getInstance().setWindowObject(&window);
 
   // registerMainScreen()
   // registerTutorialScreen()
@@ -47,19 +39,18 @@ UI::UI(Vector screen_dimensions) {
   ScreenManager::getInstance().screens.push_back(ScreenFactory::highscoresScreen());
   
   sf::Event event;
-  this->event_ptr = &event;
 
   // Screen loop
-  while ((*this->window_ptr).isOpen()) {
-    // Event loop
-    while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+  while (window.isOpen()) {
+    // Update the current screen
+    while (window.pollEvent(event)) {
       ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i].update(event);
     }
 
-    // Rendering
-    (*this->window_ptr).clear();
+    // Render the current screen
+    window.clear();
     ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i].render();
-    (*this->window_ptr).display();
+    window.display();
   }
 }
 
@@ -82,8 +73,8 @@ UI::UI(Vector screen_dimensions) {
 //   sf::Sprite bg_sprite;
 //   bg_sprite.setScale(this->screen_dimensions.getY()/1080, this->screen_dimensions.getY()/1080);
 //   bg_sprite.setTexture(background);
-//   (*this->window_ptr).draw(bg_sprite);
-//   (*this->window_ptr).draw(cat_title);
+//   (window).draw(bg_sprite);
+//   (window).draw(cat_title);
 // }
 
 // // Fetching the highscores from the highscores folder
@@ -132,17 +123,17 @@ UI::UI(Vector screen_dimensions) {
 //     PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
 
 //   // Screen loop
-//   while ((*this->window_ptr).isOpen()) {
+//   while ((window).isOpen()) {
 
 //     // Event loop
-//     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+//     while ((window).pollEvent((*this->event_ptr))) {
 //       switch ((*this->event_ptr).type) {
 //       case sf::Event::Closed:
-//         (*this->window_ptr).close();
+//         (window).close();
 //         break;
 
 //       case sf::Event::MouseButtonPressed:
-//         if ((menu.isMouseOver(*this->window_ptr))) {
+//         if ((menu.isMouseOver(window))) {
 //           std::cout << "Menu button pressed" << std::endl;
 //           // menu_button_pressed = true;
 //           return true;
@@ -150,7 +141,7 @@ UI::UI(Vector screen_dimensions) {
 //         break;
 
 //       case sf::Event::MouseMoved:
-//         if (menu.isMouseOver(*this->window_ptr)) {
+//         if (menu.isMouseOver(window)) {
 //           // menu.setBackToColor(MOUSE_OVER_COLOR);
 //         } else {
 //           // menu.setBackToColor(PLAY_BUTTON_COLOR);
@@ -160,11 +151,11 @@ UI::UI(Vector screen_dimensions) {
 //     }
 
 //     // Display on the screen
-//     (*this->window_ptr).clear();
-//     (*this->window_ptr).draw(bg_sprite);
-//     game_instructions.drawButton(*this->window_ptr);
-//     menu.drawButton(*this->window_ptr);
-//     (*this->window_ptr).display();
+//     (window).clear();
+//     (window).draw(bg_sprite);
+//     game_instructions.drawButton(window);
+//     menu.drawButton(window);
+//     (window).display();
 //   }
 //   return true;
 // }
@@ -219,14 +210,14 @@ UI::UI(Vector screen_dimensions) {
 
 
 //   // Screen loop
-//   while ((*this->window_ptr).isOpen()) {
+//   while ((window).isOpen()) {
 
 //     // Event loop
-//     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+//     while ((window).pollEvent((*this->event_ptr))) {
 //       switch ((*this->event_ptr).type) {
 
 //       case sf::Event::Closed:
-//         (*this->window_ptr).close();
+//         (window).close();
 //         break;
 
 //       case sf::Event::KeyPressed:
@@ -257,7 +248,7 @@ UI::UI(Vector screen_dimensions) {
 //         break;
 
 //       case sf::Event::MouseMoved:
-//         if (menu.isMouseOver(*this->window_ptr)) {
+//         if (menu.isMouseOver(window)) {
 //           // menu.setBackToColor(MOUSE_OVER_COLOR);
 //         } else {
 //           // menu.setBackToColor(PLAY_BUTTON_COLOR);
@@ -265,7 +256,7 @@ UI::UI(Vector screen_dimensions) {
 //         break;
 
 //       case sf::Event::MouseButtonPressed:
-//         if ((menu.isMouseOver(*this->window_ptr))) {
+//         if ((menu.isMouseOver(window))) {
 //           std::cout << "Menu button pressed" << std::endl;
 //           // menu_button_pressed = true;
 //           return true;
@@ -275,14 +266,14 @@ UI::UI(Vector screen_dimensions) {
 //     }
 
 //     // Display on the screen
-//     (*this->window_ptr).clear();
-//     (*this->window_ptr).draw(bg_sprite);
-//     (*this->window_ptr).draw(enter_name);
-//     (*this->window_ptr).draw(highscores_text);
-//     name_entered.drawButton(*this->window_ptr);
-//     (*this->window_ptr).draw(to_play);
-//     menu.drawButton(*this->window_ptr);
-//     (*this->window_ptr).display();
+//     (window).clear();
+//     (window).draw(bg_sprite);
+//     (window).draw(enter_name);
+//     (window).draw(highscores_text);
+//     name_entered.drawButton(window);
+//     (window).draw(to_play);
+//     menu.drawButton(window);
+//     (window).display();
 //   }
 //   return true;
 // }
@@ -372,17 +363,17 @@ UI::UI(Vector screen_dimensions) {
 //   Button menu_button("Main Menu", Vector(1300, 800), BUTTON_SIZE, PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
 
 //   // Screen loop
-//   while ((*this->window_ptr).isOpen()) {
+//   while ((window).isOpen()) {
 
 //     //event loop
-//     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+//     while ((window).pollEvent((*this->event_ptr))) {
 //       switch ((*this->event_ptr).type) {
 //       case sf::Event::Closed:
-//         (*this->window_ptr).close();
+//         (window).close();
 //         break;
 
 //       case sf::Event::MouseMoved:
-//         if (menu_button.isMouseOver(*this->window_ptr)) {
+//         if (menu_button.isMouseOver(window)) {
 //           // menu_button.setBackToColor(MOUSE_OVER_COLOR);
 //         } else {
 //           // menu_button.setBackToColor(PLAY_BUTTON_COLOR);
@@ -390,7 +381,7 @@ UI::UI(Vector screen_dimensions) {
 //         break;
 
 //       case sf::Event::MouseButtonPressed:
-//         if (menu_button.isMouseOver(*this->window_ptr)) {
+//         if (menu_button.isMouseOver(window)) {
 //           std::cout << "Menu button pressed" << std::endl;
 //           return true;
 //         }
@@ -398,14 +389,14 @@ UI::UI(Vector screen_dimensions) {
 //       }
 //     }
 
-//     (*this->window_ptr).clear();
+//     (window).clear();
 
-//     (*this->window_ptr).draw(sprite);
-//     (*this->window_ptr).draw(game_over_text);
-//     menu_button.drawButton(*this->window_ptr);
-//     (*this->window_ptr).draw(prompt_text);
+//     (window).draw(sprite);
+//     (window).draw(game_over_text);
+//     menu_button.drawButton(window);
+//     (window).draw(prompt_text);
 
-//     (*this->window_ptr).display();
+//     (window).display();
 //   }
 //   return true;
 // }
@@ -472,17 +463,17 @@ UI::UI(Vector screen_dimensions) {
 //   Button menu_button("Main Menu", Vector(1400, 850), BUTTON_SIZE, PLAY_BUTTON_COLOR, sf::Color::White, BUTTON_TEXT_SIZE, 10);
 
 //   // Screen loop
-//   while ((*this->window_ptr).isOpen()) {
+//   while ((window).isOpen()) {
 
 //     //event loop
-//     while ((*this->window_ptr).pollEvent((*this->event_ptr))) {
+//     while ((window).pollEvent((*this->event_ptr))) {
 //       switch ((*this->event_ptr).type) {
 //       case sf::Event::Closed:
-//         (*this->window_ptr).close();
+//         (window).close();
 //         break;
 
 //       case sf::Event::MouseMoved:
-//         if (menu_button.isMouseOver(*this->window_ptr)) {
+//         if (menu_button.isMouseOver(window)) {
 //           // menu_button.setBackToColor(MOUSE_OVER_COLOR);
 //         } else {
 //           // menu_button.setBackToColor(PLAY_BUTTON_COLOR);
@@ -490,7 +481,7 @@ UI::UI(Vector screen_dimensions) {
 //         break;
 
 //       case sf::Event::MouseButtonPressed:
-//         if (menu_button.isMouseOver(*this->window_ptr)) {
+//         if (menu_button.isMouseOver(window)) {
 //           std::cout << "Menu button pressed" << std::endl;
 //           return true;
 //         }
@@ -498,20 +489,20 @@ UI::UI(Vector screen_dimensions) {
 //       }
 //     }
 
-//     (*this->window_ptr).clear();
+//     (window).clear();
 
-//     (*this->window_ptr).draw(sprite);
-//     (*this->window_ptr).draw(game_win_text);
-//     menu_button.drawButton(*this->window_ptr);
-//     (*this->window_ptr).draw(prompt_text);
-//     (*this->window_ptr).draw(time_text);
-//     (*this->window_ptr).draw(highscores_text);
+//     (window).draw(sprite);
+//     (window).draw(game_win_text);
+//     menu_button.drawButton(window);
+//     (window).draw(prompt_text);
+//     (window).draw(time_text);
+//     (window).draw(highscores_text);
 
 //     if (this->clock->getElapsedTime().asSeconds() < this->highscores.rbegin()->first) {
-//       (*this->window_ptr).draw(new_highscore_text);
+//       (window).draw(new_highscore_text);
 //     }
 
-//     (*this->window_ptr).display();
+//     (window).display();
 
 //   }
 //   return true;
