@@ -26,7 +26,7 @@ void Utility::frames_handler(
   }
 
   if (is_moving) {
-    *current_animation_frame += speed_factor*UTIL_CLASS.getTimeFactor();
+    *current_animation_frame += speed_factor*Utility::getInstance().getTimeFactor();
     if (*current_animation_frame >= 4000) *current_animation_frame = 0;
 
     sprite->setTextureRect(*walking_frames[(*current_frames_index)][*current_animation_frame / 1000]);

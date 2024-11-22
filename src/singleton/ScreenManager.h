@@ -1,6 +1,8 @@
 #ifndef SCREEN_MANAGER_INCLUDE
 #define SCREEN_MANAGER_INCLUDE
 
+#define XVEC ScreenManager::getInstance().ratioVec
+
 #include "../global.h"
 #include "../Screen.h"
 #include "Singleton.h"
@@ -11,7 +13,7 @@ using std::vector;
 using std::pair;
 using std::string;
 
-class ScreenManager : public Singleton {
+class ScreenManager : public Singleton<ScreenManager> {
 public:
   // Window pointer
   sf::RenderWindow* window_ptr;

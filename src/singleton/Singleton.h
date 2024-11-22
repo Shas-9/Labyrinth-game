@@ -1,11 +1,15 @@
 #ifndef SINGLETON_INCLUDE
 #define SINGLETON_INCLUDE
 
+template <typename T>
 class Singleton {
 protected:
-  Singleton();
+  Singleton() {}
 public:
-  static Singleton& getInstance();
+  static T& getInstance() {
+  static T instance;
+  return instance;
+}
   Singleton(Singleton const&) = delete;
   void operator=(Singleton const&) = delete;
 };

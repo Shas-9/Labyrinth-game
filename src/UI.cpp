@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "ScreenFactory.h"
+#include "singleton/ScreenManager.h"
 
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
@@ -25,14 +26,14 @@ UI::UI(Vector screen_dimensions) {
   // this->fetchHighScores();
 
   this->screen_dimensions = screen_dimensions;
-  UTIL_CLASS.setScreenDimensions(screen_dimensions);
+  ScreenManager::getInstance().setScreenDimensions(screen_dimensions);
 
   sf::RenderWindow window(sf::VideoMode(this->screen_dimensions.getX(),
     this->screen_dimensions.getY()),
     "CatQuest");
 
   this->window_ptr = &window;
-  UTIL_CLASS.setWindowObject(this->window_ptr);
+  ScreenManager::getInstance().setWindowObject(this->window_ptr);
 
   // registerMainScreen()
   // registerTutorialScreen()

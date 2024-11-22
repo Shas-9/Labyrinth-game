@@ -1,4 +1,6 @@
 #include "Screen.h"
+#include "singleton/ScreenManager.h"
+
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define PLAY_BUTTON_COLOR sf::Color (22, 30, 43)
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
@@ -18,29 +20,29 @@ Screen::Screen(string screen_name, vector<ScreenButton> buttons, vector<ScreenTe
 void Screen::render() {
   // render the images
   for (ScreenImage& image : this->images) {
-    (*UTIL_CLASS.window_ptr).draw(*image.sprite);
+    (*ScreenManager::getInstance().window_ptr).draw(*image.sprite);
   }
 
   // render the text
   for (ScreenText& text : this->texts) {
-    (*UTIL_CLASS.window_ptr).draw(*text.text);
+    (*ScreenManager::getInstance().window_ptr).draw(*text.text);
   }
 
   // render all the buttons
   for (ScreenButton& button : this->buttons) {
-    button.button->drawButton(*UTIL_CLASS.window_ptr);
+    button.button->drawButton(*ScreenManager::getInstance().window_ptr);
   }
 }
 
 void Screen::update(sf::Event event) {
   switch (event.type) {
     case sf::Event::Closed:
-      (*UTIL_CLASS.window_ptr).close();
+      (*ScreenManager::getInstance().window_ptr).close();
       break;
 
     case sf::Event::MouseButtonPressed:
       for (ScreenButton& button : this->buttons) {
-        if ((button.button->isMouseOver(*UTIL_CLASS.window_ptr))) {
+        if ((button.button->isMouseOver(*ScreenManager::getInstance().window_ptr))) {
           button.button->setDefaultColor();
           button.func();
         }
@@ -49,7 +51,7 @@ void Screen::update(sf::Event event) {
 
     case sf::Event::MouseMoved:
       for (ScreenButton& button : this->buttons) {
-        if (button.button->isMouseOver(*UTIL_CLASS.window_ptr)) {
+        if (button.button->isMouseOver(*ScreenManager::getInstance().window_ptr)) {
           button.button->setHoverColor();
         } else {
           button.button->setDefaultColor();

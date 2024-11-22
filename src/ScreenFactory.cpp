@@ -29,10 +29,10 @@ Screen ScreenFactory::mainScreen() {
       ScreenButton(tutorial_btn, SWITCH_SCREEN("tutorial_screen"))
     }), 
     vector<ScreenText>({
-      ScreenText("CatQuest", XVEC(Vector(0.25, 0.3)), 10, "fonts/cat_font.ttf", UTIL_CLASS.screen_dimensions.getX())
+      ScreenText("CatQuest", XVEC(Vector(0.25, 0.3)), 10, "fonts/cat_font.ttf", ScreenManager::getInstance().screen_dimensions.getX())
     }),
     vector<ScreenImage>({
-      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(UTIL_CLASS.screen_dimensions.getY()/1080, UTIL_CLASS.screen_dimensions.getY()/1080))
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
     })
   );
 }
@@ -54,10 +54,10 @@ Screen ScreenFactory::tutorialScreen() {
       ScreenButton(back_button, SWITCH_SCREEN("main_screen")),
     }), 
     vector<ScreenText>({
-      ScreenText(how_to_play, XVEC(Vector(0.1, 0.4)), 1.8, "fonts/arial.ttf", UTIL_CLASS.screen_dimensions.getX())
+      ScreenText(how_to_play, XVEC(Vector(0.1, 0.4)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
     }),
     vector<ScreenImage>({
-      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(UTIL_CLASS.screen_dimensions.getY()/1080, UTIL_CLASS.screen_dimensions.getY()/1080))
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
     })
   );
 }
@@ -77,12 +77,12 @@ Screen ScreenFactory::highscoresScreen() {
       ScreenButton(name_button, do_nothing),
     }), 
     vector<ScreenText>({
-      ScreenText(highscores, XVEC(Vector(0.1, 0.4)), 3, "fonts/MouldyCheese.ttf", UTIL_CLASS.screen_dimensions.getX()),
-      ScreenText("Enter your name:", XVEC(Vector(0.65, 0.4)), 2.4, "fonts/MouldyCheese.ttf", UTIL_CLASS.screen_dimensions.getX()),
-      ScreenText("Press enter to play", XVEC(Vector(0.64, 0.58)), 2.4, "fonts/MouldyCheese.ttf", UTIL_CLASS.screen_dimensions.getX()),
+      ScreenText(highscores, XVEC(Vector(0.1, 0.4)), 3, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText("Enter your name:", XVEC(Vector(0.65, 0.4)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText("Press enter to play", XVEC(Vector(0.64, 0.58)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
     }),
     vector<ScreenImage>({
-      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(UTIL_CLASS.screen_dimensions.getY()/1080, UTIL_CLASS.screen_dimensions.getY()/1080))
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
     })
   );
 

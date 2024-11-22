@@ -14,13 +14,13 @@
 using std::vector;
 using std::string;
 
-class Utility : public Singleton {
+class Utility : public Singleton<Utility> {
 private:
   sf::Clock deltaClock;
   sf::Time dt = deltaClock.restart();
-  Utility();
 
 public:
+  Utility();
   static void frames_handler(
     sf::Sprite * sprite,
     int* current_frames_index,

@@ -3,7 +3,7 @@ CC_FLAGS =
 INCLUDES = -Ilibs/sfml/include
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
-SRC_FILES = $(wildcard src/*.cpp) $(wildcard src/singleton/*.cpp)
+SRC_FILES = $(wildcard src/singleton/*.cpp) $(wildcard src/*.cpp)
 O_FILES = $(patsubst src/%.cpp, %.o, $(patsubst src/singleton/%.cpp, %.o, $(SRC_FILES)) )
 TEST_O_FILES = $(patsubst main.o,, $(O_FILES))
 
