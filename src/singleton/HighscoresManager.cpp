@@ -1,20 +1,12 @@
 #include "HighscoresManager.h"
 #include <fstream>
 
-HighscoresManager::HighscoresManager() {}
-
-HighscoresManager& HighscoresManager::getInstance() {
-  static HighscoresManager instance;
-  return instance;
-}
-
-
 void HighscoresManager::fetchHighScores() {
   std::ifstream names_file("highscores/names.txt");
   std::ifstream scores_file("highscores/scores.txt");
 
-  std::string name;
-  std::string score;
+  string name;
+  string score;
 
   int i = 0;
 
@@ -33,7 +25,7 @@ void HighscoresManager::fetchHighScores() {
 string HighscoresManager::formatHighscores() {
   this->fetchHighScores();
 
-  std::string highscores_string = "Highscores:\n\n";
+  string highscores_string = "Highscores:\n\n";
 
   int i = 1;
   for (auto& player : this->highscores) {

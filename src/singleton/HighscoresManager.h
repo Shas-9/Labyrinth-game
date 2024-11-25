@@ -1,24 +1,20 @@
 #ifndef HIGHSCORES_MANAGER_INCLUDE
 #define HIGHSCORES_MANAGER_INCLUDE
 
-#include "global.h"
-#include "Button.h"
+#include "Singleton.h"
 #include <vector>
+#include <string>
 
 using std::vector;
 using std::pair;
 using std::string;
 
-class HighscoresManager {
+class HighscoresManager : public Singleton<HighscoresManager> {
 private:
-  HighscoresManager();
+  friend class Singleton<HighscoresManager>;
   vector<pair<int, string>> highscores;
   int num_highscores;
 public:
-  static HighscoresManager& getInstance();
-  HighscoresManager(HighscoresManager const&) = delete;
-  void operator=(HighscoresManager const&) = delete;
-
   void fetchHighScores();
   string formatHighscores();
 };

@@ -1,5 +1,5 @@
 #include "ScreenFactory.h"
-#include "HighscoresManager.h"
+#include "singleton/HighscoresManager.h"
 #include "singleton/ScreenManager.h"
 
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
@@ -93,7 +93,9 @@ Screen ScreenFactory::highscoresScreen() {
       UTIL_CLASS.player_name += static_cast<char>(event.text.unicode);
       name_button->setString(UTIL_CLASS.player_name);
     } else if (event.text.unicode == 13 && UTIL_CLASS.player_name.length() > 0) {
-      ScreenManager::getInstance().switchScreen("main_screen");
+      // initialize game object
+      ScreenManager::getInstance().switchScreen("main_screen"); // make this game screen?
+
       // // Start timer here
       // this->startGame();
       // // End timer
@@ -111,4 +113,20 @@ Screen ScreenFactory::highscoresScreen() {
   };
 
   return scr;
+}
+
+Screen ScreenFactory::gameScreen() {
+  // Game::getInstance()::time ??
+
+  return Screen("game_screen", 
+    vector<ScreenButton>({
+      ScreenButton(back_button, SWITCH_SCREEN("pause_screen")),
+    }), 
+    vector<ScreenText>({
+      ScreenText(how_to_play, XVEC(Vector(0.1, 0.4)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
+    }),
+    vector<ScreenImage>({
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
+    })
+  );
 }

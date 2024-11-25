@@ -14,6 +14,8 @@
 #define BUTTON_TEXT_SIZE int (30)
 #define BUTTON_SIZE XVEC(Vector(0.2, 0.1))
 
+#define CURRENT_SCREEN ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i]
+
 // Default constructor
 UI::UI() { UI(Vector(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height)); }
 
@@ -44,12 +46,14 @@ UI::UI(Vector screen_dimensions) {
   while (window.isOpen()) {
     // Update the current screen
     while (window.pollEvent(event)) {
-      ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i].update(event);
+      if (CURRENT_SCREEN.screen_name == "game_screen") Game::getInstance().update(event);
+      CURRENT_SCREEN.update(event);
     }
 
     // Render the current screen
     window.clear();
-    ScreenManager::getInstance().screens[ScreenManager::getInstance().current_screen_i].render();
+    if (CURRENT_SCREEN.screen_name == "game_screen") Game::getInstance().render();
+    CURRENT_SCREEN.render();
     window.display();
   }
 }

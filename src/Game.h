@@ -17,12 +17,11 @@ class Game {
   bool is_game_paused;
   bool is_game_won;
   bool is_game_over;
-  sf::Event* event_ptr;
-  sf::RenderWindow *window_ptr;
+  sf::Clock* clock;
 
  public:
   Game();
-  Game(sf::RenderWindow *window, sf::Event* event_ptr, Vector screen_dimensions, sf::Clock* clock);
+  Game(sf::Clock* clock);
   
   bool pause();
   bool confirmationScreen();

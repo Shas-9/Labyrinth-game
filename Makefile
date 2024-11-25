@@ -63,9 +63,6 @@ Screen.o: src/Screen.cpp
 ScreenFactory.o: src/ScreenFactory.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
-HighscoresManager.o: src/HighscoresManager.cpp
-	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
-
 main.o: src/main.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
@@ -76,6 +73,9 @@ Singleton.o: src/singleton/Singleton.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
 ScreenManager.o: src/singleton/ScreenManager.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
+HighscoresManager.o: src/singleton/HighscoresManager.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 
 build: $(O_FILES)
