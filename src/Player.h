@@ -8,10 +8,12 @@
 #include "Environment.h"
 #include "Enemy.h"
 
+#include <memory>
+
 class Player : public Entity {
 protected:
   int score;
-  Environment* environment;
+  std::shared_ptr<Environment> environment;
 
 public:
   Player();
@@ -22,7 +24,7 @@ public:
     int movement_speed,
     int health,
     int attack_damage,
-    Environment* environment
+    std::shared_ptr<Environment> environment
   );
   int getScore();
 

@@ -40,6 +40,7 @@ UI::UI(Vector screen_dimensions) {
   ScreenManager::getInstance().screens.push_back(ScreenFactory::tutorialScreen());
   ScreenManager::getInstance().screens.push_back(ScreenFactory::highscoresScreen());
   ScreenManager::getInstance().screens.push_back(ScreenFactory::gameScreen());
+  ScreenManager::getInstance().screens.push_back(ScreenFactory::pauseScreen());
   
   sf::Event event;
 

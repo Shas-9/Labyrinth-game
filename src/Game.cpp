@@ -11,25 +11,6 @@
 Game::Game() {
   srand(time(NULL));
 
-  this->is_game_won = false;
-
-  this->environment = new Environment();
-  this->is_game_won = false;
-  this->is_game_paused = false;
-  this->is_game_over = false;
-
-  // Create the player object
-  this->player = Player(
-    Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
-    Vector(140 / 2, 180 / 2),
-    "player",
-    3,
-    10000,
-    10,
-    this->environment
-  );
-
-
   // Loading ground textures
   sf::IntRect* rectSourceSprite = new sf::IntRect(0, 0, MAP_BOUNDS / 3, MAP_BOUNDS / 3);
   sf::Sprite* ground_sprite = new sf::Sprite();
@@ -38,8 +19,6 @@ Game::Game() {
   ground_sprite->scale(sf::Vector2f(3, 3));
 
   this->ground_sprite = ground_sprite;
-
-  int time_elapsed = 0;
 
   // // Screen loop
   // while (this->window_ptr->isOpen() && !(this->is_game_over)) {
@@ -308,11 +287,47 @@ int Game::getScore() {
 void Game::setGamePaused(bool isPaused) {
   this->is_game_paused = isPaused;
   // do other stuff related to the clock
+  if (isPaused) {
+    // time_elapsed = clock->getElapsedTime().asSeconds();
+    // bool resume_button_pressed = false;
+
+    // while (!(resume_button_pressed)) {
+    //   resume_button_pressed = this->pause();
+    // }
+    
+  } else {
+    // clock->restart();
+    UTIL_CLASS.setDT();
+    this->player.setMovementDirection(0, false);
+    this->player.setMovementDirection(1, false);
+    this->player.setMovementDirection(2, false);
+    this->player.setMovementDirection(3, false);
+  }
 }
 
 
 void Game::startGame() {
+  this->is_game_won = false;
+
+  this->environment = std::make_shared<Environment>();
+  this->is_game_won = false;
+  this->is_game_paused = false;
+  this->is_game_over = false;
+
+  // Create the player object
+  this->player = Player(
+    Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
+    Vector(140 / 2, 180 / 2),
+    "player",
+    3,
+    10000,
+    10,
+    this->environment
+  );
+
+  this->time_elapsed = 0;
 }
+
 void Game::update(sf::Event event) {
 
 }
@@ -406,9 +421,6 @@ void Game::render() {
 
   // Render the player
   this->player.render(ScreenManager::getInstance().window_ptr, ScreenManager::getInstance().screen_dimensions);
-
-  // // Render the pause button
-  // pause_button.drawButton(*ScreenManager::getInstance().window_ptr);
 
   // // Render the hp text
   // hp_string = "Health: " + std::to_string(this->player.getHealth());

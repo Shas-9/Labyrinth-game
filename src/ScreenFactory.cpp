@@ -69,6 +69,7 @@ Screen ScreenFactory::highscoresScreen() {
   
   Button* name_button = new Button("", XVEC(Vector(0.645, 0.47)), BUTTON_SIZE,
     sf::Color::Black, sf::Color::White, sf::Color::Black, sf::Color::White, BUTTON_TEXT_SIZE-10, 6);
+  name_button->setCustomFont("fonts/MouldyCheese.ttf");
 
   std::string highscores = HighscoresManager::getInstance().formatHighscores();
 
@@ -97,13 +98,6 @@ Screen ScreenFactory::highscoresScreen() {
       // initialize game object
       ScreenManager::getInstance().switchScreen("game_screen"); // make this game screen?
       Game::getInstance().startGame();
-
-      // // Start timer here
-      // this->startGame();
-      // // End timer
-      // // Calculate score
-      // this->showScoreScreen()
-      // return true;
     }
   };
 
@@ -134,7 +128,7 @@ Screen ScreenFactory::gameScreen() {
 
   Screen game_screen("game_screen", 
     vector<ScreenButton>({
-      ScreenButton(pause_button, SWITCH_SCREEN("pause_screen"))
+      ScreenButton(pause_button, []() {Game::getInstance().setGamePaused(true); ScreenManager::getInstance().switchScreen("pause_screen");})
       // ScreenButton(hp_text, SWITCH_SCREEN("pause_screen")),
       // ScreenButton(time_text, SWITCH_SCREEN("pause_screen")),
     }), 
@@ -173,4 +167,26 @@ Screen ScreenFactory::gameScreen() {
   };
 
   return game_screen;
+}
+
+Screen ScreenFactory::pauseScreen() {
+  Button* resume_button = new Button("Resume game", XVEC(Vector(0.1, 0.72)), BUTTON_SIZE,
+    sf::Color::White, DEFAULT_BUTTON_COLOT, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+
+  Button* quit_game_button = new Button("Quite game", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
+    sf::Color::White, TUTORIAL_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+
+  return Screen("pause_screen", 
+    vector<ScreenButton>({
+      ScreenButton(resume_button, []() {Game::getInstance().setGamePaused(false); ScreenManager::getInstance().switchScreen("game_screen");}),
+      ScreenButton(quit_game_button, []() {Game::getInstance().setGamePaused(false); ScreenManager::getInstance().switchScreen("main_screen");}),
+    }), 
+    vector<ScreenText>({
+      ScreenText("Game Paused", XVEC(Vector(0.26, 0.3)), 6.8, "fonts/cat_font.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText("All progress will be lost if you quit.", XVEC(Vector(0.32, 0.6)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+    }),
+    vector<ScreenImage>({
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
+    })
+  );
 }

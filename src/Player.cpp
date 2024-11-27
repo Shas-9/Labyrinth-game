@@ -12,7 +12,7 @@ Player::Player(
   int movement_speed,
   int health,
   int attack_damage,
-  Environment* environment
+  std::shared_ptr<Environment> environment
 ) : Entity(
   position,
   dimensions,

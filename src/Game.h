@@ -11,17 +11,20 @@
 #include "Button.h"
 #include "IronSpider.h"
 
+#include <memory>
+
 class Game : public Singleton<Game> {
 private:
   friend class Singleton<Game>;
   Game();
 
-  Environment *environment;
+  std::shared_ptr<Environment> environment;
   bool is_game_paused;
   bool is_game_won;
   bool is_game_over;
   sf::Clock* clock;
   sf::Sprite* ground_sprite;
+  long int time_elapsed;
 
 public:
   Player player;
