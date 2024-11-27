@@ -14,6 +14,7 @@
 Screen::Screen(string screen_name, vector<ScreenButton> buttons, vector<ScreenText> texts, vector<ScreenImage> images): screen_name(screen_name), buttons(buttons), texts(texts), images(images) {
   // by default set keypressed handlers to do nothing
   this->keyPressedHandler = [](sf::Event event) {};
+  this->keyReleasedHandler = [](sf::Event event) {};
   this->textEnteredHandler = [](sf::Event event) {};
 }
 
@@ -61,13 +62,10 @@ void Screen::update(sf::Event event) {
 
     case sf::Event::KeyPressed:
       this->keyPressedHandler(event);
-    //   if ((*this->event_ptr).key.code == sf::Keyboard::BackSpace) {
-    //     if (name.size() < 1) {
-    //       break;
-    //     }
-    //     name.pop_back();
-    //     name_entered.setString(name);
-    //   }
+      break;
+
+    case sf::Event::KeyReleased:
+      this->keyReleasedHandler(event);
       break;
 
     case sf::Event::TextEntered:

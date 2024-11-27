@@ -58,4 +58,10 @@ void Player::render(sf::RenderWindow *window, Vector screen_dimensions) {
   window->draw(*this->sprite);
 }
 
-void Player::update() {}
+void Player::update() {
+  // Player movement
+  if (this->getMovementDirection(0)) this->moveLeft();
+  if (this->getMovementDirection(1)) this->moveRight();
+  if (this->getMovementDirection(2)) this->moveUp();
+  if (this->getMovementDirection(3)) this->moveDown();
+}

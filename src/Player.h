@@ -27,7 +27,7 @@ public:
   int getScore();
 
   void render(sf::RenderWindow *window, Vector screen_dimensions);
-  void update() override;
+  void update();
 };
 
 #endif

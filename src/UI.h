@@ -20,7 +20,6 @@ class UI {
   std::map<int, std::string> highscores;
   int num_highscores;
   std::string current_state;
-  Game game;
   sf::Clock* clock;
 
   void renderUI();

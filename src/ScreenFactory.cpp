@@ -1,6 +1,7 @@
 #include "ScreenFactory.h"
 #include "singleton/HighscoresManager.h"
 #include "singleton/ScreenManager.h"
+#include "Game.h"
 
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
 #define DEFAULT_BUTTON_COLOT sf::Color (22, 30, 43)
@@ -94,7 +95,8 @@ Screen ScreenFactory::highscoresScreen() {
       name_button->setString(UTIL_CLASS.player_name);
     } else if (event.text.unicode == 13 && UTIL_CLASS.player_name.length() > 0) {
       // initialize game object
-      ScreenManager::getInstance().switchScreen("main_screen"); // make this game screen?
+      ScreenManager::getInstance().switchScreen("game_screen"); // make this game screen?
+      Game::getInstance().startGame();
 
       // // Start timer here
       // this->startGame();
@@ -116,17 +118,59 @@ Screen ScreenFactory::highscoresScreen() {
 }
 
 Screen ScreenFactory::gameScreen() {
-  // Game::getInstance()::time ??
+  Button* pause_button = new Button("Pause Game", XVEC(Vector(0.75, 0.05)), BUTTON_SIZE, sf::Color::White, DEFAULT_BUTTON_COLOT, 
+    sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
 
-  return Screen("game_screen", 
+  std::string hp_string = "HP: ";
+  Button hp_text(hp_string, Vector(100, 50), Vector(100, 30), sf::Color::White, sf::Color::Transparent, 
+    sf::Color::White, sf::Color::Transparent, 44, 5);
+  hp_text.setCustomFont("fonts/MouldyCheese.ttf");
+
+  std::string time_string = "Time: ";
+  Button time_text(time_string, Vector(900, 50), Vector(100, 30), sf::Color::White, sf::Color::Transparent, 
+    sf::Color::White, sf::Color::Transparent, 44, 5);
+  time_text.setCustomFont("fonts/MouldyCheese.ttf");
+
+
+  Screen game_screen("game_screen", 
     vector<ScreenButton>({
-      ScreenButton(back_button, SWITCH_SCREEN("pause_screen")),
+      ScreenButton(pause_button, SWITCH_SCREEN("pause_screen"))
+      // ScreenButton(hp_text, SWITCH_SCREEN("pause_screen")),
+      // ScreenButton(time_text, SWITCH_SCREEN("pause_screen")),
     }), 
     vector<ScreenText>({
-      ScreenText(how_to_play, XVEC(Vector(0.1, 0.4)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
+      // ScreenText(how_to_play, XVEC(Vector(0.1, 0.4)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
     }),
     vector<ScreenImage>({
-      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
+      // ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
     })
   );
+
+  game_screen.keyPressedHandler = [](sf::Event event) {
+    if (event.key.code == sf::Keyboard::A) Game::getInstance().player.setMovementDirection(0, true);
+    if (event.key.code == sf::Keyboard::D) Game::getInstance().player.setMovementDirection(1, true);
+    if (event.key.code == sf::Keyboard::W) Game::getInstance().player.setMovementDirection(2, true);
+    if (event.key.code == sf::Keyboard::S) Game::getInstance().player.setMovementDirection(3, true);
+  };
+
+  game_screen.keyReleasedHandler = [](sf::Event event) {
+    if (event.key.code == sf::Keyboard::A) Game::getInstance().player.setMovementDirection(0, false);
+    if (event.key.code == sf::Keyboard::D) Game::getInstance().player.setMovementDirection(1, false);
+    if (event.key.code == sf::Keyboard::W) Game::getInstance().player.setMovementDirection(2, false);
+    if (event.key.code == sf::Keyboard::S) Game::getInstance().player.setMovementDirection(3, false);
+
+    if (event.key.code == sf::Keyboard::Escape) {
+      Game::getInstance().setGamePaused(true);
+      ScreenManager::getInstance().switchScreen("pause_screen");
+      // time_elapsed = clock->getElapsedTime().asSeconds();
+      // bool resume_button_pressed = false;
+
+      // while (!(resume_button_pressed)) {
+      //   resume_button_pressed = this->pause();
+      // }
+      // clock->restart();
+    }
+  };
+
+  return game_screen;
 }

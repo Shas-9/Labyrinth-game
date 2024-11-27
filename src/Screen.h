@@ -65,6 +65,7 @@ public:
   string screen_name;
   std::function<void(sf::Event)> textEnteredHandler;
   std::function<void(sf::Event)> keyPressedHandler;
+  std::function<void(sf::Event)> keyReleasedHandler;
 
   Screen(string screen_name, vector<ScreenButton> buttons, vector<ScreenText> texts, vector<ScreenImage> images);
   void render();
