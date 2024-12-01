@@ -26,7 +26,6 @@ void Screen::render() {
 
   // render the text
   for (ScreenText& text : this->texts) {
-    std::cout << text.text_string_ptr << std::endl;
     text.text->setString(*text.text_string_ptr);
     (*ScreenManager::getInstance().window_ptr).draw(*text.text);
   }

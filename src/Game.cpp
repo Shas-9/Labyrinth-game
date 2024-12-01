@@ -288,7 +288,7 @@ void Game::setGamePaused(bool isPaused) {
   this->is_game_paused = isPaused;
   // do other stuff related to the clock
   if (isPaused) {
-    // time_elapsed = clock->getElapsedTime().asSeconds();
+    // this->time_offset = clock->getElapsedTime().asSeconds();
     // bool resume_button_pressed = false;
 
     // while (!(resume_button_pressed)) {
@@ -325,7 +325,7 @@ void Game::startGame() {
     this->environment
   );
 
-  this->time_elapsed = 0;
+  this->time_offset = 0;
 }
 
 void Game::update(sf::Event event) {

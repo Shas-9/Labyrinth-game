@@ -22,9 +22,9 @@ private:
   bool is_game_paused;
   bool is_game_won;
   bool is_game_over;
-  sf::Clock* clock;
   sf::Sprite* ground_sprite;
-  long int time_elapsed;
+  sf::Clock* clock;
+  long int time_offset;
 
 public:
   Player player;

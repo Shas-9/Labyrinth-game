@@ -35,22 +35,12 @@ struct ScreenImage {
 };
 
 struct ScreenText {
-  ScreenText(string text, Vector text_position, double text_size, string font_location, double screen_width) {  
-    // this->text_string_ptr = &text;
-    // // *this->text_string_ptr = text;
-    // std::cout << text << std::endl;
-  
-    ScreenText(new string(text), text_position, text_size, font_location, screen_width);
-  }
+  ScreenText(string text, Vector text_position, double text_size, string font_location, double screen_width): 
+  ScreenText(std::make_shared<string>(text), text_position, text_size, font_location, screen_width) {}
 
-  ScreenText(string* text_ptr, Vector text_position, double text_size, string font_location, double screen_width) {  
-    // std::cout << text_ptr << std::endl;
-    
+  ScreenText(std::shared_ptr<string> text_ptr, Vector text_position, double text_size, string font_location, double screen_width) {  
     this->text_string_ptr = text_ptr;
-    
   
-    std::cout << *this->text_string_ptr << std::endl;
-
     this->text = std::make_shared<sf::Text>();
     this->text->setString(*this->text_string_ptr);
     this->text->setCharacterSize(screen_width*text_size/100);
@@ -65,10 +55,9 @@ struct ScreenText {
     }
   }
 
-  string* text_string_ptr;
+  std::shared_ptr<string> text_string_ptr;
   std::shared_ptr<sf::Text> text;
   std::shared_ptr<sf::Font> text_font;
-  
 };
 
 class Screen {

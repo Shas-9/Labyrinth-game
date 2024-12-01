@@ -4,7 +4,7 @@
 #include "Game.h"
 
 #define TUTORIAL_BUTTON_COLOR sf::Color (74, 74, 46)
-#define DEFAULT_BUTTON_COLOT sf::Color (22, 30, 43)
+#define DEFAULT_BUTTON_COLOR sf::Color (22, 30, 43)
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
 
 // TODO:
@@ -22,7 +22,7 @@ Screen ScreenFactory::mainScreen() {
     sf::Color::White, TUTORIAL_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 5);
   
   Button* play_button = new Button("Play Game", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
-    sf::Color::White, DEFAULT_BUTTON_COLOT, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 5);
+    sf::Color::White, DEFAULT_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 5);
 
   return Screen("main_screen", 
     vector<ScreenButton>({
@@ -40,7 +40,7 @@ Screen ScreenFactory::mainScreen() {
 
 Screen ScreenFactory::tutorialScreen() {
   Button* back_button = new Button("Back to Menu", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
-    sf::Color::White, DEFAULT_BUTTON_COLOT, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+    sf::Color::White, DEFAULT_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
 
   std::string how_to_play;
   how_to_play = ("Gameplay Instructions:\n\n"
@@ -64,8 +64,11 @@ Screen ScreenFactory::tutorialScreen() {
 }
 
 Screen ScreenFactory::highscoresScreen() {
-  Button* back_button = new Button("Back to Menu", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
-    sf::Color::White, DEFAULT_BUTTON_COLOT, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+  Button* back_button = new Button("Back to Menu", XVEC(Vector(0.1, 0.72)), BUTTON_SIZE,
+    sf::Color::White, DEFAULT_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+  
+  Button* start_button = new Button("Start Game", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
+    sf::Color::White, TUTORIAL_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
   
   Button* name_button = new Button("", XVEC(Vector(0.645, 0.47)), BUTTON_SIZE,
     sf::Color::Black, sf::Color::White, sf::Color::Black, sf::Color::White, BUTTON_TEXT_SIZE-10, 6);
@@ -76,10 +79,17 @@ Screen ScreenFactory::highscoresScreen() {
   Screen scr("highscores_screen", 
     vector<ScreenButton>({
       ScreenButton(back_button, SWITCH_SCREEN("main_screen")),
+      ScreenButton(start_button, []() {
+        if (UTIL_CLASS.player_name.length() > 0) {
+          ScreenManager::getInstance().switchScreen("game_screen"); // make this game screen?
+          // initialize game object
+          Game::getInstance().startGame();
+        }
+      }),
       ScreenButton(name_button, do_nothing),
     }), 
     vector<ScreenText>({
-      ScreenText(highscores, XVEC(Vector(0.1, 0.4)), 3, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText(highscores, XVEC(Vector(0.1, 0.4)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
       ScreenText("Enter your name:", XVEC(Vector(0.65, 0.4)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
       ScreenText("Press enter to play", XVEC(Vector(0.64, 0.58)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
     }),
@@ -95,8 +105,8 @@ Screen ScreenFactory::highscoresScreen() {
       UTIL_CLASS.player_name += static_cast<char>(event.text.unicode);
       name_button->setString(UTIL_CLASS.player_name);
     } else if (event.text.unicode == 13 && UTIL_CLASS.player_name.length() > 0) {
-      // initialize game object
       ScreenManager::getInstance().switchScreen("game_screen"); // make this game screen?
+      // initialize game object
       Game::getInstance().startGame();
     }
   };
@@ -112,7 +122,7 @@ Screen ScreenFactory::highscoresScreen() {
 }
 
 Screen ScreenFactory::gameScreen() {
-  Button* pause_button = new Button("Pause Game", XVEC(Vector(0.75, 0.05)), BUTTON_SIZE, sf::Color::White, DEFAULT_BUTTON_COLOT, 
+  Button* pause_button = new Button("Pause Game", XVEC(Vector(0.75, 0.05)), BUTTON_SIZE, sf::Color::White, DEFAULT_BUTTON_COLOR, 
     sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
 
   std::string hp_string = "HP: ";
@@ -125,6 +135,7 @@ Screen ScreenFactory::gameScreen() {
     sf::Color::White, sf::Color::Transparent, 44, 5);
   time_text.setCustomFont("fonts/MouldyCheese.ttf");
 
+  std::shared_ptr<string> test_str = std::make_shared<string>("for now");
 
   Screen game_screen("game_screen", 
     vector<ScreenButton>({
@@ -133,7 +144,7 @@ Screen ScreenFactory::gameScreen() {
       // ScreenButton(time_text, SWITCH_SCREEN("pause_screen")),
     }), 
     vector<ScreenText>({
-      // ScreenText(how_to_play, XVEC(Vector(0.1, 0.4)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
+      ScreenText(test_str, XVEC(Vector(0.1, 0.4)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
     }),
     vector<ScreenImage>({
       // ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
@@ -170,10 +181,10 @@ Screen ScreenFactory::gameScreen() {
 }
 
 Screen ScreenFactory::pauseScreen() {
-  Button* resume_button = new Button("Resume game", XVEC(Vector(0.1, 0.72)), BUTTON_SIZE,
-    sf::Color::White, DEFAULT_BUTTON_COLOT, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+  Button* quit_game_button = new Button("Quit game", XVEC(Vector(0.1, 0.72)), BUTTON_SIZE,
+    sf::Color::White, DEFAULT_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
 
-  Button* quit_game_button = new Button("Quite game", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
+  Button* resume_button = new Button("Resume game", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
     sf::Color::White, TUTORIAL_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
 
   return Screen("pause_screen", 
