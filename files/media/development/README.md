@@ -12,7 +12,7 @@
 
 ![](./Screenshot-from-2023-10-15-21-34-58.png)
 
-![](./vid1.webm)
+![](./vid1.webm.mov)
 
 ![](./Screenshot-from-2023-10-16-12-20-37.png)
 
@@ -22,9 +22,9 @@
 
 ![](./Screenshot-from-2023-10-16-15-38-36.png)
 
-![](./vid2.webm)
+![](./vid2.webm.mov)
 
-![](./vid3.webm)
+![](./vid3.webm.mov)
 
 ![](./Screenshot-from-2023-10-17-10-20-36.png)
 
@@ -40,7 +40,7 @@
 
 ![](./Screenshot-from-2024-02-18-14-09-42.png)
 
-![](./vid4.webm)
+![](./vid4.webm.mov)
 
 ![](./Screenshot-from-2024-02-18-20-40-01.png)
 
