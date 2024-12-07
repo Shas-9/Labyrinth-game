@@ -290,7 +290,7 @@ void Game::setGamePaused(bool isPaused) {
   this->is_game_paused = isPaused;
   // do other stuff related to the clock
   if (isPaused) {
-    this->time_offset = this->clock.getElapsedTime().asMilliseconds();
+    this->time_offset += this->clock.getElapsedTime().asMilliseconds();
     // bool resume_button_pressed = false;
 
     // while (!(resume_button_pressed)) {
