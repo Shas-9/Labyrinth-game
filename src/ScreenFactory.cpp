@@ -144,7 +144,7 @@ Screen ScreenFactory::gameScreen() {
       // ScreenButton(time_text, SWITCH_SCREEN("pause_screen")),
     }), 
     vector<ScreenText>({
-      ScreenText(test_str, XVEC(Vector(0.1, 0.4)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
+      ScreenText(Game::getInstance().time_string, XVEC(Vector(0.04, 0.04)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
     }),
     vector<ScreenImage>({
       // ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))

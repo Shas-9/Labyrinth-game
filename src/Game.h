@@ -23,10 +23,11 @@ private:
   bool is_game_won;
   bool is_game_over;
   sf::Sprite* ground_sprite;
-  sf::Clock* clock;
+  sf::Clock clock;
   long int time_offset;
 
 public:
+  std::shared_ptr<string> time_string;
   Player player;
   void startGame();
   void setGamePaused(bool isPaused);

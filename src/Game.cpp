@@ -20,6 +20,8 @@ Game::Game() {
 
   this->ground_sprite = ground_sprite;
 
+  this->time_string = std::make_shared<string>("");
+
   // // Screen loop
   // while (this->window_ptr->isOpen() && !(this->is_game_over)) {
   //   UTIL_CLASS.setDT();
@@ -288,7 +290,7 @@ void Game::setGamePaused(bool isPaused) {
   this->is_game_paused = isPaused;
   // do other stuff related to the clock
   if (isPaused) {
-    // this->time_offset = clock->getElapsedTime().asSeconds();
+    this->time_offset = this->clock.getElapsedTime().asMilliseconds();
     // bool resume_button_pressed = false;
 
     // while (!(resume_button_pressed)) {
@@ -296,7 +298,7 @@ void Game::setGamePaused(bool isPaused) {
     // }
     
   } else {
-    // clock->restart();
+    this->clock.restart();
     UTIL_CLASS.setDT();
     this->player.setMovementDirection(0, false);
     this->player.setMovementDirection(1, false);
@@ -326,10 +328,11 @@ void Game::startGame() {
   );
 
   this->time_offset = 0;
+  this->clock.restart();
 }
 
 void Game::update(sf::Event event) {
-
+  
 }
 
 void Game::render() {
@@ -421,6 +424,11 @@ void Game::render() {
 
   // Render the player
   this->player.render(ScreenManager::getInstance().window_ptr, ScreenManager::getInstance().screen_dimensions);
+
+  string time_left = std::to_string(std::ceil(((double)((long int)(this->clock.getElapsedTime().asMilliseconds()) + this->time_offset)/1000) * 100.0) / 100.0);
+  time_left.erase ( time_left.find_last_not_of('0') + 1, std::string::npos );
+  time_left.erase ( time_left.find_last_not_of('.') + 1, std::string::npos );
+  *this->time_string = "Time: " + time_left + "s";
 
   // // Render the hp text
   // hp_string = "Health: " + std::to_string(this->player.getHealth());
