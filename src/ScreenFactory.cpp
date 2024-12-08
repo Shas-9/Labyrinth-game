@@ -74,22 +74,19 @@ Screen ScreenFactory::highscoresScreen() {
     sf::Color::Black, sf::Color::White, sf::Color::Black, sf::Color::White, BUTTON_TEXT_SIZE-10, 6);
   name_button->setCustomFont("fonts/MouldyCheese.ttf");
 
-  std::string highscores = HighscoresManager::getInstance().formatHighscores();
-
   Screen scr("highscores_screen", 
     vector<ScreenButton>({
       ScreenButton(back_button, SWITCH_SCREEN("main_screen")),
       ScreenButton(start_button, []() {
         if (UTIL_CLASS.player_name.length() > 0) {
-          ScreenManager::getInstance().switchScreen("game_screen"); // make this game screen?
-          // initialize game object
+          ScreenManager::getInstance().switchScreen("game_screen");
           Game::getInstance().startGame();
         }
       }),
       ScreenButton(name_button, do_nothing),
     }), 
     vector<ScreenText>({
-      ScreenText(highscores, XVEC(Vector(0.1, 0.4)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText(HighscoresManager::getInstance().highscores_str, XVEC(Vector(0.1, 0.36)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
       ScreenText("Enter your name:", XVEC(Vector(0.65, 0.4)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
       ScreenText("Press enter to play", XVEC(Vector(0.64, 0.58)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
     }),
@@ -105,8 +102,7 @@ Screen ScreenFactory::highscoresScreen() {
       UTIL_CLASS.player_name += static_cast<char>(event.text.unicode);
       name_button->setString(UTIL_CLASS.player_name);
     } else if (event.text.unicode == 13 && UTIL_CLASS.player_name.length() > 0) {
-      ScreenManager::getInstance().switchScreen("game_screen"); // make this game screen?
-      // initialize game object
+      ScreenManager::getInstance().switchScreen("game_screen");
       Game::getInstance().startGame();
     }
   };
@@ -144,11 +140,10 @@ Screen ScreenFactory::gameScreen() {
       // ScreenButton(time_text, SWITCH_SCREEN("pause_screen")),
     }), 
     vector<ScreenText>({
-      ScreenText(Game::getInstance().time_string, XVEC(Vector(0.04, 0.04)), 1.8, "fonts/arial.ttf", ScreenManager::getInstance().screen_dimensions.getX())
+      ScreenText(Game::getInstance().health_string, XVEC(Vector(0.03, 0.04)), 2, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText(Game::getInstance().time_string, XVEC(Vector(0.45, 0.04)), 2, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
     }),
-    vector<ScreenImage>({
-      // ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
-    })
+    vector<ScreenImage>()
   );
 
   game_screen.keyPressedHandler = [](sf::Event event) {
@@ -167,14 +162,10 @@ Screen ScreenFactory::gameScreen() {
     if (event.key.code == sf::Keyboard::Escape) {
       Game::getInstance().setGamePaused(true);
       ScreenManager::getInstance().switchScreen("pause_screen");
-      // time_elapsed = clock->getElapsedTime().asSeconds();
-      // bool resume_button_pressed = false;
-
-      // while (!(resume_button_pressed)) {
-      //   resume_button_pressed = this->pause();
-      // }
-      // clock->restart();
     }
+
+    if (event.key.code == sf::Keyboard::Subtract) Game::getInstance().loseGame();
+    if (event.key.code == sf::Keyboard::Add) Game::getInstance().winGame();
   };
 
   return game_screen;
@@ -195,6 +186,74 @@ Screen ScreenFactory::pauseScreen() {
     vector<ScreenText>({
       ScreenText("Game Paused", XVEC(Vector(0.26, 0.3)), 6.8, "fonts/cat_font.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
       ScreenText("All progress will be lost if you quit.", XVEC(Vector(0.32, 0.6)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+    }),
+    vector<ScreenImage>({
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
+    })
+  );
+}
+
+Screen ScreenFactory::losingScreen() {
+  Button* main_menu = new Button("Main Menu", XVEC(Vector(0.1, 0.72)), BUTTON_SIZE,
+    sf::Color::White, DEFAULT_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+
+  Button* play_again = new Button("Play Again", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
+    sf::Color::White, TUTORIAL_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+
+  return Screen("losing_screen", 
+    vector<ScreenButton>({
+      ScreenButton(main_menu, SWITCH_SCREEN("main_screen")),
+      ScreenButton(play_again, SWITCH_SCREEN("highscores_screen")),
+    }), 
+    vector<ScreenText>({
+      ScreenText("Game Over", XVEC(Vector(0.3, 0.3)), 6.8, "fonts/cat_font.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText("You died without finding the cat.", XVEC(Vector(0.32, 0.6)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+    }),
+    vector<ScreenImage>({
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
+    })
+  );
+}
+
+Screen ScreenFactory::winningScreen() {
+  Button* main_menu = new Button("Main Menu", XVEC(Vector(0.1, 0.72)), BUTTON_SIZE,
+    sf::Color::White, DEFAULT_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+
+  Button* play_again = new Button("Play Again", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
+    sf::Color::White, TUTORIAL_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+
+  return Screen("winning_screen", 
+    vector<ScreenButton>({
+      ScreenButton(main_menu, SWITCH_SCREEN("main_screen")),
+      ScreenButton(play_again, SWITCH_SCREEN("highscores_screen")),
+    }), 
+    vector<ScreenText>({
+      ScreenText("Meow", XVEC(Vector(0.38, 0.1)), 6.8, "fonts/cat_font.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText("You found the cat! Good job!", XVEC(Vector(0.34, 0.3)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText(HighscoresManager::getInstance().highscores_str, XVEC(Vector(0.7, 0.3)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+    }),
+    vector<ScreenImage>({
+      ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))
+    })
+  );
+}
+
+Screen ScreenFactory::highscoreWinningScreen() {
+  Button* main_menu = new Button("Main Menu", XVEC(Vector(0.1, 0.72)), BUTTON_SIZE,
+    sf::Color::White, DEFAULT_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+
+  Button* play_again = new Button("Play Again", XVEC(Vector(0.7, 0.72)), BUTTON_SIZE,
+    sf::Color::White, TUTORIAL_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
+
+  return Screen("highscore_winning_screen", 
+    vector<ScreenButton>({
+      ScreenButton(main_menu, SWITCH_SCREEN("main_screen")),
+      ScreenButton(play_again, SWITCH_SCREEN("highscores_screen")),
+    }), 
+    vector<ScreenText>({
+      ScreenText("Meow", XVEC(Vector(0.38, 0.1)), 6.8, "fonts/cat_font.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText("New highscore!", XVEC(Vector(0.4, 0.3)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
+      ScreenText(HighscoresManager::getInstance().highscores_str, XVEC(Vector(0.7, 0.3)), 2.4, "fonts/MouldyCheese.ttf", ScreenManager::getInstance().screen_dimensions.getX()),
     }),
     vector<ScreenImage>({
       ScreenImage("images/UI.png", Vector(0, 0), Vector(1920, 1080), Vector(ScreenManager::getInstance().screen_dimensions.getY()/1080, ScreenManager::getInstance().screen_dimensions.getY()/1080))

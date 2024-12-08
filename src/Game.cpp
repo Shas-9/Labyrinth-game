@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "TexturesHandler.hpp"
 #include "singleton/ScreenManager.h"
+#include "singleton/HighscoresManager.h"
 
 #define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
 #define PAUSE_BUTTON_COLOR sf::Color (22, 30, 43)
@@ -21,6 +22,8 @@ Game::Game() {
   this->ground_sprite = ground_sprite;
 
   this->time_string = std::make_shared<string>("");
+  this->health_string = std::make_shared<string>("");
+
 
   // // Screen loop
   // while (this->window_ptr->isOpen() && !(this->is_game_over)) {
@@ -278,28 +281,17 @@ Game::Game() {
 //   return true;
 // }
 
-bool Game::isGameWon() {
-  return this->is_game_won;
-}
-
-int Game::getScore() {
-  return this->player.getScore();
-}
-
 void Game::setGamePaused(bool isPaused) {
   this->is_game_paused = isPaused;
-  // do other stuff related to the clock
+  
   if (isPaused) {
     this->time_offset += this->clock.getElapsedTime().asMilliseconds();
-    // bool resume_button_pressed = false;
-
-    // while (!(resume_button_pressed)) {
-    //   resume_button_pressed = this->pause();
-    // }
-    
   } else {
+    // For remaining time
     this->clock.restart();
+    // For animation and game speed
     UTIL_CLASS.setDT();
+    // Stop the player from moving (should this be done for other entities as well? not really)
     this->player.setMovementDirection(0, false);
     this->player.setMovementDirection(1, false);
     this->player.setMovementDirection(2, false);
@@ -309,8 +301,6 @@ void Game::setGamePaused(bool isPaused) {
 
 
 void Game::startGame() {
-  this->is_game_won = false;
-
   this->environment = std::make_shared<Environment>();
   this->is_game_won = false;
   this->is_game_paused = false;
@@ -331,16 +321,22 @@ void Game::startGame() {
   this->clock.restart();
 }
 
-void Game::update(sf::Event event) {
-  
+void Game::update() {
+  string time_left = std::to_string(std::ceil(((double)((long int)(this->clock.getElapsedTime().asMilliseconds()) + this->time_offset)/1000) * 100.0) / 100.0);
+  time_left.erase ( time_left.find_last_not_of('0') + 1, std::string::npos );
+  time_left.erase ( time_left.find_last_not_of('.') + 1, std::string::npos );
+  *this->time_string = "Time: " + time_left + "s";
+
+  string health_left = std::to_string(this->player.getHealth());
+  *this->health_string = "Health: " + health_left;
+
+  if (this->player.getHealth() <= 0) {
+    this->loseGame();
+  }
 }
 
 void Game::render() {
   UTIL_CLASS.setDT();
-
-  if (this->player.getHealth() <= 0) {
-    this->is_game_over = true;
-  }
 
   this->player.update();
   
@@ -412,31 +408,34 @@ void Game::render() {
     }
   }
 
-  Cat cat_item = (this->environment->getCat());
+  Cat cat_item = this->environment->getCat();
   Item* cat_ptr = &cat_item;
   cat_ptr->render(ScreenManager::getInstance().window_ptr, camera_position);
   if (cat_ptr->isCollidingWithObject(&this->player)) {
     if (cat_ptr->getValue() == 123) {
-      this->is_game_won = true;
-      this->is_game_over = true;
+      this->winGame();
     }
   }
 
   // Render the player
   this->player.render(ScreenManager::getInstance().window_ptr, ScreenManager::getInstance().screen_dimensions);
+}
 
-  string time_left = std::to_string(std::ceil(((double)((long int)(this->clock.getElapsedTime().asMilliseconds()) + this->time_offset)/1000) * 100.0) / 100.0);
-  time_left.erase ( time_left.find_last_not_of('0') + 1, std::string::npos );
-  time_left.erase ( time_left.find_last_not_of('.') + 1, std::string::npos );
-  *this->time_string = "Time: " + time_left + "s";
+void Game::winGame() {
+  this->is_game_won = true;
+  this->is_game_over = true;
+  long int final_score = this->time_offset + this->clock.getElapsedTime().asMilliseconds();
+  
+  bool is_highscore = HighscoresManager::getInstance().isHighscore(final_score);
+  HighscoresManager::getInstance().addScore(UTIL_CLASS.player_name, final_score);
+  
+  if (is_highscore) ScreenManager::getInstance().switchScreen("highscore_winning_screen");
+  else ScreenManager::getInstance().switchScreen("winning_screen");
+  
+}
 
-  // // Render the hp text
-  // hp_string = "Health: " + std::to_string(this->player.getHealth());
-  // hp_text.setString(hp_string);
-  // hp_text.drawButton(*ScreenManager::getInstance().window_ptr);
-
-  // // Render the time text
-  // time_string = "Time: " + std::to_string((int)clock->getElapsedTime().asSeconds() + time_elapsed) + "s";
-  // time_text.setString(time_string);
-  // time_text.drawButton(*ScreenManager::getInstance().window_ptr);
+void Game::loseGame() {
+  this->is_game_over = true;
+  this->is_game_won = false;
+  ScreenManager::getInstance().switchScreen("losing_screen");
 }

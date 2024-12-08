@@ -28,13 +28,14 @@ private:
 
 public:
   std::shared_ptr<string> time_string;
+  std::shared_ptr<string> health_string;
   Player player;
   void startGame();
+  void winGame();
+  void loseGame();
   void setGamePaused(bool isPaused);
-  bool isGameWon();
-  int getScore();
 
-  void update(sf::Event event);
+  void update();
   void render();
 };
 

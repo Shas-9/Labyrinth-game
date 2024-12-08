@@ -41,6 +41,9 @@ UI::UI(Vector screen_dimensions) {
   ScreenManager::getInstance().screens.push_back(ScreenFactory::highscoresScreen());
   ScreenManager::getInstance().screens.push_back(ScreenFactory::gameScreen());
   ScreenManager::getInstance().screens.push_back(ScreenFactory::pauseScreen());
+  ScreenManager::getInstance().screens.push_back(ScreenFactory::losingScreen());
+  ScreenManager::getInstance().screens.push_back(ScreenFactory::winningScreen());
+  ScreenManager::getInstance().screens.push_back(ScreenFactory::highscoreWinningScreen());
   
   sf::Event event;
 
@@ -48,12 +51,12 @@ UI::UI(Vector screen_dimensions) {
   while (window.isOpen()) {
     // Update the current screen
     while (window.pollEvent(event)) {
-      if (CURRENT_SCREEN.screen_name == "game_screen") Game::getInstance().update(event);
       CURRENT_SCREEN.update(event);
     }
 
     // Render the current screen
     window.clear();
+    if (CURRENT_SCREEN.screen_name == "game_screen") Game::getInstance().update();
     if (CURRENT_SCREEN.screen_name == "game_screen") Game::getInstance().render();
     CURRENT_SCREEN.render();
     window.display();

@@ -30,7 +30,6 @@ class UI {
   UI();
   UI(Vector screen_dimensions);
   UI(int width, int hight);
-  void fetchHighScores();
   void startGame();
   void drawGame();
   

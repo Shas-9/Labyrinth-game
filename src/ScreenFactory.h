@@ -11,6 +11,9 @@ public:
   static Screen highscoresScreen();
   static Screen gameScreen();
   static Screen pauseScreen();
+  static Screen losingScreen();
+  static Screen winningScreen();
+  static Screen highscoreWinningScreen();
 };
 
 #endif
