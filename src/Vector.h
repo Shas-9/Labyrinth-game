@@ -8,10 +8,11 @@ using std::endl;
 
 class Vector {
 private:
-  double x;
-  double y;
 
 public:
+  double x;
+  double y;
+  
   Vector();
   Vector(double x, double y);
   Vector(int x, int y);

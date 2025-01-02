@@ -115,7 +115,7 @@ void Game::render() {
   // Vector camera_position = this->prev_camera_position;
 
   // Update the ground's position relative to the player
-  ground_sprite->setPosition(
+  this->ground_sprite->setPosition(
     sf::Vector2f(
       -camera_position.getX(),
       -camera_position.getY()
@@ -123,7 +123,7 @@ void Game::render() {
   );
 
   // Render the ground
-  ScreenManager::getInstance().window_ptr->draw(*ground_sprite);
+  ScreenManager::getInstance().window_ptr->draw(*this->ground_sprite);
 
   // Render obstacles' walls (for 3D illusion)
   for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
