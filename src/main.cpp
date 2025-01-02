@@ -8,5 +8,6 @@
 
 int main() {
   UI* ui = new UI();
+  // UI* ui = new UI(1920/4, 1080/4);
   return 0;
 }

@@ -25,6 +25,7 @@ private:
   sf::Sprite* ground_sprite;
   sf::Clock clock;
   long int time_offset;
+  Vector prev_camera_position;
 
 public:
   std::shared_ptr<string> time_string;

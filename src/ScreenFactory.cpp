@@ -10,7 +10,7 @@
 // TODO:
 // needs to be responsive.. cant use macros for this
 // maybe move to the utils class?
-#define BUTTON_TEXT_SIZE int (30)
+#define BUTTON_TEXT_SIZE int (2.4)
 #define BUTTON_SIZE XVEC(Vector(0.2, 0.1))
 
 #define SWITCH_SCREEN(screen_name) []() { ScreenManager::getInstance().switchScreen(screen_name); }
@@ -71,7 +71,7 @@ Screen ScreenFactory::highscoresScreen() {
     sf::Color::White, TUTORIAL_BUTTON_COLOR, sf::Color::White, MOUSE_OVER_COLOR, BUTTON_TEXT_SIZE, 10);
   
   Button* name_button = new Button("", XVEC(Vector(0.645, 0.47)), BUTTON_SIZE,
-    sf::Color::Black, sf::Color::White, sf::Color::Black, sf::Color::White, BUTTON_TEXT_SIZE-10, 6);
+    sf::Color::Black, sf::Color::White, sf::Color::Black, sf::Color::White, BUTTON_TEXT_SIZE, 6);
   name_button->setCustomFont("fonts/MouldyCheese.ttf");
 
   Screen scr("highscores_screen", 

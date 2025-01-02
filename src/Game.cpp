@@ -23,263 +23,7 @@ Game::Game() {
 
   this->time_string = std::make_shared<string>("");
   this->health_string = std::make_shared<string>("");
-
-
-  // // Screen loop
-  // while (this->window_ptr->isOpen() && !(this->is_game_over)) {
-  //   UTIL_CLASS.setDT();
-
-  //   if (this->player.getHealth() <= 0) {
-  //     this->is_game_over = true;
-  //   }
-
-  //   // Event loop
-  //   while (this->window_ptr->pollEvent((*this->event_ptr))) {
-  //     switch ((*this->event_ptr).type) {
-  //     case sf::Event::Closed:
-  //       this->window_ptr->close();
-  //       break;
-
-  //     case sf::Event::KeyPressed:
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::A) {
-  //         this->player.setMovementDirection(0, true);
-  //       }
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::D) {
-  //         this->player.setMovementDirection(1, true);
-  //       }
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::W) {
-  //         this->player.setMovementDirection(2, true);
-  //       }
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::S) {
-  //         this->player.setMovementDirection(3, true);
-  //       }
-  //       break;
-
-  //     case sf::Event::KeyReleased:
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::A) {
-  //         this->player.setMovementDirection(0, false);
-  //       }
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::D) {
-  //         this->player.setMovementDirection(1, false);
-  //       }
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::W) {
-  //         this->player.setMovementDirection(2, false);
-  //       }
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::S) {
-  //         this->player.setMovementDirection(3, false);
-  //       }
-  //       if ((*this->event_ptr).key.code == sf::Keyboard::Escape) {
-  //         time_elapsed = clock->getElapsedTime().asSeconds();
-  //         bool resume_button_pressed = false;
-
-  //         while (!(resume_button_pressed)) {
-  //           resume_button_pressed = this->pause();
-  //         }
-  //         clock->restart();
-  //       }
-  //       break;
-
-  //     case sf::Event::MouseMoved:
-  //       if (pause_button.isMouseOver(*this->window_ptr)) {
-  //         pause_button.setHoverColor();
-  //       } else {
-  //         pause_button.setDefaultColor();
-  //       }
-  //       break;
-
-  //     case sf::Event::MouseButtonPressed:
-  //       if ((pause_button.isMouseOver(*this->window_ptr))) {
-  //         std::cout << "Pause button pressed" << std::endl;
-  //         time_elapsed = clock->getElapsedTime().asSeconds();
-  //         bool resume_button_pressed = false;
-
-  //         while (!(resume_button_pressed)) {
-  //           resume_button_pressed = this->pause();
-  //         }
-  //         clock->restart();
-  //       }
-
-  //       break;
-  //     }
-  //   }
-
-  //   this->window_ptr->clear();
-
-  //   // // Player movement
-  //   // if (this->player.getMovementDirection(0)) {
-  //   //   this->player.moveLeft();
-  //   // }
-  //   // if (this->player.getMovementDirection(1)) {
-  //   //   this->player.moveRight();
-  //   // }
-  //   // if (this->player.getMovementDirection(2)) {
-  //   //   this->player.moveUp();
-  //   // }
-  //   // if (this->player.getMovementDirection(3)) {
-  //   //   this->player.moveDown();
-  //   // }
-
-    
-
-  //   this->window_ptr->display();
-  // }
 }
-
-// bool Game::confirmationScreen() {
-//   sf::Texture texture;
-//   texture.loadFromFile("images/UI.png");
-//   sf::Sprite sprite;
-//   sprite.setTexture(texture);
-//   sprite.setTextureRect(sf::IntRect(0, 0, this->window_ptr->getSize().x, this->window_ptr->getSize().y));
-
-//   sf::Font font;
-//   font.loadFromFile("fonts/MouldyCheese.ttf");
-//   sf::Text quit_text;
-//   quit_text.setFont(font);
-//   quit_text.setString("Are you sure you want to quit?");
-//   quit_text.setCharacterSize(46);
-//   quit_text.setFillColor(sf::Color::White);
-//   quit_text.setPosition(sf::Vector2f(580, 650));
-
-//   Button yes_button("Yes", Vector(300, 800), BUTTON_SIZE, sf::Color::White, PAUSE_BUTTON_COLOR, sf::Color::White, PAUSE_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
-//   Button no_button("No", Vector(1300, 800), BUTTON_SIZE, sf::Color::White, QUIT_BUTTON_COLOR, sf::Color::White, QUIT_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
-
-//   // Screen loop
-//   while (this->window_ptr->isOpen()) {
-
-//     // Event loop
-//     while (this->window_ptr->pollEvent((*this->event_ptr))) {
-//       switch ((*this->event_ptr).type) {
-//       case sf::Event::Closed:
-//         this->window_ptr->close();
-//         break;
-
-//       case sf::Event::MouseMoved:
-//         if (yes_button.isMouseOver(*this->window_ptr)) {
-//           yes_button.setHoverColor();
-//         } else {
-//           yes_button.setDefaultColor();
-//         }
-
-//         if (no_button.isMouseOver(*this->window_ptr)) {
-//           no_button.setHoverColor();
-//         } else {
-//           no_button.setDefaultColor();
-//         }
-//         break;
-
-//       case sf::Event::MouseButtonPressed:
-//         if ((yes_button.isMouseOver(*this->window_ptr))) {
-//           std::cout << "Yes button pressed" << std::endl;
-//           this->is_game_over = true;
-//           return true;
-//         }
-
-//         if ((no_button.isMouseOver(*this->window_ptr))) {
-//           std::cout << "No button pressed" << std::endl;
-//           return false;
-//         }
-//       }
-//     }
-
-//     this->window_ptr->clear();
-
-//     this->window_ptr->draw(sprite);
-//     yes_button.drawButton(*this->window_ptr);
-//     no_button.drawButton(*this->window_ptr);
-//     this->window_ptr->draw(quit_text);
-
-//     this->window_ptr->display();
-
-//   }
-
-//   return true;
-// }
-
-// bool Game::pause() {
-//   sf::Texture texture;
-//   texture.loadFromFile("images/UI.png");
-//   sf::Sprite sprite;
-//   sprite.setTexture(texture);
-//   sprite.setTextureRect(sf::IntRect(0, 0, this->window_ptr->getSize().x, this->window_ptr->getSize().y));
-
-//   sf::Font font;
-//   font.loadFromFile("fonts/MouldyCheese.ttf");
-//   sf::Font cat_font;
-//   cat_font.loadFromFile("fonts/cat_font.ttf");
-
-//   sf::Text pause_text;
-//   pause_text.setFont(cat_font);
-//   pause_text.setString("Game Paused");
-//   pause_text.setCharacterSize(130);
-//   pause_text.setFillColor(sf::Color::White);
-//   pause_text.setPosition(sf::Vector2f(500, 350));
-
-//   sf::Text resume_text;
-//   resume_text.setFont(font);
-//   resume_text.setString("All progress will be lost if you quit");
-//   resume_text.setCharacterSize(46);
-//   resume_text.setFillColor(sf::Color::White);
-//   resume_text.setPosition(sf::Vector2f(580, 650));
-
-//   Button resume_button("Resume", Vector(300, 800), BUTTON_SIZE, sf::Color::White, PAUSE_BUTTON_COLOR, sf::Color::White, PAUSE_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
-//   Button quit_game_button("Quit Game", Vector(1300, 800), BUTTON_SIZE, sf::Color::White, QUIT_BUTTON_COLOR, sf::Color::White, QUIT_BUTTON_COLOR, BUTTON_TEXT_SIZE, 10);
-
-
-//   // Screen loop
-//   while (this->window_ptr->isOpen()) {
-
-//     // Event loop
-//     while (this->window_ptr->pollEvent((*this->event_ptr))) {
-//       switch ((*this->event_ptr).type) {
-//       case sf::Event::Closed:
-//         this->window_ptr->close();
-//         break;
-
-//       case sf::Event::MouseMoved:
-//         if (resume_button.isMouseOver(*this->window_ptr)) {
-//           resume_button.setHoverColor();
-//         } else {
-//           resume_button.setDefaultColor();
-//         }
-
-//         if (quit_game_button.isMouseOver(*this->window_ptr)) {
-//           quit_game_button.setHoverColor();
-//         } else {
-//           quit_game_button.setDefaultColor();
-//         }
-//         break;
-
-//       case sf::Event::MouseButtonPressed:
-//         if ((resume_button.isMouseOver(*this->window_ptr))) {
-//           std::cout << "Resume button pressed" << std::endl;
-//           return true;
-//         }
-
-//         if ((quit_game_button.isMouseOver(*this->window_ptr))) {
-//           std::cout << "Quit game button pressed" << std::endl;
-
-//           if (this->confirmationScreen()) {
-//             return true;
-//           }
-//         }
-//         break;
-//       }
-//     }
-
-//     this->window_ptr->clear();
-
-//     this->window_ptr->draw(sprite);
-//     this->window_ptr->draw(pause_text);
-//     resume_button.drawButton(*this->window_ptr);
-//     quit_game_button.drawButton(*this->window_ptr);
-//     this->window_ptr->draw(resume_text);
-
-//     this->window_ptr->display();
-//   }
-
-//   return true;
-// }
 
 void Game::setGamePaused(bool isPaused) {
   this->is_game_paused = isPaused;
@@ -298,7 +42,6 @@ void Game::setGamePaused(bool isPaused) {
     this->player.setMovementDirection(3, false);
   }
 }
-
 
 void Game::startGame() {
   this->environment = std::make_shared<Environment>();
@@ -319,6 +62,11 @@ void Game::startGame() {
 
   this->time_offset = 0;
   this->clock.restart();
+
+  this->prev_camera_position = Vector(
+    this->player.getPosition().getX() - ((ScreenManager::getInstance().screen_dimensions.getX() - this->player.getDimensions().getX()) / 2),
+    this->player.getPosition().getY() - ((ScreenManager::getInstance().screen_dimensions.getY() - this->player.getDimensions().getY()) / 2)
+  );
 }
 
 void Game::update() {
@@ -335,6 +83,13 @@ void Game::update() {
   }
 }
 
+// Vector calcCameraPosChange(Vector current, Vector target) {
+//   Vector direction = Vector::subtract(current, target);
+//   direction.print();
+//   direction.multiply(0.3);
+//   return direction;
+// }
+
 void Game::render() {
   UTIL_CLASS.setDT();
 
@@ -345,6 +100,19 @@ void Game::render() {
     this->player.getPosition().getX() - ((ScreenManager::getInstance().screen_dimensions.getX() - this->player.getDimensions().getX()) / 2),
     this->player.getPosition().getY() - ((ScreenManager::getInstance().screen_dimensions.getY() - this->player.getDimensions().getY()) / 2)
   );
+
+  // // Calculate the camera position for all rendered objects
+  // Vector target_pos = Vector(
+  //   this->player.getPosition().getX() - ((ScreenManager::getInstance().screen_dimensions.getX() - this->player.getDimensions().getX()) / 2),
+  //   this->player.getPosition().getY() - ((ScreenManager::getInstance().screen_dimensions.getY() - this->player.getDimensions().getY()) / 2)
+  // );
+  
+  // Vector change = calcCameraPosChange(this->prev_camera_position, target_pos);
+  
+  // // this->prev_camera_position.set(this->prev_camera_position.getX() - change.getX(), this->prev_camera_position.getY() - change.getY());
+  // this->prev_camera_position.set(target_pos.getX() * 0.8, target_pos.getY() * 0.8);
+  
+  // Vector camera_position = this->prev_camera_position;
 
   // Update the ground's position relative to the player
   ground_sprite->setPosition(

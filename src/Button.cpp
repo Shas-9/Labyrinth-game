@@ -1,4 +1,5 @@
 #include "Button.h"
+#include "singleton/ScreenManager.h"
 
 // Default constructor that loads the font for the test in the button
 Button::Button() {
@@ -25,9 +26,10 @@ Button::Button(
   this->text.setString(text);
   this->text.setFillColor(text_color);
   this->text.setFont(this->arial);
-  this->text.setCharacterSize(charsize);
+  // this->text.setCharacterSize(charsize);
+  this->text.setCharacterSize(ScreenManager::getInstance().screen_dimensions.getX()*charsize/100);
 
-  this->move_text_pixels = move_text_pixels;
+  this->move_text_pixels = ScreenManager::getInstance().screen_dimensions.getX()*move_text_pixels/1000;
 
   button.setSize(sf::Vector2f(size.getX(), size.getY()));
   button.setFillColor(bg_color);

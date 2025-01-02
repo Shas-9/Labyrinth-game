@@ -25,6 +25,11 @@ public:
   void set(double x, double y);
   void set(int x, int y);
 
+  static Vector subtract(Vector vec1, Vector vec2);
+  double getLength();
+  void multiply(double len);
+  void normalize();
+
   void print();
 };
 
