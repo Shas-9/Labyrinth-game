@@ -9,6 +9,9 @@
 #define BUTTON_TEXT_SIZE int (40)
 #define BUTTON_SIZE Vector (250, 110)
 
+#define SCREEN_X ScreenManager::getInstance().screen_dimensions.x
+#define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
+
 Game::Game() {
   srand(time(NULL));
 
@@ -23,11 +26,12 @@ Game::Game() {
 
   this->time_string = std::make_shared<string>("");
   this->health_string = std::make_shared<string>("");
+  this->main_cam = std::make_shared<Camera>();
 }
 
 void Game::setGamePaused(bool isPaused) {
   this->is_game_paused = isPaused;
-  
+
   if (isPaused) {
     this->time_offset += this->clock.getElapsedTime().asMilliseconds();
   } else {
@@ -48,6 +52,10 @@ void Game::startGame() {
   this->is_game_won = false;
   this->is_game_paused = false;
   this->is_game_over = false;
+  
+  // set camera immediatley to origin
+  this->main_cam->setTargetPos(Vector(0, 0));
+  this->main_cam->update(false);
 
   // Create the player object
   this->player = Player(
@@ -70,9 +78,9 @@ void Game::startGame() {
 }
 
 void Game::update() {
-  string time_left = std::to_string(std::ceil(((double)((long int)(this->clock.getElapsedTime().asMilliseconds()) + this->time_offset)/1000) * 100.0) / 100.0);
-  time_left.erase ( time_left.find_last_not_of('0') + 1, std::string::npos );
-  time_left.erase ( time_left.find_last_not_of('.') + 1, std::string::npos );
+  string time_left = std::to_string(std::ceil(((double)((long int)(this->clock.getElapsedTime().asMilliseconds()) + this->time_offset) / 1000) * 100.0) / 100.0);
+  time_left.erase(time_left.find_last_not_of('0') + 1, std::string::npos);
+  time_left.erase(time_left.find_last_not_of('.') + 1, std::string::npos);
   *this->time_string = "Time: " + time_left + "s";
 
   string health_left = std::to_string(this->player.getHealth());
@@ -94,49 +102,34 @@ void Game::render() {
   UTIL_CLASS.setDT();
 
   this->player.update();
-  
+
   // Calculate the camera position for all rendered objects
   Vector camera_position = Vector(
     this->player.getPosition().getX() - ((ScreenManager::getInstance().screen_dimensions.getX() - this->player.getDimensions().getX()) / 2),
     this->player.getPosition().getY() - ((ScreenManager::getInstance().screen_dimensions.getY() - this->player.getDimensions().getY()) / 2)
   );
 
-  // // Calculate the camera position for all rendered objects
-  // Vector target_pos = Vector(
-  //   this->player.getPosition().getX() - ((ScreenManager::getInstance().screen_dimensions.getX() - this->player.getDimensions().getX()) / 2),
-  //   this->player.getPosition().getY() - ((ScreenManager::getInstance().screen_dimensions.getY() - this->player.getDimensions().getY()) / 2)
-  // );
   
-  // Vector change = calcCameraPosChange(this->prev_camera_position, target_pos);
+  this->main_cam->setTargetPos(Vector(this->player.getPosition().x + this->player.getDimensions().x, this->player.getPosition().y + this->player.getDimensions().y));
+  this->main_cam->update(true);
   
-  // // this->prev_camera_position.set(this->prev_camera_position.getX() - change.getX(), this->prev_camera_position.getY() - change.getY());
-  // this->prev_camera_position.set(target_pos.getX() * 0.8, target_pos.getY() * 0.8);
-  
-  // Vector camera_position = this->prev_camera_position;
-
-  // Update the ground's position relative to the player
-  this->ground_sprite->setPosition(
-    sf::Vector2f(
-      -camera_position.getX(),
-      -camera_position.getY()
-    )
-  );
+  this->ground_sprite->setPosition(sf::Vector2f(-this->main_cam->getCurrentPos().x * this->main_cam->getZoom() + SCREEN_X/2, -this->main_cam->getCurrentPos().y * this->main_cam->getZoom() + SCREEN_Y/2));
 
   // Render the ground
   ScreenManager::getInstance().window_ptr->draw(*this->ground_sprite);
 
   // Render obstacles' walls (for 3D illusion)
   for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
-    this->environment->getObstacles()[i].render_right_wall(ScreenManager::getInstance().window_ptr, camera_position);
+    this->environment->getObstacles()[i].render_right_wall(this->main_cam);
   }
   // Render obstacles' walls (for 3D illusion)
   for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
-    this->environment->getObstacles()[i].render_bottom_wall(ScreenManager::getInstance().window_ptr, camera_position);
+    this->environment->getObstacles()[i].render_bottom_wall(this->main_cam);
   }
 
   // Render all obstacles/walls of the cave
   for (int i = 0; i < this->environment->getObstaclesNum(); i++) {
-    this->environment->getObstacles()[i].render(ScreenManager::getInstance().window_ptr, camera_position);
+    this->environment->getObstacles()[i].render(this->main_cam);
   }
 
   // Render and update all enemies
@@ -158,14 +151,14 @@ void Game::render() {
       this->player.loseHealth(this->environment->getEnemies()[i].getAttackDamage() * UTIL_CLASS.getTimeFactor());
     }
 
-    this->environment->getEnemies()[i].render(ScreenManager::getInstance().window_ptr, camera_position);
+    this->environment->getEnemies()[i].render(this->main_cam);
     this->environment->getEnemies()[i].update();
   }
 
   // Render and update all items
   for (int i = 0; i < this->environment->getItemsNum(); i++) {
     Item* current_item = &(this->environment->getItems()[i]);
-    current_item->render(ScreenManager::getInstance().window_ptr, camera_position);
+    current_item->render(this->main_cam);
 
     if (current_item->isCollidingWithObject(&this->player)) {
       // Use item
@@ -178,7 +171,7 @@ void Game::render() {
 
   Cat cat_item = this->environment->getCat();
   Item* cat_ptr = &cat_item;
-  cat_ptr->render(ScreenManager::getInstance().window_ptr, camera_position);
+  cat_ptr->render(this->main_cam);
   if (cat_ptr->isCollidingWithObject(&this->player)) {
     if (cat_ptr->getValue() == 123) {
       this->winGame();
@@ -186,20 +179,20 @@ void Game::render() {
   }
 
   // Render the player
-  this->player.render(ScreenManager::getInstance().window_ptr, ScreenManager::getInstance().screen_dimensions);
+  this->player.render(this->main_cam);
 }
 
 void Game::winGame() {
   this->is_game_won = true;
   this->is_game_over = true;
   long int final_score = this->time_offset + this->clock.getElapsedTime().asMilliseconds();
-  
+
   bool is_highscore = HighscoresManager::getInstance().isHighscore(final_score);
   HighscoresManager::getInstance().addScore(UTIL_CLASS.player_name, final_score);
-  
+
   if (is_highscore) ScreenManager::getInstance().switchScreen("highscore_winning_screen");
   else ScreenManager::getInstance().switchScreen("winning_screen");
-  
+
 }
 
 void Game::loseGame() {

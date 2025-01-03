@@ -14,7 +14,7 @@ public:
      Item(Vector position, Vector dimensions, std::string type, std::string description);
 
      void update();
-     void render(sf::RenderWindow *window, Vector camera_position);
+     void render(std::shared_ptr<Camera> cam);
      std::string getType();
      virtual int getValue();
      bool isInObstacle(Obstacle* obstacles, int obstacles_num);

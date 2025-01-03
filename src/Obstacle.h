@@ -5,6 +5,8 @@
 #include <fstream>
 
 #include "RenderedObject.h"
+#include <memory>
+#include "Camera.h"
 
 class Obstacle : public RenderedObject {
 private:
@@ -17,9 +19,9 @@ public:
   Obstacle();
   Obstacle(Vector position, string type, Vector dimensions);
   void update();
-  void render(sf::RenderWindow* window, Vector camera_position);
-  void render_bottom_wall(sf::RenderWindow* window, Vector camera_position);
-  void render_right_wall(sf::RenderWindow* window, Vector camera_position);
+  void render(std::shared_ptr<Camera> cam);
+  void render_bottom_wall(std::shared_ptr<Camera> cam);
+  void render_right_wall(std::shared_ptr<Camera> cam);
   void printData(std::ofstream* outfile);
 };
 

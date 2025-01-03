@@ -123,9 +123,9 @@ public:
 };
 
 int main() {
-  // UI* ui = new UI();
+  UI* ui = new UI();
   // UI* ui = new UI(1920/4, 1080/4);
-  CamTesting *test = new CamTesting();
+  // CamTesting *test = new CamTesting();
   // CamTesting *test = new CamTesting(1920/4, 1080/4);
 
   return 0;

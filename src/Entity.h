@@ -63,7 +63,7 @@ public:
   bool canMove();
 
   virtual void update() = 0;
-  void render(sf::RenderWindow *window, Vector camera_position);
+  void render(std::shared_ptr<Camera> cam);
 };
 
 #endif

@@ -10,6 +10,7 @@
 #include "singleton/Utility.h"
 #include "Button.h"
 #include "IronSpider.h"
+#include "Camera.h"
 
 #include <memory>
 
@@ -26,6 +27,7 @@ private:
   sf::Clock clock;
   long int time_offset;
   Vector prev_camera_position;
+  std::shared_ptr<Camera> main_cam;
 
 public:
   std::shared_ptr<string> time_string;

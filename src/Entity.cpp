@@ -1,4 +1,5 @@
 #include "Entity.h"
+#include "singleton/ScreenManager.h"
 
 // Default constructor
 Entity::Entity() {}
@@ -161,7 +162,7 @@ int Entity::getMovementDirection(int direction) {
 }
 
 // Render the entity (also handles movement animation)
-void Entity::render(sf::RenderWindow *window, Vector camera_position) {
+void Entity::render(std::shared_ptr<Camera> cam) {
   // Use the utility function "frames handles" to handle frames of walking
   Utility::frames_handler(
     this->sprite,
@@ -175,12 +176,10 @@ void Entity::render(sf::RenderWindow *window, Vector camera_position) {
     20
   );
 
-  // Sets the new position for the sprite of the entity and renders it on the screen
-  this->sprite->setPosition(
-    this->position.getX() - camera_position.getX(),
-    this->position.getY() - camera_position.getY()
-  );
-  window->draw(*this->sprite);
+  Vector sprite_pos = cam->convertPos(this->getPosition());
+  this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
+  
+  ScreenManager::getInstance().window_ptr->draw(*this->sprite);
 }
 
 // Get the health of the entity as a percentage

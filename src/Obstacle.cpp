@@ -1,6 +1,7 @@
 #include "Obstacle.h"
 #include "TexturesHandler.hpp"
 #include <iostream>
+#include "singleton/ScreenManager.h"
 
 Obstacle::Obstacle() : RenderedObject(Vector(0, 0), Vector(10, 10), "obstacle") {}
 
@@ -37,43 +38,47 @@ Obstacle::Obstacle(Vector position, string type, Vector dimensions) : RenderedOb
 }
 
 // This function takes in the window object and draws the object
-void Obstacle::render(sf::RenderWindow *window, Vector camera_position) {
-  this->sprite->setPosition(
-    sf::Vector2f(
-      this->position.getX() - camera_position.getX(),
-      this->position.getY() - camera_position.getY()
-    )
-  );
-  window->draw(*this->sprite);
+void Obstacle::render(std::shared_ptr<Camera> cam) {
+  // this->sprite->setPosition(
+  //   sf::Vector2f(
+  //     this->position.getX() - camera_position.getX(),
+  //     this->position.getY() - camera_position.getY()
+  //   )
+  // );
+  // window->draw(*this->sprite);
+
+  Vector pos = this->getPosition();
+  Vector sprite_pos = cam->convertPos(pos);
+
+  this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
+  ScreenManager::getInstance().window_ptr->draw(*this->sprite);
 }
 
-void Obstacle::render_bottom_wall(sf::RenderWindow *window, Vector camera_position) {
-  this->bottom_wall_sprite->setPosition(
-    sf::Vector2f(
-      this->position.getX() - camera_position.getX(),
-      this->position.getY() - camera_position.getY() + (this->sprite->getTextureRect().height) * 3
-    )
-  );
-  window->draw(*this->bottom_wall_sprite);
+void Obstacle::render_bottom_wall(std::shared_ptr<Camera> cam) {
+  Vector bottom_wall_pos = this->getPosition();
+  bottom_wall_pos.y += ((this->sprite->getTextureRect().height) * 3);
+  Vector bottom_sprite_pos = cam->convertPos(bottom_wall_pos);
 
-  // render the border
-  border_wall_sprite->setPosition(
-    sf::Vector2f(
-      this->position.getX() - camera_position.getX() + (this->sprite->getTextureRect().width) * 3,
-      this->position.getY() - camera_position.getY() + (this->sprite->getTextureRect().height) * 3
-    )
-  );
-  window->draw(*this->border_wall_sprite);
+  this->bottom_wall_sprite->setPosition(sf::Vector2f(bottom_sprite_pos.x, bottom_sprite_pos.y));
+  ScreenManager::getInstance().window_ptr->draw(*this->bottom_wall_sprite);
+
+
+  Vector border_wall_pos = this->getPosition();
+  border_wall_pos.x += ((this->sprite->getTextureRect().height) * 3);
+  border_wall_pos.y += ((this->sprite->getTextureRect().height) * 3);
+  Vector border_sprite_pos = cam->convertPos(border_wall_pos);
+
+  this->border_wall_sprite->setPosition(sf::Vector2f(border_sprite_pos.x, border_sprite_pos.y));
+  ScreenManager::getInstance().window_ptr->draw(*this->border_wall_sprite);
 }
 
-void Obstacle::render_right_wall(sf::RenderWindow *window, Vector camera_position) {
-  this->right_wall_sprite->setPosition(
-    sf::Vector2f(
-      this->position.getX() - camera_position.getX() + (this->sprite->getTextureRect().width) * 3,
-      this->position.getY() - camera_position.getY()
-    )
-  );
-  window->draw(*this->right_wall_sprite);
+void Obstacle::render_right_wall(std::shared_ptr<Camera> cam) {
+  Vector right_wall_pos = this->getPosition();
+  right_wall_pos.x += ((this->sprite->getTextureRect().width) * 3);
+  Vector sprite_pos = cam->convertPos(right_wall_pos);
+
+  this->right_wall_sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
+  ScreenManager::getInstance().window_ptr->draw(*this->right_wall_sprite);
 }
 
 // Obstacle update function should do nothing.

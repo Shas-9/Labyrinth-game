@@ -1,6 +1,10 @@
 #include "Player.h"
 #include "TexturesHandler.hpp"
 #include <iostream>
+#include "singleton/ScreenManager.h"
+
+#define SCREEN_X ScreenManager::getInstance().screen_dimensions.x
+#define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
 // Default constructor for player does nothing (Environment required)
 Player::Player() {}
@@ -36,7 +40,7 @@ int Player::getScore() {
   return this->score;
 }
 
-void Player::render(sf::RenderWindow *window, Vector screen_dimensions) {
+void Player::render(std::shared_ptr<Camera> cam) {
   Utility::frames_handler(
     this->sprite,
     &this->current_frames_index,
@@ -49,13 +53,17 @@ void Player::render(sf::RenderWindow *window, Vector screen_dimensions) {
     movement_speed*8
   );
 
-  this->sprite->setPosition(
-    sf::Vector2f(
-      (screen_dimensions.getX() - this->getDimensions().getX()) / 2,
-      (screen_dimensions.getY() - this->getDimensions().getY()) / 2
-    )
-  );
-  window->draw(*this->sprite);
+  // this->sprite->setPosition(
+  //   sf::Vector2f(
+  //     (screen_dimensions.getX() - this->getDimensions().getX()) / 2,
+  //     (screen_dimensions.getY() - this->getDimensions().getY()) / 2
+  //   )
+  // );
+  
+  Vector sprite_pos = cam->convertPos(this->getPosition());
+  this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
+  
+  ScreenManager::getInstance().window_ptr->draw(*this->sprite);
 }
 
 void Player::update() {

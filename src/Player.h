@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "Environment.h"
 #include "Enemy.h"
+#include "Camera.h"
 
 #include <memory>
 
@@ -28,7 +29,7 @@ public:
   );
   int getScore();
 
-  void render(sf::RenderWindow *window, Vector screen_dimensions);
+  void render(std::shared_ptr<Camera> cam);
   void update();
 };
 

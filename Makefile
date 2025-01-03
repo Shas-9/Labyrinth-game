@@ -9,6 +9,9 @@ TEST_O_FILES = $(patsubst main.o,, $(O_FILES))
 
 all: build run
 
+Camera.o: src/Camera.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
 IronSpider.o: src/IronSpider.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 

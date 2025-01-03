@@ -1,4 +1,5 @@
 #include "Item.h"
+#include "singleton/ScreenManager.h"
 
 Item::Item() {}
 
@@ -10,14 +11,11 @@ Item::Item(Vector position,
   this->sprite = new sf::Sprite();
 }
 
-void Item::render(sf::RenderWindow *window, Vector camera_position) {
-  this->sprite->setPosition(
-    sf::Vector2f(
-      this->position.getX() - camera_position.getX(),
-      this->position.getY() - camera_position.getY()
-    )
-  );
-  window->draw(*this->sprite);
+void Item::render(std::shared_ptr<Camera> cam) {
+  Vector sprite_pos = cam->convertPos(this->getPosition());
+  this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
+  
+  ScreenManager::getInstance().window_ptr->draw(*this->sprite);
 }
 
 std::string Item::getType() {
