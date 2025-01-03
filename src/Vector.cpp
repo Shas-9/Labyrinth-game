@@ -68,3 +68,12 @@ void Vector::normalize() {
 void Vector::print() {
   cout << "{" << this->getX() << ", " << this->getY() << "}" << endl;
 }
+
+Vector Vector::getMid(Vector vec1, Vector vec2, double delay) {
+  Vector res(-(vec1.x-vec2.x)/delay, -(vec1.y-vec2.y)/delay);
+  return Vector(vec1.x+res.x, vec1.y+res.y);
+}
+
+Vector Vector::getMid(Vector vec1, Vector vec2) {
+  return Vector::getMid(vec1, vec2, 2);
+}

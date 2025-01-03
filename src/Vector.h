@@ -32,6 +32,9 @@ public:
   void normalize();
 
   void print();
+
+  static Vector getMid(Vector vec1, Vector vec2, double delay);
+  static Vector getMid(Vector vec1, Vector vec2);
 };
 
 #endif
