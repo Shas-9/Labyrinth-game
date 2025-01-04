@@ -53,13 +53,6 @@ void Player::render(std::shared_ptr<Camera> cam) {
     movement_speed*8
   );
 
-  // this->sprite->setPosition(
-  //   sf::Vector2f(
-  //     (screen_dimensions.getX() - this->getDimensions().getX()) / 2,
-  //     (screen_dimensions.getY() - this->getDimensions().getY()) / 2
-  //   )
-  // );
-  
   Vector sprite_pos = cam->convertPos(this->getPosition());
   this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
 

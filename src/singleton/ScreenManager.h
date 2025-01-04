@@ -21,6 +21,7 @@ public:
   // Window pointer
   sf::RenderWindow* window_ptr;
   void setWindowObject(sf::RenderWindow* window_ptr);
+  sf::View view;
 
   // Screen dimensions
   Vector screen_dimensions;

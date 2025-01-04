@@ -13,6 +13,7 @@ void ScreenManager::switchScreen(std::string screen_name) {
 
 void ScreenManager::setScreenDimensions(Vector dimensions) {
   this->screen_dimensions = dimensions;
+  screen_dimensions.print();
 }
 
 Vector ScreenManager::ratioVec(Vector ratio) {
@@ -21,4 +22,7 @@ Vector ScreenManager::ratioVec(Vector ratio) {
 
 void ScreenManager::setWindowObject(sf::RenderWindow* window_ptr) {
   this->window_ptr = window_ptr;
+  this->window_ptr->setVerticalSyncEnabled(true);
+  // sf::View view = this->window_ptr->getDefaultView();
+  // this->view = view;
 }

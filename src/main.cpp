@@ -3,9 +3,6 @@
 
 #include "UI.h"
 #include "singleton/ScreenManager.h"
-// #include "Vector.h"
-// #include "Environment.h"
-// #include "../testing/CamTesting.h"
 
 #include <iostream>
 
@@ -124,6 +121,7 @@ public:
 
 int main() {
   UI* ui = new UI();
+  // UI* ui = new UI(800, 500);
   // UI* ui = new UI(1920/4, 1080/4);
   // CamTesting *test = new CamTesting();
   // CamTesting *test = new CamTesting(1920/4, 1080/4);

@@ -3,12 +3,6 @@
 #include "singleton/ScreenManager.h"
 #include "singleton/HighscoresManager.h"
 
-#define MOUSE_OVER_COLOR sf::Color (59, 5, 44)
-#define PAUSE_BUTTON_COLOR sf::Color (22, 30, 43)
-#define QUIT_BUTTON_COLOR sf::Color (74, 74, 46)
-#define BUTTON_TEXT_SIZE int (40)
-#define BUTTON_SIZE Vector (250, 110)
-
 #define SCREEN_X ScreenManager::getInstance().screen_dimensions.x
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 

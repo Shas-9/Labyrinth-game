@@ -14,28 +14,10 @@
 #include "Screen.h"
 
 class UI {
- private:
-  int score;
-  std::string player_name;
-  std::map<int, std::string> highscores;
-  int num_highscores;
-  std::string current_state;
-  sf::Clock* clock;
-
-  void renderUI();
-  bool drawTutorial();
-  bool enterName();
-
- public:
+public:
   UI();
   UI(Vector screen_dimensions);
   UI(int width, int hight);
-  void startGame();
-  void drawGame();
-  
-  void pushHighScore();
-  bool gameOverScreen();
-  bool gameWinScreen();
 };
 
 #endif

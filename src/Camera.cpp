@@ -10,7 +10,7 @@ Camera::Camera(Vector current, Vector target, double zoom) : target_camera_pos(t
 void Camera::updatePos(bool smooth) {
   // smooth camera movement
   if (smooth) {
-    Vector new_cam_pos = Vector::getMid(this->current_camera_pos, this->target_camera_pos, 50);
+    Vector new_cam_pos = Vector::getMid(this->current_camera_pos, this->target_camera_pos, 10);
     this->current_camera_pos = new_cam_pos;
   }
 
@@ -21,7 +21,7 @@ void Camera::updatePos(bool smooth) {
 void Camera::updateZoom(bool smooth) {
   // smooth camera movement
   if (smooth) {
-    this->current_custom_zoom -= (this->current_custom_zoom - this->target_custom_zoom)/50;
+    this->current_custom_zoom -= (this->current_custom_zoom - this->target_custom_zoom)/10;
   }
 
   // instant caera movement

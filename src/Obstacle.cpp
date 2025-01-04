@@ -39,14 +39,6 @@ Obstacle::Obstacle(Vector position, string type, Vector dimensions) : RenderedOb
 
 // This function takes in the window object and draws the object
 void Obstacle::render(std::shared_ptr<Camera> cam) {
-  // this->sprite->setPosition(
-  //   sf::Vector2f(
-  //     this->position.getX() - camera_position.getX(),
-  //     this->position.getY() - camera_position.getY()
-  //   )
-  // );
-  // window->draw(*this->sprite);
-
   Vector pos = this->getPosition();
   Vector sprite_pos = cam->convertPos(pos);
 

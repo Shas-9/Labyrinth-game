@@ -41,6 +41,19 @@ void Screen::update(sf::Event event) {
     case sf::Event::Closed:
       (*ScreenManager::getInstance().window_ptr).close();
       break;
+    
+    case sf::Event::Resized:
+      {
+        // ScreenManager::getInstance().view.setSize({
+        //   static_cast<float>(event.size.width),
+        //   static_cast<float>(event.size.height)
+        // });
+        // (*ScreenManager::getInstance().window_ptr).setView(ScreenManager::getInstance().view);
+        sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+        (*ScreenManager::getInstance().window_ptr).setView(sf::View(visibleArea));
+        ScreenManager::getInstance().setScreenDimensions(Vector(event.size.width, event.size.height));
+      }
+      break;
 
     case sf::Event::MouseButtonPressed:
       for (ScreenButton& button : this->buttons) {
