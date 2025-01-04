@@ -5,9 +5,9 @@
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
 Camera::Camera(): Camera(Vector(0, 0), Vector(0, 0), 1) {}
-Camera::Camera(Vector current, Vector target, double zoom) : target_camera_pos(target), current_camera_pos(current), custom_zoom(zoom) { this->resolution_zoom = SCREEN_Y / 1080; }
+Camera::Camera(Vector current, Vector target, double zoom) : target_camera_pos(target), current_camera_pos(current), target_custom_zoom(zoom), current_custom_zoom(zoom) { this->resolution_zoom = SCREEN_Y / 1080; }
 
-void Camera::update(bool smooth) {
+void Camera::updatePos(bool smooth) {
   // smooth camera movement
   if (smooth) {
     Vector new_cam_pos = Vector::getMid(this->current_camera_pos, this->target_camera_pos, 50);
@@ -18,9 +18,21 @@ void Camera::update(bool smooth) {
   else this->current_camera_pos = this->target_camera_pos;
 }
 
+void Camera::updateZoom(bool smooth) {
+  // smooth camera movement
+  if (smooth) {
+    this->current_custom_zoom -= (this->current_custom_zoom - this->target_custom_zoom)/50;
+  }
+
+  // instant caera movement
+  else this->current_custom_zoom = this->target_custom_zoom;
+}
+
 void Camera::setTargetPos(Vector target) { this->target_camera_pos = target; }
-double Camera::getZoom() { return this->resolution_zoom * this->custom_zoom; }
 Vector Camera::getCurrentPos() { return this->current_camera_pos; }
+
+double Camera::getZoom() { return this->resolution_zoom * this->current_custom_zoom; }
+void Camera::multZoom(double zoom) { this->target_custom_zoom *= zoom; }
 
 Vector Camera::convertPos(Vector pos) {
   return Vector(pos.x * this->getZoom() - this->getCurrentPos().x * this->getZoom() + SCREEN_X/2, pos.y * this->getZoom() - this->getCurrentPos().y * this->getZoom() + SCREEN_Y/2);

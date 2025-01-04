@@ -51,6 +51,7 @@ void Obstacle::render(std::shared_ptr<Camera> cam) {
   Vector sprite_pos = cam->convertPos(pos);
 
   this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
+  this->sprite->setScale(sf::Vector2f(3 * cam->getZoom(), 3 * cam->getZoom()));
   ScreenManager::getInstance().window_ptr->draw(*this->sprite);
 }
 
@@ -60,15 +61,17 @@ void Obstacle::render_bottom_wall(std::shared_ptr<Camera> cam) {
   Vector bottom_sprite_pos = cam->convertPos(bottom_wall_pos);
 
   this->bottom_wall_sprite->setPosition(sf::Vector2f(bottom_sprite_pos.x, bottom_sprite_pos.y));
+  this->bottom_wall_sprite->setScale(sf::Vector2f(3 * cam->getZoom(), 3 * cam->getZoom()));
   ScreenManager::getInstance().window_ptr->draw(*this->bottom_wall_sprite);
 
 
   Vector border_wall_pos = this->getPosition();
-  border_wall_pos.x += ((this->sprite->getTextureRect().height) * 3);
+  border_wall_pos.x += ((this->sprite->getTextureRect().width) * 3);
   border_wall_pos.y += ((this->sprite->getTextureRect().height) * 3);
   Vector border_sprite_pos = cam->convertPos(border_wall_pos);
 
   this->border_wall_sprite->setPosition(sf::Vector2f(border_sprite_pos.x, border_sprite_pos.y));
+  this->border_wall_sprite->setScale(sf::Vector2f(2 * cam->getZoom(), 1.9 * cam->getZoom()));
   ScreenManager::getInstance().window_ptr->draw(*this->border_wall_sprite);
 }
 
@@ -78,6 +81,7 @@ void Obstacle::render_right_wall(std::shared_ptr<Camera> cam) {
   Vector sprite_pos = cam->convertPos(right_wall_pos);
 
   this->right_wall_sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
+  this->right_wall_sprite->setScale(sf::Vector2f(3 * cam->getZoom(), 3 * cam->getZoom()));
   ScreenManager::getInstance().window_ptr->draw(*this->right_wall_sprite);
 }
 

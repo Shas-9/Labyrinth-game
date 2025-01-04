@@ -28,6 +28,7 @@ protected:
   vector<vector<sf::IntRect*>> walking_frames;
   int current_frames_index;
   int current_animation_frame;
+  double scale;
 
   // Properties
   int health;

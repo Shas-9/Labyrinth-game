@@ -34,6 +34,7 @@ attack_damage(attack_damage) {
   this->current_frames_index = 0;
   this->current_animation_frame = 0;
   this->sprite = new sf::Sprite();
+  this->scale = 1;
 }
 
 // Checks whether the entity can move or not by 
@@ -179,6 +180,9 @@ void Entity::render(std::shared_ptr<Camera> cam) {
   Vector sprite_pos = cam->convertPos(this->getPosition());
   this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
   
+  // int scale = dimensions.getX()/14;
+  this->sprite->setScale(sf::Vector2f(this->scale * cam->getZoom(), this->scale * cam->getZoom()));
+
   ScreenManager::getInstance().window_ptr->draw(*this->sprite);
 }
 

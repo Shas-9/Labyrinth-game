@@ -27,9 +27,9 @@ private:
   sf::Clock clock;
   long int time_offset;
   Vector prev_camera_position;
-  std::shared_ptr<Camera> main_cam;
 
 public:
+  std::shared_ptr<Camera> main_cam;
   std::shared_ptr<string> time_string;
   std::shared_ptr<string> health_string;
   Player player;

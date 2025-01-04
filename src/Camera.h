@@ -6,14 +6,17 @@
 class Camera {
   Vector current_camera_pos;
   Vector target_camera_pos;
-  double custom_zoom;
+  double target_custom_zoom;
+  double current_custom_zoom;
   double resolution_zoom;
 public:
   Camera();
   Camera(Vector current, Vector target, double zoom);
   void setTargetPos(Vector target);
-  void update(bool smooth);
+  void updatePos(bool smooth);
+  void updateZoom(bool smooth);
   double getZoom();
+  void multZoom(double zoom);
   Vector getCurrentPos();
   
   Vector convertPos(Vector pos);

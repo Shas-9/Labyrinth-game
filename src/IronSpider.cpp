@@ -16,6 +16,7 @@ IronSpider::IronSpider(Vector position, Obstacle* obstacles, int obstacles_num) 
   40                // Sight distance
 ) {
   int scale = 4;
+  this->scale = 4;
   this->walking_frames = Utility::getIronSpiderWalkingFrames(this->getDimensions(), scale);
   sf::Texture* texture = LOADTEXTURE("textures/iron_spider.png");
   sprite->scale(sf::Vector2f(scale, scale));

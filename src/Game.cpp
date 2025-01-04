@@ -55,7 +55,7 @@ void Game::startGame() {
   
   // set camera immediatley to origin
   this->main_cam->setTargetPos(Vector(0, 0));
-  this->main_cam->update(false);
+  this->main_cam->updatePos(false);
 
   // Create the player object
   this->player = Player(
@@ -91,13 +91,6 @@ void Game::update() {
   }
 }
 
-// Vector calcCameraPosChange(Vector current, Vector target) {
-//   Vector direction = Vector::subtract(current, target);
-//   direction.print();
-//   direction.multiply(0.3);
-//   return direction;
-// }
-
 void Game::render() {
   UTIL_CLASS.setDT();
 
@@ -110,10 +103,13 @@ void Game::render() {
   );
 
   
-  this->main_cam->setTargetPos(Vector(this->player.getPosition().x + this->player.getDimensions().x, this->player.getPosition().y + this->player.getDimensions().y));
-  this->main_cam->update(true);
+  this->main_cam->setTargetPos(Vector(this->player.getPosition().x + this->player.getDimensions().x/2, this->player.getPosition().y + this->player.getDimensions().y/2));
+  this->main_cam->updatePos(true);
+
+  this->main_cam->updateZoom(true);
   
   this->ground_sprite->setPosition(sf::Vector2f(-this->main_cam->getCurrentPos().x * this->main_cam->getZoom() + SCREEN_X/2, -this->main_cam->getCurrentPos().y * this->main_cam->getZoom() + SCREEN_Y/2));
+  this->ground_sprite->setScale(sf::Vector2f(3 * this->main_cam->getZoom(), 3 * this->main_cam->getZoom()));
 
   // Render the ground
   ScreenManager::getInstance().window_ptr->draw(*this->ground_sprite);

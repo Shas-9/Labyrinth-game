@@ -9,12 +9,13 @@ Item::Item(Vector position,
   std::string description
 ) : RenderedObject(position, dimensions, type), description(description) {
   this->sprite = new sf::Sprite();
+  this->scale = 1;
 }
 
 void Item::render(std::shared_ptr<Camera> cam) {
   Vector sprite_pos = cam->convertPos(this->getPosition());
   this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
-  
+  this->sprite->setScale(sf::Vector2f(this->scale * cam->getZoom(), this->scale * cam->getZoom()));
   ScreenManager::getInstance().window_ptr->draw(*this->sprite);
 }
 

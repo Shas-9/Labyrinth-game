@@ -159,6 +159,9 @@ Screen ScreenFactory::gameScreen() {
     if (event.key.code == sf::Keyboard::W) Game::getInstance().player.setMovementDirection(2, false);
     if (event.key.code == sf::Keyboard::S) Game::getInstance().player.setMovementDirection(3, false);
 
+    if (event.key.code == sf::Keyboard::Z) Game::getInstance().main_cam->multZoom(2);
+    if (event.key.code == sf::Keyboard::X) Game::getInstance().main_cam->multZoom(0.5);
+
     if (event.key.code == sf::Keyboard::Escape) {
       Game::getInstance().setGamePaused(true);
       ScreenManager::getInstance().switchScreen("pause_screen");

@@ -62,6 +62,9 @@ void Player::render(std::shared_ptr<Camera> cam) {
   
   Vector sprite_pos = cam->convertPos(this->getPosition());
   this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
+
+  int scale = dimensions.getX()/14;
+  this->sprite->setScale(sf::Vector2f(scale * cam->getZoom(), scale * cam->getZoom()));
   
   ScreenManager::getInstance().window_ptr->draw(*this->sprite);
 }

@@ -8,6 +8,7 @@ class Item : public RenderedObject {
 protected:
      std::string description;
      sf::Sprite* sprite;
+     double scale;
 
 public:
      Item();
