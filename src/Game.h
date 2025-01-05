@@ -14,6 +14,8 @@
 
 #include <memory>
 
+#include "Renderable.h"
+
 class Game : public Singleton<Game> {
 private:
   friend class Singleton<Game>;
@@ -26,7 +28,7 @@ private:
   sf::Sprite* ground_sprite;
   sf::Clock clock;
   long int time_offset;
-  Vector prev_camera_position;
+  Renderable renderable;
 
 public:
   std::shared_ptr<Camera> main_cam;

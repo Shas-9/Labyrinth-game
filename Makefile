@@ -9,6 +9,12 @@ TEST_O_FILES = $(patsubst main.o,, $(O_FILES))
 
 all: build run
 
+AnimController.o: src/AnimController.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
+Renderable.o: src/Renderable.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
 Camera.o: src/Camera.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 

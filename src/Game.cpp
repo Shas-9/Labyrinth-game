@@ -3,6 +3,8 @@
 #include "singleton/ScreenManager.h"
 #include "singleton/HighscoresManager.h"
 
+#include "AnimController.h"
+
 #define SCREEN_X ScreenManager::getInstance().screen_dimensions.x
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
@@ -21,6 +23,18 @@ Game::Game() {
   this->time_string = std::make_shared<string>("");
   this->health_string = std::make_shared<string>("");
   this->main_cam = std::make_shared<Camera>();
+
+  std::shared_ptr<AnimController> anim_cont = std::make_shared<AnimController>();
+  anim_cont->addRow(Vector(14, 18), 4, "walking_down");
+  anim_cont->addRow(Vector(14, 18), 4, "walking_up");
+  anim_cont->addRow(Vector(14, 18), 4, "walking_left");
+  anim_cont->addRow(Vector(14, 18), 4, "walking_right");
+  
+  this->renderable = Renderable(Vector(0, 0), Vector(14*5, 18*5), "rect");
+  this->renderable.setTexture("textures/better-player.png");
+  // this->renderable.registerStaticSprite(Vector(64, 64));
+  this->renderable.registerAnimController(anim_cont);
+  this->renderable.anim_controller->setActivity("walking_down");
 }
 
 void Game::setGamePaused(bool isPaused) {
@@ -64,11 +78,6 @@ void Game::startGame() {
 
   this->time_offset = 0;
   this->clock.restart();
-
-  this->prev_camera_position = Vector(
-    this->player.getPosition().getX() - ((ScreenManager::getInstance().screen_dimensions.getX() - this->player.getDimensions().getX()) / 2),
-    this->player.getPosition().getY() - ((ScreenManager::getInstance().screen_dimensions.getY() - this->player.getDimensions().getY()) / 2)
-  );
 }
 
 void Game::update() {
@@ -89,13 +98,7 @@ void Game::render() {
   UTIL_CLASS.setDT();
 
   this->player.update();
-
-  // Calculate the camera position for all rendered objects
-  Vector camera_position = Vector(
-    this->player.getPosition().getX() - ((ScreenManager::getInstance().screen_dimensions.getX() - this->player.getDimensions().getX()) / 2),
-    this->player.getPosition().getY() - ((ScreenManager::getInstance().screen_dimensions.getY() - this->player.getDimensions().getY()) / 2)
-  );
-
+  this->renderable.setPosition(this->player.getPosition());
   
   this->main_cam->setTargetPos(Vector(this->player.getPosition().x + this->player.getDimensions().x/2, this->player.getPosition().y + this->player.getDimensions().y/2));
   this->main_cam->updatePos(true);
@@ -169,7 +172,9 @@ void Game::render() {
   }
 
   // Render the player
-  this->player.render(this->main_cam);
+  // this->player.render(this->main_cam);
+  this->renderable.anim_controller->updateFrame(100, "repeat");
+  this->renderable.render(this->main_cam);
 }
 
 void Game::winGame() {
