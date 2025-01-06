@@ -9,6 +9,12 @@ TEST_O_FILES = $(patsubst main.o,, $(O_FILES))
 
 all: build run
 
+NewPlayer.o: src/NewPlayer.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
+NewEntity.o: src/NewEntity.cpp
+	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
+
 AnimController.o: src/AnimController.cpp
 	g++ -c $^ $(CC_FLAGS) $(INCLUDES)
 

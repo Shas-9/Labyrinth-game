@@ -11,6 +11,7 @@
 #include "Button.h"
 #include "IronSpider.h"
 #include "Camera.h"
+#include "NewPlayer.h"
 
 #include <memory>
 
@@ -34,7 +35,7 @@ public:
   std::shared_ptr<Camera> main_cam;
   std::shared_ptr<string> time_string;
   std::shared_ptr<string> health_string;
-  Player player;
+  NewPlayer player;
   void startGame();
   void winGame();
   void loseGame();

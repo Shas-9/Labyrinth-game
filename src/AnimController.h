@@ -27,13 +27,19 @@ protected:
   int current_row;
   int current_frame_progress;
 
+  bool temp_reset;
+
 public:
   AnimController();
   void addRow(Vector frames_dimension, int frames_number, std::string activity_name);
   sf::IntRect getTextureRect();
 
   void setActivity(std::string activity);
+  void resetFrames();
   void updateFrame(int animation_speed, std::string mode);
+
+  void tempResetFrames();
+  void tempResumeFrames();
 };
 
 #endif

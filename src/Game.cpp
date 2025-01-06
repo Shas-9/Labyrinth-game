@@ -24,17 +24,16 @@ Game::Game() {
   this->health_string = std::make_shared<string>("");
   this->main_cam = std::make_shared<Camera>();
 
-  std::shared_ptr<AnimController> anim_cont = std::make_shared<AnimController>();
-  anim_cont->addRow(Vector(14, 18), 4, "walking_down");
-  anim_cont->addRow(Vector(14, 18), 4, "walking_up");
-  anim_cont->addRow(Vector(14, 18), 4, "walking_left");
-  anim_cont->addRow(Vector(14, 18), 4, "walking_right");
+  // std::shared_ptr<AnimController> anim_cont = std::make_shared<AnimController>();
+  // anim_cont->addRow(Vector(14, 18), 4, "walking_down");
+  // anim_cont->addRow(Vector(14, 18), 4, "walking_up");
+  // anim_cont->addRow(Vector(14, 18), 4, "walking_left");
+  // anim_cont->addRow(Vector(14, 18), 4, "walking_right");
   
-  this->renderable = Renderable(Vector(0, 0), Vector(14*5, 18*5), "rect");
-  this->renderable.setTexture("textures/better-player.png");
-  // this->renderable.registerStaticSprite(Vector(64, 64));
-  this->renderable.registerAnimController(anim_cont);
-  this->renderable.anim_controller->setActivity("walking_down");
+  // this->renderable = Renderable(Vector(0, 0), Vector(14*5, 18*5), "rect");
+  // this->renderable.setTexture("textures/better-player.png");
+  // // this->renderable.registerStaticSprite(Vector(64, 64));
+  // this->renderable.registerAnimController(anim_cont);
 }
 
 void Game::setGamePaused(bool isPaused) {
@@ -66,14 +65,18 @@ void Game::startGame() {
   this->main_cam->updatePos(false);
 
   // Create the player object
-  this->player = Player(
-    Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
-    Vector(140 / 2, 180 / 2),
-    "player",
-    3,
-    10000,
-    10,
-    this->environment
+  // this->player = Player(
+  //   Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10),
+  //   Vector(140 / 2, 180 / 2),
+  //   "player",
+  //   3,
+  //   10000,
+  //   10,
+  //   this->environment
+  // );
+  this->player = NewPlayer(
+    Vector(MAZE_BOX_THICKNESS + 10, MAZE_BOX_THICKNESS + 10), 
+    Vector(14*5, 18*5)
   );
 
   this->time_offset = 0;
@@ -98,7 +101,7 @@ void Game::render() {
   UTIL_CLASS.setDT();
 
   this->player.update();
-  this->renderable.setPosition(this->player.getPosition());
+  // this->renderable.setPosition(this->player.getPosition());
   
   this->main_cam->setTargetPos(Vector(this->player.getPosition().x + this->player.getDimensions().x/2, this->player.getPosition().y + this->player.getDimensions().y/2));
   this->main_cam->updatePos(true);
@@ -140,9 +143,9 @@ void Game::render() {
       this->environment->getEnemies()[i].moveDown();
     }
 
-    if (this->environment->getEnemies()[i].isCollidingWithObject(&this->player)) {
-      this->player.loseHealth(this->environment->getEnemies()[i].getAttackDamage() * UTIL_CLASS.getTimeFactor());
-    }
+    // if (this->environment->getEnemies()[i].isCollidingWithObject(&this->player)) {
+    //   this->player.loseHealth(this->environment->getEnemies()[i].getAttackDamage() * UTIL_CLASS.getTimeFactor());
+    // }
 
     this->environment->getEnemies()[i].render(this->main_cam);
     this->environment->getEnemies()[i].update();
@@ -153,28 +156,28 @@ void Game::render() {
     Item* current_item = &(this->environment->getItems()[i]);
     current_item->render(this->main_cam);
 
-    if (current_item->isCollidingWithObject(&this->player)) {
-      // Use item
-      if (current_item->getType() == "health") {
-        this->player.gainHealth(400);
-        this->environment->removeItem(i);
-      }
-    }
+    // if (current_item->isCollidingWithObject(&this->player)) {
+    //   // Use item
+    //   if (current_item->getType() == "health") {
+    //     this->player.gainHealth(400);
+    //     this->environment->removeItem(i);
+    //   }
+    // }
   }
 
   Cat cat_item = this->environment->getCat();
   Item* cat_ptr = &cat_item;
   cat_ptr->render(this->main_cam);
-  if (cat_ptr->isCollidingWithObject(&this->player)) {
-    if (cat_ptr->getValue() == 123) {
-      this->winGame();
-    }
-  }
+  // if (cat_ptr->isCollidingWithObject(&this->player)) {
+  //   if (cat_ptr->getValue() == 123) {
+  //     this->winGame();
+  //   }
+  // }
 
   // Render the player
-  // this->player.render(this->main_cam);
-  this->renderable.anim_controller->updateFrame(100, "repeat");
-  this->renderable.render(this->main_cam);
+  this->player.render(this->main_cam);
+  // this->renderable.getAnimController()->updateFrame(100, "repeat");
+  // this->renderable.render(this->main_cam);
 }
 
 void Game::winGame() {

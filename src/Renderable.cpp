@@ -27,7 +27,7 @@ void Renderable::render(std::shared_ptr<Camera> cam) {
   this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));
   
   if (this->type == "static") {
-    this->sprite->setScale(sf::Vector2f(this->dimensions.x / this->texture_dim.x * cam->getZoom(), this->dimensions.y / this->texture_dim.y * cam->getZoom()));
+    this->sprite->setScale(sf::Vector2f(this->dimensions.x / this->texture_rect.getSize().x * cam->getZoom(), this->dimensions.y / this->texture_rect.getSize().y * cam->getZoom()));
   }
 
   if (this->type == "animation") {
@@ -49,10 +49,12 @@ void Renderable::registerAnimController(std::shared_ptr<AnimController> anim_con
   this->type = "animation";
 }
 
+std::shared_ptr<AnimController> Renderable::getAnimController() {
+  return this->anim_controller;
+}
+
 void Renderable::registerStaticSprite(Vector texture_dim) {
-  this->texture_dim = texture_dim;
-  this->texture_rect = sf::IntRect(0, 0, this->texture_dim.x, this->texture_dim.y);
+  this->texture_rect = sf::IntRect(0, 0, texture_dim.x, texture_dim.y);
   this->sprite->setTextureRect(this->texture_rect);
-  
   this->type = "static";
 }

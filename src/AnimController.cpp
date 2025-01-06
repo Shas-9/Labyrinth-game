@@ -1,31 +1,33 @@
 #include "AnimController.h"
 
-AnimController::AnimController() {}
+AnimController::AnimController() {
+  this->temp_reset = false;
+}
 
 void AnimController::updateFrame(int animation_speed, std::string mode) {
-  if (mode == "repeat") {
+  if (!this->temp_reset) {
     this->current_frame_progress += animation_speed;
-    if (this->current_frame_progress >= this->frames_numbers[this->current_row] * 1000) this->current_frame_progress = 0;
+
+    if (mode == "repeat") {
+      if (this->current_frame_progress >= this->frames_numbers[this->current_row] * 1000) this->current_frame_progress = 0;
+    }
+
+    if (mode == "once") {
+      if (this->current_frame_progress >= this->frames_numbers[this->current_row] * 1000) this->current_frame_progress = this->frames_numbers[this->current_row] * 1000;
+    }
   }
 
-  if (mode == "once") {
-    this->current_frame_progress += animation_speed;
-    if (this->current_frame_progress >= this->frames_numbers[this->current_row] * 1000) this->current_frame_progress = this->frames_numbers[this->current_row] * 1000;
-  }
-  
   Vector frame_dim = this->frames_dimensions[this->current_row];
-  
-  int x_offset = frame_dim.x * (this->current_frame_progress / 1000);
+
+  int x_offset = frame_dim.x * (this->temp_reset ? 0 : this->current_frame_progress / 1000);
   int y_offset = 0;
   for (int i = 0; i < this->current_row; i++) y_offset += this->frames_dimensions[i].y;
 
-  // this->rectSourceSprite->setSize(x_offset, y_offset, frame_dim.x, frame_dim.y);
   this->texture_rect = sf::IntRect(x_offset, y_offset, frame_dim.x, frame_dim.y);
 }
 
 void AnimController::setActivity(std::string activity) {
   this->current_row = this->activities_map[activity];
-  this->current_frame_progress = 0;
 }
 
 void AnimController::addRow(Vector frames_dimension, int frames_number, std::string activity_name) {
@@ -36,4 +38,19 @@ void AnimController::addRow(Vector frames_dimension, int frames_number, std::str
 
 sf::IntRect AnimController::getTextureRect() {
   return this->texture_rect;
+}
+
+void AnimController::resetFrames() {
+  this->current_frame_progress = 0;
+  this->updateFrame(0, "once");
+}
+
+void AnimController::tempResetFrames() {
+  this->temp_reset = true;
+  this->updateFrame(0, "once");
+}
+
+void AnimController::tempResumeFrames() {
+  this->temp_reset = false;
+  this->updateFrame(0, "once");
 }

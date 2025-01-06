@@ -18,9 +18,9 @@ class Renderable {
   std::shared_ptr<sf::Sprite> sprite;
   Vector texture_dim;
   sf::IntRect texture_rect;
+  std::shared_ptr<AnimController> anim_controller;
 
  public:
-  std::shared_ptr<AnimController> anim_controller;
   
   Renderable();
   Renderable(Vector position, Vector dimensions, string type);
@@ -36,6 +36,8 @@ class Renderable {
   void setTexture(std::string texture_location);
   void registerAnimController(std::shared_ptr<AnimController> anim_controller);
   void registerStaticSprite(Vector texture_dim);
+
+  std::shared_ptr<AnimController> getAnimController();
 };
 
 #endif
