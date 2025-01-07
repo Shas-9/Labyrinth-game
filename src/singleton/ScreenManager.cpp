@@ -22,7 +22,8 @@ Vector ScreenManager::ratioVec(Vector ratio) {
 
 void ScreenManager::setWindowObject(sf::RenderWindow* window_ptr) {
   this->window_ptr = window_ptr;
-  this->window_ptr->setVerticalSyncEnabled(true);
+  // this->window_ptr->setVerticalSyncEnabled(true);
+  this->window_ptr->setFramerateLimit(60);
   // sf::View view = this->window_ptr->getDefaultView();
   // this->view = view;
 }
