@@ -16,7 +16,7 @@ using namespace std::chrono_literals;
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
 struct Obj {
-  Obj(Vector pos, Vector dim, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256)) : pos(pos), dim(dim) {
+  Obj(Vector pos = Vector(0, 0), Vector dim = Vector(1, 1), const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256)) : pos(pos), dim(dim) {
     // this->rectangle = new sf::RectangleShape();
     this->rectangle.setFillColor(color);
 
@@ -24,8 +24,9 @@ struct Obj {
     this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
 
     // Set the position of the object
-    this->rectangle.setPosition(
-        sf::Vector2f(this->pos.x, this->pos.y));
+    this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+
+    this->velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5);
   }
   void render(Vector current_camera_pos, double zoom) {
     // update position with respect to zoom and camera
@@ -42,10 +43,11 @@ struct Obj {
   }
   Vector dim;
   Vector pos;
+  Vector velocity;
   sf::RectangleShape rectangle;
 };
 
-void constructQuadTree(StaticQuadTreeContainer<Obj>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
+void constructQuadTree(DynamicQuadTreeContainer<Obj>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
   qt_container.resize(qt_area);
   for (int i = 0; i < rects.size(); i++) qt_container.insert(objs[i], rects[i]);
   std::cout << qt_container.size() << std::endl;
@@ -81,13 +83,14 @@ public:
     vector<Obj> objects = {};
     for (const auto& rect : rects) { objects.push_back(Obj(rect.pos, rect.size)); }
 
-    StaticQuadTreeContainer<Obj> qt_container;
+    DynamicQuadTreeContainer<Obj> qt_container;
     constructQuadTree(qt_container, map_boundary, rects, objects);
     
     // qt_container.visualizeTree("testing/static-quad-tree.dot"); 
 
     Vector target_camera_pos(0, 0);
-    double zoom = 1 * SCREEN_Y/1080;
+    // double zoom = 1 * SCREEN_Y/1080;
+    double zoom = 1 ;
 
     Vector current_camera_pos(0, 0);
 
@@ -104,10 +107,13 @@ public:
     double old_mouse_y = 10000;
 
     bool quadTreeMode = true;
+    bool remove_objects_in_cursor = false;
 
     Obj text_bg(Vector(0, 0), Vector(460, 130), sf::Color(1, 1, 1, 150));
 
     sf::Event event;
+    Vector mouse_pos(0, 0);
+    Obj cursor_box(Vector(mouse_pos.x - 50/zoom, mouse_pos.y - 50/zoom), Vector(2*50/zoom, 2*50/zoom));
 
     using std::chrono::high_resolution_clock;
     using std::chrono::duration_cast;
@@ -143,14 +149,19 @@ public:
         
         case sf::Event::MouseButtonPressed:
           if (event.mouseButton.button == sf::Mouse::Left) mouse_pressed = true;
+          if (event.mouseButton.button == sf::Mouse::Right) remove_objects_in_cursor = true;
           break;
         case sf::Event::MouseButtonReleased:
-          if (event.mouseButton.button == sf::Mouse::Left) mouse_pressed = false;
-          old_mouse_x = 10000;
-          old_mouse_y = 10000;
+          if (event.mouseButton.button == sf::Mouse::Left) {
+            mouse_pressed = false;
+            old_mouse_x = 10000;
+            old_mouse_y = 10000;
+          }
+          if (event.mouseButton.button == sf::Mouse::Right) remove_objects_in_cursor = false;
           break;
 
         case sf::Event::MouseMoved: 
+          mouse_pos = Vector(event.mouseMove.x, event.mouseMove.y);
           if (mouse_pressed) {
             if (old_mouse_x == 10000 && old_mouse_y == 10000) {
               old_mouse_x = event.mouseMove.x;
@@ -187,15 +198,28 @@ public:
 
       // map_boundary_obj.render(current_camera_pos, zoom);
 
+      Vector rendering_distance(SCREEN_X/zoom*3, SCREEN_Y/zoom*3);
       Vector screen_size(SCREEN_X/zoom, SCREEN_Y/zoom);
       Vector screen_pos(current_camera_pos.x - screen_size.x/2, current_camera_pos.y - screen_size.y/2);
+
+      cursor_box = Obj(Vector((mouse_pos.x - SCREEN_X/2 - 50)/zoom + current_camera_pos.x, (mouse_pos.y - SCREEN_Y/2 - 50)/zoom + current_camera_pos.y), Vector(2*50/zoom, 2*50/zoom), sf::Color(255, 255, 255, 80));
 
       std::string stats = "";
 
       // render
       if (quadTreeMode) {
-        auto objects_in_camera = qt_container.search(AreaRect(screen_pos, screen_size));
-        for (auto& obj : objects_in_camera) obj->render(current_camera_pos, zoom);
+
+        if (remove_objects_in_cursor) {
+          auto objects_in_cursor = qt_container.search(AreaRect(cursor_box.pos, cursor_box.dim));
+          for (auto& obj : objects_in_cursor) qt_container.remove(obj);
+        }
+
+        auto objects_in_camera = qt_container.search(AreaRect(screen_pos, rendering_distance));
+        for (auto& obj : objects_in_camera) {
+          obj->item.render(current_camera_pos, zoom);
+          obj->item.pos = Vector(obj->item.pos.x + obj->item.velocity.x, obj->item.pos.y + obj->item.velocity.y);
+          qt_container.relocate(obj, AreaRect(obj->item.pos, obj->item.dim));
+        }
 
         std::string objs_count_str = "\n" + std::to_string(objects_in_camera.size()) + " objects on screen";
         stats += objs_count_str;
@@ -204,6 +228,8 @@ public:
       }
       auto t2 = high_resolution_clock::now();
       std::chrono::duration<double> fp_ms = t2 - t1;
+
+      cursor_box.render(current_camera_pos, zoom);
 
       text_bg.render();
 

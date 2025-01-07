@@ -195,6 +195,27 @@ public:
     }
   }
 
+  bool remove(OBJECT_TYPE item) {
+    // check if its in tree_container, if yes remove it and return true
+    auto it = std::find_if(this->tree_container.begin(), this->tree_container.end(), 
+      [&item](std::pair<AreaRect, OBJECT_TYPE>& a) { return a.second == item; }
+    );
+
+    if (it != this->tree_container.end()) {
+      this->tree_container.erase(it);
+      return true;
+    }
+
+    // call this on all children
+    for (int i = 0; i < 4; i++) {
+      if (this->child_trees[i]) {
+        if (this->child_trees[i]->remove(item)) return true;
+      }
+    }
+
+    return false;
+  }
+
 protected:
   void printChildren(std::ofstream& idk) {
     for (int i = 0; i < 4; i++) {
@@ -248,6 +269,11 @@ public:
     this->root.search(search_area, item_ptrs_list);
     return item_ptrs_list;
   }
+
+  void remove(typename QuadTreeContainer::iterator item) {
+    this->root.remove(item);
+    this->all_items.erase(item);
+  }
 };
 
 template <typename T>
@@ -264,7 +290,7 @@ protected:
   AreaRect rect_area;
   std::array<AreaRect, 4> child_areas{};
   std::array<std::shared_ptr<DynamicQuadTree<OBJECT_TYPE>>, 4> child_trees{};
-  std::vector<std::pair<AreaRect, OBJECT_TYPE>> tree_container;
+  std::list<std::pair<AreaRect, OBJECT_TYPE>> tree_container;
 
 public:
   DynamicQuadTree(const AreaRect& size = {{0.0, 0.0}, {100.0, 100.0}}, const size_t depth = 0) {
@@ -311,7 +337,6 @@ public:
         if (this->depth <= MAX_QUAD_TREE_DEPTH) {
           if (!this->child_trees[i]) {
             this->child_trees[i] = std::make_shared<DynamicQuadTree<OBJECT_TYPE>>(this->child_areas[i], this->depth + 1);
-
           }
           return this->child_trees[i]->insert(item, item_size);
         }
@@ -319,6 +344,7 @@ public:
     }
 
     this->tree_container.push_back({item_size, item});
+    return { &this->tree_container, std::prev(this->tree_container.end()) };
   }
 
   std::list<OBJECT_TYPE> search(const AreaRect& search_area) const {
@@ -350,9 +376,15 @@ public:
   const AreaRect& area() { return this->rect_area; }
 };
 
+template <typename T>
+struct QuadTreeItem {
+  T item;
+  QuadTreeItemLocation<typename std::list<QuadTreeItem<T>>::iterator> item_ptr;
+};
+
 template <typename OBJECT_TYPE>
 class DynamicQuadTreeContainer {
-  using QuadTreeContainer = std::list<OBJECT_TYPE>;
+  using QuadTreeContainer = std::list<QuadTreeItem<OBJECT_TYPE>>;
 
 protected:
   QuadTreeContainer all_items;
@@ -380,14 +412,28 @@ public:
   typename QuadTreeContainer::iterator cend() { return this->all_items.cend(); }
 
   void insert(const OBJECT_TYPE& item, const AreaRect& item_size) {
-    this->all_items.push_back(item);
-    this->root.insert(std::prev(this->all_items.end()), item_size);
+    QuadTreeItem<OBJECT_TYPE> new_item;
+    new_item.item = item;
+    
+    this->all_items.push_back(new_item);
+    this->all_items.back().item_ptr = this->root.insert(std::prev(this->all_items.end()), item_size);
   }
 
   std::list<typename QuadTreeContainer::iterator> search(const AreaRect& search_area) const {
     std::list<typename QuadTreeContainer::iterator> item_ptrs_list;
     this->root.search(search_area, item_ptrs_list);
     return item_ptrs_list;
+  }
+
+  void remove(typename QuadTreeContainer::iterator& item) {
+    // iterator points to a quadtree item
+    item->item_ptr.container->erase(item->item_ptr.iterator);
+    this->all_items.erase(item);
+  }
+
+  void relocate(typename QuadTreeContainer::iterator& item, const AreaRect& new_rect) {
+    item->item_ptr.container->erase(item->item_ptr.iterator);
+    item->item_ptr = this->root.insert(item, new_rect);
   }
 };
 
