@@ -1,6 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
 
+#include <chrono>
+using namespace std::chrono_literals;
+
 // #include "UI.h"
 #include "singleton/ScreenManager.h"
 
@@ -13,9 +16,9 @@
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
 struct Obj {
-  Obj(Vector pos, Vector dim) : pos(pos), dim(dim) {
+  Obj(Vector pos, Vector dim, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256)) : pos(pos), dim(dim) {
     // this->rectangle = new sf::RectangleShape();
-    this->rectangle.setFillColor(sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256));
+    this->rectangle.setFillColor(color);
 
     // Set the size of the object
     this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
@@ -31,12 +34,18 @@ struct Obj {
     
     (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
   }
+  void render() {
+    this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+    this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
+    
+    (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
+  }
   Vector dim;
   Vector pos;
   sf::RectangleShape rectangle;
 };
 
-void constructQuadTree(StaticQuadTree<Obj>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
+void constructQuadTree(StaticQuadTreeContainer<Obj>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
   qt_container.resize(qt_area);
   for (int i = 0; i < rects.size(); i++) qt_container.insert(objs[i], rects[i]);
   std::cout << qt_container.size() << std::endl;
@@ -72,9 +81,10 @@ public:
     vector<Obj> objects = {};
     for (const auto& rect : rects) { objects.push_back(Obj(rect.pos, rect.size)); }
 
-    StaticQuadTree<Obj> qt_container;
+    StaticQuadTreeContainer<Obj> qt_container;
     constructQuadTree(qt_container, map_boundary, rects, objects);
-    // qt_container.visualizeTree("testing/static-quad-tree.dot");
+    
+    // qt_container.visualizeTree("testing/static-quad-tree.dot"); 
 
     Vector target_camera_pos(0, 0);
     double zoom = 1 * SCREEN_Y/1080;
@@ -82,28 +92,32 @@ public:
     Vector current_camera_pos(0, 0);
 
     sf::Font font;
-    font.loadFromFile("fonts/arial.ttf");
+    font.loadFromFile("fonts/MouldyCheese.ttf");
 
     sf::Text coords;
     coords.setFont(font);
     coords.setCharacterSize(24);
     coords.setPosition(10, 10);
 
-    sf::Text objs_count;
-    objs_count.setFont(font);
-    objs_count.setCharacterSize(24);
-    objs_count.setPosition(10, 65);
-
     bool mouse_pressed;
     double old_mouse_x = 10000;
     double old_mouse_y = 10000;
 
-    bool quadTreeMode = false;
+    bool quadTreeMode = true;
+
+    Obj text_bg(Vector(0, 0), Vector(460, 130), sf::Color(1, 1, 1, 150));
 
     sf::Event event;
 
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::seconds;
+
     // Screen loop
     while (window.isOpen()) {
+      auto t1 = high_resolution_clock::now();
+
       // Update the current screen
       while (window.pollEvent(event)) {
         switch (event.type) {
@@ -171,26 +185,36 @@ public:
       // // instant caera movement
       // current_camera_pos = target_camera_pos;
 
-      map_boundary_obj.render(current_camera_pos, zoom);
+      // map_boundary_obj.render(current_camera_pos, zoom);
 
-      Vector screen_size = Vector(SCREEN_X/zoom, SCREEN_Y/zoom);
+      Vector screen_size(SCREEN_X/zoom, SCREEN_Y/zoom);
       Vector screen_pos(current_camera_pos.x - screen_size.x/2, current_camera_pos.y - screen_size.y/2);
-      
+
+      std::string stats = "";
+
       // render
       if (quadTreeMode) {
         auto objects_in_camera = qt_container.search(AreaRect(screen_pos, screen_size));
-        for (auto& obj : objects_in_camera) obj.render(current_camera_pos, zoom);
+        for (auto& obj : objects_in_camera) obj->render(current_camera_pos, zoom);
 
-        string objs_count_str = std::to_string(objects_in_camera.size()) + " objects on screen";
-        objs_count.setString(objs_count_str);
-        window.draw(objs_count);
+        std::string objs_count_str = "\n" + std::to_string(objects_in_camera.size()) + " objects on screen";
+        stats += objs_count_str;
       } else {
         for (auto& obj : objects) obj.render(current_camera_pos, zoom);
       }
+      auto t2 = high_resolution_clock::now();
+      std::chrono::duration<double> fp_ms = t2 - t1;
 
-      string mode = quadTreeMode ? "QuadTree" : "Linear";
-      string cam_pos = "Camera {" + std::to_string(current_camera_pos.x) + ", " + std::to_string(current_camera_pos.y) + "}\nCurrent mode: " + mode;
-      coords.setString(cam_pos);
+      text_bg.render();
+
+      std::string mode = quadTreeMode ? "QuadTree" : "Linear";
+      std::string current_mode = "\nCurrent mode: " + mode;
+      std::string perf = "\nDelta time: " + std::to_string(fp_ms.count()) + "s";
+      std::string cam_pos = "Camera {" + std::to_string(current_camera_pos.x) + ", " + std::to_string(current_camera_pos.y) + "}";
+      
+      stats = cam_pos + current_mode + perf + stats;
+
+      coords.setString(stats);
       window.draw(coords);
 
       window.display();

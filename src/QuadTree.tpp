@@ -24,27 +24,20 @@ struct AreaRect {
     this->size = size;
   }
   bool contains(const AreaRect& rect) const {
-    // bool x_axis = this->pos.x < rect.pos.x && this->pos.x + this->size.x > rect.pos.x + rect.size.x;
-    // bool y_axis = this->pos.y < rect.pos.y && this->pos.y + this->size.y > rect.pos.y + rect.size.y;
-    // return x_axis && y_axis;
-    return (rect.pos.x >= pos.x) && (rect.pos.x + rect.size.x < pos.x + size.x) &&
-				(rect.pos.y >= pos.y) && (rect.pos.y + rect.size.y < pos.y + size.y);
+    bool x_axis = this->pos.x < rect.pos.x && this->pos.x + this->size.x > rect.pos.x + rect.size.x;
+    bool y_axis = this->pos.y < rect.pos.y && this->pos.y + this->size.y > rect.pos.y + rect.size.y;
+    return x_axis && y_axis;
   }
   bool overlap(const AreaRect& rect) const {
-    // bool A_above_B = rect.pos.y >= this->pos.y + this->size.y;
-    // bool A_below_B = rect.pos.y + rect.size.y <= this->pos.y;
-    // bool A_right_of_B = rect.pos.x + rect.size.x <= this->pos.x;
-    // bool A_left_of_B = rect.pos.x >= this->pos.x + this->size.x;
+    bool A_above_B = rect.pos.y >= this->pos.y + this->size.y;
+    bool A_below_B = rect.pos.y + rect.size.y <= this->pos.y;
+    bool A_right_of_B = rect.pos.x + rect.size.x <= this->pos.x;
+    bool A_left_of_B = rect.pos.x >= this->pos.x + this->size.x;
 
-    // bool notColliding = A_above_B || A_below_B || A_right_of_B || A_left_of_B;
-    
-    // return !notColliding;
-
-    return pos.x < rect.pos.x + rect.size.x && pos.x + size.x >= rect.pos.x && pos.y < rect.pos.y + rect.size.y && pos.y + size.y >= rect.pos.y;
+    bool notColliding = A_above_B || A_below_B || A_right_of_B || A_left_of_B;
+    return !notColliding;
   }
-  // top left coords
   Vector pos;
-  // Width and height
   Vector size;
 };
 
@@ -181,25 +174,28 @@ public:
   const AreaRect& area() { return this->rect_area; }
 
   void visualizeTree(std::string file_location) {
-    // Create and open a text file
-    std::ofstream MyFile(file_location);
+    if (this->size() <= 200) {
+      // Create and open a text file
+      std::ofstream MyFile(file_location);
 
-    MyFile << "digraph test123 {" << std::endl;
-    
-    MyFile << "  \"" << this->id << "\" [shape=box,label=\" Root \n" << this->tree_container.size() << " elements\"];" << std::endl;
+      MyFile << "digraph test123 {" << std::endl;
+      
+      MyFile << "  \"" << this->id << "\" [shape=box,label=\" Root \n" << this->tree_container.size() << " elements\"];" << std::endl;
 
-    // Write to the file
-    this->printChildren(MyFile);
+      // Write to the file
+      this->printChildren(MyFile);
 
-    MyFile << "}" << std::endl;
+      MyFile << "}" << std::endl;
 
-    // Close the file
-    MyFile.close();
+      // Close the file
+      MyFile.close();
 
-    std::string cmd = "dot -Tsvg " + file_location + " > " + file_location + ".svg";
-    exec(cmd.c_str());
+      std::string cmd = "dot -Tsvg " + file_location + " > " + file_location + ".svg";
+      exec(cmd.c_str());
+    }
   }
 
+protected:
   void printChildren(std::ofstream& idk) {
     for (int i = 0; i < 4; i++) {
       if (this->child_trees[i]) {
@@ -346,7 +342,7 @@ public:
     }
   }
 
-  void items(std::list<OBJECT_TYPE> items_list) const {
+  void items(std::list<OBJECT_TYPE>& items_list) const {
     for (const auto& p : this->tree_container) items_list.push_back(p.second);
     for (int i = 0; i < 4; i++) if (this->child_trees[i]) this->child_trees[i]->items(items_list);
   }
