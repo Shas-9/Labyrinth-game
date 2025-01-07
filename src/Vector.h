@@ -35,6 +35,16 @@ public:
 
   static Vector getMid(Vector vec1, Vector vec2, double delay);
   static Vector getMid(Vector vec1, Vector vec2);
+
+  Vector operator+(const Vector& vec);
+  Vector& operator+=(const Vector& vec);
+  Vector operator-(const Vector& vec);
+  Vector& operator-=(const Vector& vec);
+  Vector operator*(const double d);
+  Vector& operator*=(const double d);
+  Vector operator/(const double d);
+  Vector& operator/=(const double d);
+  bool operator==(const Vector& vec);
 };
 
 #endif

@@ -30,7 +30,8 @@ struct Obj {
   }
   void render(Vector current_camera_pos, double zoom) {
     // update position with respect to zoom and camera
-    this->rectangle.setPosition(sf::Vector2f(this->pos.x * zoom - current_camera_pos.x * zoom + SCREEN_X/2, this->pos.y * zoom - current_camera_pos.y * zoom + SCREEN_Y/2));
+    Vector relative_pos = (this->pos - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+    this->rectangle.setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
     this->rectangle.setSize(sf::Vector2f(this->dim.x * zoom, this->dim.y * zoom));
     
     (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
@@ -89,8 +90,7 @@ public:
     // qt_container.visualizeTree("testing/static-quad-tree.dot"); 
 
     Vector target_camera_pos(0, 0);
-    // double zoom = 1 * SCREEN_Y/1080;
-    double zoom = 1 ;
+    double zoom = 1 * SCREEN_Y/1080;
 
     Vector current_camera_pos(0, 0);
 
@@ -102,10 +102,9 @@ public:
     coords.setCharacterSize(24);
     coords.setPosition(10, 10);
 
-    bool mouse_pressed;
-    double old_mouse_x = 10000;
-    double old_mouse_y = 10000;
-
+    bool mouse_pressed = false;
+    Vector old_mouse_pos = Vector(10000, 10000);
+    
     bool quadTreeMode = true;
     bool remove_objects_in_cursor = false;
 
@@ -113,7 +112,7 @@ public:
 
     sf::Event event;
     Vector mouse_pos(0, 0);
-    Obj cursor_box(Vector(mouse_pos.x - 50/zoom, mouse_pos.y - 50/zoom), Vector(2*50/zoom, 2*50/zoom));
+    Obj cursor_box(Vector(0, 0), Vector(0, 0));
 
     using std::chrono::high_resolution_clock;
     using std::chrono::duration_cast;
@@ -154,8 +153,7 @@ public:
         case sf::Event::MouseButtonReleased:
           if (event.mouseButton.button == sf::Mouse::Left) {
             mouse_pressed = false;
-            old_mouse_x = 10000;
-            old_mouse_y = 10000;
+            old_mouse_pos = Vector(10000, 10000);
           }
           if (event.mouseButton.button == sf::Mouse::Right) remove_objects_in_cursor = false;
           break;
@@ -163,19 +161,13 @@ public:
         case sf::Event::MouseMoved: 
           mouse_pos = Vector(event.mouseMove.x, event.mouseMove.y);
           if (mouse_pressed) {
-            if (old_mouse_x == 10000 && old_mouse_y == 10000) {
-              old_mouse_x = event.mouseMove.x;
-              old_mouse_y = event.mouseMove.y;
-            }
+            if (old_mouse_pos == Vector(10000, 10000)) 
+              old_mouse_pos = Vector(event.mouseMove.x, event.mouseMove.y);
 
-            double delta_x = old_mouse_x - event.mouseMove.x;
-            double delta_y = old_mouse_y - event.mouseMove.y;
+            Vector delta = old_mouse_pos - Vector(event.mouseMove.x, event.mouseMove.y);
+            target_camera_pos += delta/zoom;
 
-            target_camera_pos.x += delta_x/zoom;
-            target_camera_pos.y += delta_y/zoom;
-
-            old_mouse_x = event.mouseMove.x;
-            old_mouse_y = event.mouseMove.y;
+            old_mouse_pos = Vector(event.mouseMove.x, event.mouseMove.y);
           }
           break;
 
@@ -198,11 +190,11 @@ public:
 
       // map_boundary_obj.render(current_camera_pos, zoom);
 
-      Vector rendering_distance(SCREEN_X/zoom*3, SCREEN_Y/zoom*3);
-      Vector screen_size(SCREEN_X/zoom, SCREEN_Y/zoom);
-      Vector screen_pos(current_camera_pos.x - screen_size.x/2, current_camera_pos.y - screen_size.y/2);
+      Vector screen_size = Vector(SCREEN_X, SCREEN_Y)/zoom;
+      Vector rendering_distance = screen_size*3;
+      Vector screen_pos = current_camera_pos - screen_size/2;
 
-      cursor_box = Obj(Vector((mouse_pos.x - SCREEN_X/2 - 50)/zoom + current_camera_pos.x, (mouse_pos.y - SCREEN_Y/2 - 50)/zoom + current_camera_pos.y), Vector(2*50/zoom, 2*50/zoom), sf::Color(255, 255, 255, 80));
+      cursor_box = Obj((mouse_pos - Vector(SCREEN_X, SCREEN_Y)/2 - Vector(50, 50))/zoom + current_camera_pos, Vector(50, 50)*2/zoom, sf::Color(255, 255, 255, 80));
 
       std::string stats = "";
 
@@ -217,7 +209,7 @@ public:
         auto objects_in_camera = qt_container.search(AreaRect(screen_pos, rendering_distance));
         for (auto& obj : objects_in_camera) {
           obj->item.render(current_camera_pos, zoom);
-          obj->item.pos = Vector(obj->item.pos.x + obj->item.velocity.x, obj->item.pos.y + obj->item.velocity.y);
+          obj->item.pos += obj->item.velocity;
           qt_container.relocate(obj, AreaRect(obj->item.pos, obj->item.dim));
         }
 

@@ -77,3 +77,51 @@ Vector Vector::getMid(Vector vec1, Vector vec2, double delay) {
 Vector Vector::getMid(Vector vec1, Vector vec2) {
   return Vector::getMid(vec1, vec2, 2);
 }
+
+Vector Vector::operator+(const Vector& vec) {
+    Vector res(this->x + vec.x, this->y + vec.y);
+    return res;
+}
+
+Vector& Vector::operator+=(const Vector& vec) {
+    this->x += vec.x;
+    this->y += vec.y;
+    return *this;
+}
+
+Vector Vector::operator-(const Vector& vec) {
+    Vector res(this->x - vec.x, this->y - vec.y);
+    return res;
+}
+
+Vector& Vector::operator-=(const Vector& vec) {
+    this->x -= vec.x;
+    this->y -= vec.y;
+    return *this;
+}
+
+Vector Vector::operator*(const double d) {
+    Vector res(this->x * d, this->y * d);
+    return res;
+}
+
+Vector& Vector::operator*=(const double d) {
+    this->x *= d;
+    this->y *= d;
+    return *this;
+}
+
+Vector Vector::operator/(const double d) {
+    Vector res(this->x / d, this->y / d);
+    return res;
+}
+
+Vector& Vector::operator/=(const double d) {
+    this->x /= d;
+    this->y /= d;
+    return *this;
+}
+
+bool Vector::operator==(const Vector& vec) {
+    return this->x == vec.x && this->y == vec.y;
+}
