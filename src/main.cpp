@@ -4,7 +4,7 @@
 #include <chrono>
 using namespace std::chrono_literals;
 
-// #include "UI.h"
+#include "UI.h"
 #include "singleton/ScreenManager.h"
 
 #include "QuadTree.tpp"
@@ -16,7 +16,7 @@ using namespace std::chrono_literals;
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
 struct Obj {
-  Obj(Vector pos = Vector(0, 0), Vector dim = Vector(1, 1), const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256)) : pos(pos), dim(dim) {
+  Obj(Vector pos = {0, 0}, Vector dim = {1, 1}, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256)) : pos(pos), dim(dim) {
     // this->rectangle = new sf::RectangleShape();
     this->rectangle.setFillColor(color);
 
@@ -51,7 +51,6 @@ struct Obj {
 void constructQuadTree(DynamicQuadTreeContainer<Obj>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
   qt_container.resize(qt_area);
   for (int i = 0; i < rects.size(); i++) qt_container.insert(objs[i], rects[i]);
-  std::cout << qt_container.size() << std::endl;
 }
 
 void generateBoxes(vector<AreaRect>& boxes, AreaRect bounds, int num_boxes) {
@@ -62,6 +61,47 @@ void generateBoxes(vector<AreaRect>& boxes, AreaRect bounds, int num_boxes) {
     int box_y = bounds.pos.y + std::rand() % (int)(bounds.size.y + 1 - box_height);
     boxes.push_back(AreaRect(box_x, box_y, box_width, box_height));
   }
+}
+
+void drawGrid(sf::RenderWindow& win, int rows, int cols, Vector current_camera_pos, double zoom, const AreaRect& map_boundary) {
+    // initialize values
+    int numLines = rows+cols-2;
+    sf::VertexArray grid(sf::Lines, 2*(numLines));
+    // win.setView(win.getDefaultView());
+    // auto size = win.getView().getSize();
+    Vector size = map_boundary.size;
+    // size.x *= 15000;
+    // size.y *= 15000;
+    float rowH = size.y/rows;
+    float colW = size.x/cols;
+    // row separators
+    for(int i=0; i < rows-1; i++){
+        int r = i+1;
+        float rowY = rowH*r;
+
+        Vector pos_vec1 = {0.0f, rowY};
+        Vector relative_pos1 = (pos_vec1 - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+        grid[i*2].position = {static_cast<float>(relative_pos1.x), static_cast<float>(relative_pos1.y)};
+
+        Vector pos_vec2 = {static_cast<float>(size.x), rowY};
+        Vector relative_pos2 = (pos_vec2 - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+        grid[i*2+1].position = {static_cast<float>(relative_pos2.x), static_cast<float>(relative_pos2.y)};
+    }
+    // column separators
+    for(int i=rows-1; i < numLines; i++){
+        int c = i-rows+2;
+        float colX = colW*c;
+        
+        Vector pos_vec1 = {colX, 0.0f};
+        Vector relative_pos1 = (pos_vec1 - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+        grid[i*2].position = {static_cast<float>(relative_pos1.x), static_cast<float>(relative_pos1.y)};
+
+        Vector pos_vec2 = {colX, static_cast<float>(size.y)};
+        Vector relative_pos2 = (pos_vec2 - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+        grid[i*2+1].position = {static_cast<float>(relative_pos2.x), static_cast<float>(relative_pos2.y)};
+    }
+    // draw it
+    win.draw(grid);
 }
 
 class CamTesting {
@@ -87,7 +127,7 @@ public:
     DynamicQuadTreeContainer<Obj> qt_container;
     constructQuadTree(qt_container, map_boundary, rects, objects);
     
-    // qt_container.visualizeTree("testing/static-quad-tree.dot"); 
+    qt_container.visualizeTree("testing/static-quad-tree.dot"); 
 
     Vector target_camera_pos(0, 0);
     double zoom = 1 * SCREEN_Y/1080;
@@ -108,7 +148,7 @@ public:
     bool quadTreeMode = true;
     bool remove_objects_in_cursor = false;
 
-    Obj text_bg(Vector(0, 0), Vector(460, 130), sf::Color(1, 1, 1, 150));
+    Obj text_bg(Vector(0, 0), Vector(480, 130), sf::Color(1, 1, 1, 150));
 
     sf::Event event;
     Vector mouse_pos(0, 0);
@@ -119,8 +159,13 @@ public:
     using std::chrono::duration;
     using std::chrono::seconds;
 
+    sf::Clock deltaClock;
+
+    std::chrono::duration<double> delta_time;
+
     // Screen loop
     while (window.isOpen()) {
+      sf::Time deltaTime = deltaClock.restart();
       auto t1 = high_resolution_clock::now();
 
       // Update the current screen
@@ -198,6 +243,8 @@ public:
 
       std::string stats = "";
 
+      drawGrid(window, 50, 50, current_camera_pos, zoom, map_boundary);
+
       // render
       if (quadTreeMode) {
 
@@ -209,7 +256,7 @@ public:
         auto objects_in_camera = qt_container.search(AreaRect(screen_pos, rendering_distance));
         for (auto& obj : objects_in_camera) {
           obj->item.render(current_camera_pos, zoom);
-          obj->item.pos += obj->item.velocity;
+          obj->item.pos += obj->item.velocity * 100 * deltaTime.asSeconds();
           qt_container.relocate(obj, AreaRect(obj->item.pos, obj->item.dim));
         }
 
@@ -219,7 +266,7 @@ public:
         for (auto& obj : objects) obj.render(current_camera_pos, zoom);
       }
       auto t2 = high_resolution_clock::now();
-      std::chrono::duration<double> fp_ms = t2 - t1;
+      delta_time = t2 - t1;
 
       cursor_box.render(current_camera_pos, zoom);
 
@@ -227,10 +274,11 @@ public:
 
       std::string mode = quadTreeMode ? "QuadTree" : "Linear";
       std::string current_mode = "\nCurrent mode: " + mode;
-      std::string perf = "\nDelta time: " + std::to_string(fp_ms.count()) + "s";
+      std::string perf = "\nDelta time: " + std::to_string(delta_time.count()) + "s";
+      std::string framerate = "\nFramerate delta: " + std::to_string(deltaTime.asSeconds()) + "s";
       std::string cam_pos = "Camera {" + std::to_string(current_camera_pos.x) + ", " + std::to_string(current_camera_pos.y) + "}";
       
-      stats = cam_pos + current_mode + perf + stats;
+      stats = cam_pos + current_mode + perf + framerate + stats;
 
       coords.setString(stats);
       window.draw(coords);
@@ -242,10 +290,10 @@ public:
 
 int main() {
   srand(time(0));
-  // UI* ui = new UI();
+  UI* ui = new UI();
   // UI* ui = new UI(800, 500);
   // UI* ui = new UI(1920/4, 1080/4);
-  CamTesting *test = new CamTesting();
+  // CamTesting *test = new CamTesting();
   // CamTesting *test = new CamTesting(1920/1.7, 1080/1.7);
   
 

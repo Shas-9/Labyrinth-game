@@ -2,44 +2,13 @@
 #define STATIC_QUAD_TREE_INCLUDE
 
 #include "Vector.h"
+#include <memory>
 #include <vector>
 #include <list>
 #include <array>
 #include <string>
 
-#include <iostream>
 #include <fstream> 
-
-struct AreaRect {
-  AreaRect() {
-    this->pos = Vector(0, 0);
-    this->size = Vector(1, 1);
-  }
-  AreaRect(double x, double y, double w, double h) {
-    this->pos = Vector(x, y);
-    this->size = Vector(w, h);
-  }
-  AreaRect(Vector pos, Vector size) {
-    this->pos = pos;
-    this->size = size;
-  }
-  bool contains(const AreaRect& rect) const {
-    bool x_axis = this->pos.x < rect.pos.x && this->pos.x + this->size.x > rect.pos.x + rect.size.x;
-    bool y_axis = this->pos.y < rect.pos.y && this->pos.y + this->size.y > rect.pos.y + rect.size.y;
-    return x_axis && y_axis;
-  }
-  bool overlap(const AreaRect& rect) const {
-    bool A_above_B = rect.pos.y >= this->pos.y + this->size.y;
-    bool A_below_B = rect.pos.y + rect.size.y <= this->pos.y;
-    bool A_right_of_B = rect.pos.x + rect.size.x <= this->pos.x;
-    bool A_left_of_B = rect.pos.x >= this->pos.x + this->size.x;
-
-    bool notColliding = A_above_B || A_below_B || A_right_of_B || A_left_of_B;
-    return !notColliding;
-  }
-  Vector pos;
-  Vector size;
-};
 
 std::string gen_random(const int len) {
     static const char alphanum[] =
@@ -49,19 +18,9 @@ std::string gen_random(const int len) {
     std::string tmp_s;
     tmp_s.reserve(len);
 
-    for (int i = 0; i < len; ++i) {
-        tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
-    }
-    
+    for (int i = 0; i < len; ++i) tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
     return tmp_s;
 }
-
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <array>
 
 std::string exec(const char* cmd) {
     std::array<char, 128> buffer;
@@ -291,11 +250,13 @@ protected:
   std::array<AreaRect, 4> child_areas{};
   std::array<std::shared_ptr<DynamicQuadTree<OBJECT_TYPE>>, 4> child_trees{};
   std::list<std::pair<AreaRect, OBJECT_TYPE>> tree_container;
+  std::string id;
 
 public:
   DynamicQuadTree(const AreaRect& size = {{0.0, 0.0}, {100.0, 100.0}}, const size_t depth = 0) {
     this->depth = depth;
     this->resize(size);
+    this->id = gen_random(5);
   }
 
   void resize(const AreaRect& resize_area) {
@@ -374,6 +335,41 @@ public:
   }
 
   const AreaRect& area() { return this->rect_area; }
+
+  void visualizeTree(std::string file_location) {
+    if (this->size() <= 200) {
+      // Create and open a text file
+      std::ofstream MyFile(file_location);
+
+      MyFile << "digraph test123 {" << std::endl;
+      
+      MyFile << "  \"" << this->id << "\" [shape=box,label=\" Root \n" << this->tree_container.size() << " elements\"];" << std::endl;
+
+      // Write to the file
+      this->printChildren(MyFile);
+
+      MyFile << "}" << std::endl;
+
+      // Close the file
+      MyFile.close();
+
+      std::string cmd = "dot -Tsvg " + file_location + " > " + file_location + ".svg";
+      exec(cmd.c_str());
+    }
+  }
+
+protected:
+  void printChildren(std::ofstream& idk) {
+    for (int i = 0; i < 4; i++) {
+      if (this->child_trees[i]) {
+        std::string blah[] = { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
+        idk << "  \"" << this->child_trees[i]->id << "\" [shape=box,label=\"" << blah[i] << "\n" << this->child_trees[i]->tree_container.size() << " elements\"];" << std::endl;
+        
+        idk << "  \"" << this->id << "\" -> \"" << this->child_trees[i]->id << "\";" << std::endl;
+        this->child_trees[i]->printChildren(idk);
+      }
+    }
+  }
 };
 
 template <typename T>
@@ -434,6 +430,10 @@ public:
   void relocate(typename QuadTreeContainer::iterator& item, const AreaRect& new_rect) {
     item->item_ptr.container->erase(item->item_ptr.iterator);
     item->item_ptr = this->root.insert(item, new_rect);
+  }
+
+  void visualizeTree(std::string file_name) {
+    this->root.visualizeTree(file_name);
   }
 };
 
