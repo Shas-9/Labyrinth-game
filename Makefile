@@ -110,8 +110,9 @@ run:
 .PHONY: all clean build run main
 
 testing: clean
+	g++ -c src/AreaShape.cpp  -Ilibs/sfml/include
+	g++ -c src/Vector.cpp  -Ilibs/sfml/include
 	g++ -c src/main.cpp  -Ilibs/sfml/include
 	g++ -c src/singleton/ScreenManager.cpp  -Ilibs/sfml/include
-	g++ -c src/Vector.cpp  -Ilibs/sfml/include
-	g++ -o main.out main.o ScreenManager.o Vector.o -Llibs/sfml/lib -lsfml-graphics -lsfml-window -lsfml-system
+	g++ -o main.out main.o ScreenManager.o Vector.o AreaShape.o -Llibs/sfml/lib -lsfml-graphics -lsfml-window -lsfml-system
 	export LD_LIBRARY_PATH=libs/sfml/lib && ./$(BIN_NAME)

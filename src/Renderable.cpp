@@ -12,16 +12,6 @@ Vector Renderable::getPosition() { return this->position; }
 Vector Renderable::getDimensions() { return this->dimensions; }
 void Renderable::setPosition(Vector new_position) { this->position = new_position; }
 
-bool Renderable::isCollidingWithObject(Renderable* renderable) {
-  bool A_above_B = renderable->getPosition().getY() >= this->getPosition().getY() + this->getDimensions().getY();
-  bool A_below_B = renderable->getPosition().getY() + renderable->getDimensions().getY() <= this->getPosition().getY();
-  bool A_right_of_B = renderable->getPosition().getX() + renderable->getDimensions().getX() <= this->getPosition().getX();
-  bool A_left_of_B = renderable->getPosition().getX() >= this->getPosition().getX() + this->getDimensions().getX();
-
-  bool notColliding = A_above_B || A_below_B || A_right_of_B || A_left_of_B;
-  return !notColliding;
-}
-
 void Renderable::render(std::shared_ptr<Camera> cam) {
   Vector sprite_pos = cam->convertPos(this->getPosition());
   this->sprite->setPosition(sf::Vector2f(sprite_pos.x, sprite_pos.y));

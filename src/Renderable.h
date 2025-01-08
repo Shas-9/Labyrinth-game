@@ -25,8 +25,6 @@ class Renderable {
   Renderable();
   Renderable(Vector position, Vector dimensions, string type);
 
-  bool isCollidingWithObject(Renderable* renderable);
-
   Vector getDimensions();
   Vector getPosition();
   void setPosition(Vector new_position);

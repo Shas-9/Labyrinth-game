@@ -16,8 +16,9 @@ using namespace std::chrono_literals;
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
 struct Obj {
-  Obj(Vector pos = {0, 0}, Vector dim = {1, 1}, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256)) : pos(pos), dim(dim) {
-    // this->rectangle = new sf::RectangleShape();
+  Obj(Vector pos = {0, 0}, Vector dim = {1, 1}, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) : pos(pos), dim(dim) {
+    this->type = 0;
+
     this->rectangle.setFillColor(color);
 
     // Set the size of the object
@@ -26,31 +27,68 @@ struct Obj {
     // Set the position of the object
     this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
 
-    this->velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5);
+    this->velocity = velocity;
+  }
+  Obj(Vector pos, double radius, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) : pos(pos), radius(radius) {
+    this->type = 1;
+
+    this->circle.setFillColor(color);
+
+    // Set the size of the object
+    this->circle.setRadius(radius);
+
+    // Set the position of the object
+    this->circle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+
+    this->velocity = velocity;
   }
   void render(Vector current_camera_pos, double zoom) {
-    // update position with respect to zoom and camera
-    Vector relative_pos = (this->pos - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
-    this->rectangle.setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
-    this->rectangle.setSize(sf::Vector2f(this->dim.x * zoom, this->dim.y * zoom));
-    
-    (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
+    if (type == 0) {
+      // update position with respect to zoom and camera
+      Vector relative_pos = (this->pos - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+      this->rectangle.setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
+      this->rectangle.setSize(sf::Vector2f(this->dim.x * zoom, this->dim.y * zoom));
+      
+      (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
+    } else if (type == 1) {
+      // update position with respect to zoom and camera
+      Vector relative_pos = (this->pos - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+      this->circle.setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
+      this->circle.setRadius(this->radius * zoom);
+      
+      (*ScreenManager::getInstance().window_ptr).draw(this->circle);
+    }
   }
   void render() {
-    this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
-    this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
-    
-    (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
+    if (type == 0) {
+      this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+      this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
+      
+      (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
+    } else if (type == 1) {
+      this->circle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+      this->circle.setRadius(this->radius);
+      
+      (*ScreenManager::getInstance().window_ptr).draw(this->circle);
+    }
   }
+  int type; // 0 = rect, 1 = circle
   Vector dim;
   Vector pos;
   Vector velocity;
+  double radius;
   sf::RectangleShape rectangle;
+  sf::CircleShape circle;
 };
 
-void constructQuadTree(DynamicQuadTreeContainer<Obj>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
+void constructQuadTree(QuadTreeContainer<Obj, AreaRect>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
   qt_container.resize(qt_area);
   for (int i = 0; i < rects.size(); i++) qt_container.insert(objs[i], rects[i]);
+}
+
+void constructQuadTree(QuadTreeContainer<Obj, AreaCirc>& qt_container, AreaRect& qt_area, vector<AreaCirc>& circs, vector<Obj>& objs) {
+  qt_container.resize(qt_area);
+  for (int i = 0; i < circs.size(); i++) qt_container.insert(objs[i], circs[i]);
 }
 
 void generateBoxes(vector<AreaRect>& boxes, AreaRect bounds, int num_boxes) {
@@ -63,15 +101,20 @@ void generateBoxes(vector<AreaRect>& boxes, AreaRect bounds, int num_boxes) {
   }
 }
 
+void generateCircles(vector<AreaCirc>& circles, AreaRect bounds, int num_circles) {
+  for (int i = 0; i < num_circles; i++) {
+    int radius = 50 + (std::rand() % 50+1);
+    int x = bounds.pos.x + std::rand() % (int)(bounds.size.x + 1 - radius);
+    int y = bounds.pos.y + std::rand() % (int)(bounds.size.y + 1 - radius);
+    circles.push_back(AreaCirc(x, y, radius));
+  }
+}
+
 void drawGrid(sf::RenderWindow& win, int rows, int cols, Vector current_camera_pos, double zoom, const AreaRect& map_boundary) {
     // initialize values
     int numLines = rows+cols-2;
     sf::VertexArray grid(sf::Lines, 2*(numLines));
-    // win.setView(win.getDefaultView());
-    // auto size = win.getView().getSize();
     Vector size = map_boundary.size;
-    // size.x *= 15000;
-    // size.y *= 15000;
     float rowH = size.y/rows;
     float colW = size.x/cols;
     // row separators
@@ -119,13 +162,17 @@ public:
     Obj map_boundary_obj(map_boundary.pos, map_boundary.size);
 
     vector<AreaRect> rects;
-    generateBoxes(rects, map_boundary, 100000);
+    // generateBoxes(rects, map_boundary, 100000);
+
+    vector<AreaCirc> circs;
+    generateCircles(circs, map_boundary, 100000);
 
     vector<Obj> objects = {};
     for (const auto& rect : rects) { objects.push_back(Obj(rect.pos, rect.size)); }
+    for (const auto& circ : circs) { objects.push_back(Obj(circ.pos, circ.radius)); }
 
-    DynamicQuadTreeContainer<Obj> qt_container;
-    constructQuadTree(qt_container, map_boundary, rects, objects);
+    QuadTreeContainer<Obj, AreaCirc> qt_container;
+    constructQuadTree(qt_container, map_boundary, circs, objects);
     
     qt_container.visualizeTree("testing/static-quad-tree.dot"); 
 
@@ -148,7 +195,7 @@ public:
     bool quadTreeMode = true;
     bool remove_objects_in_cursor = false;
 
-    Obj text_bg(Vector(0, 0), Vector(480, 130), sf::Color(1, 1, 1, 150));
+    Obj text_bg(Vector(0, 0), Vector(500, 130), sf::Color(1, 1, 1, 150));
 
     sf::Event event;
     Vector mouse_pos(0, 0);
@@ -226,8 +273,8 @@ public:
       window.clear();
       // update
 
-      // smooth camera movement
-      Vector new_cam_pos = Vector::getMid(current_camera_pos, target_camera_pos, 10);
+      // smooth camera movement      
+      Vector new_cam_pos = Vector::getMid(current_camera_pos, target_camera_pos, 10.0);
       current_camera_pos = new_cam_pos;
 
       // // instant caera movement
@@ -240,6 +287,9 @@ public:
       Vector screen_pos = current_camera_pos - screen_size/2;
 
       cursor_box = Obj((mouse_pos - Vector(SCREEN_X, SCREEN_Y)/2 - Vector(50, 50))/zoom + current_camera_pos, Vector(50, 50)*2/zoom, sf::Color(255, 255, 255, 80));
+      Obj cursor_circ = Obj((mouse_pos - Vector(SCREEN_X, SCREEN_Y)/2 - Vector(50, 50))/zoom + current_camera_pos, 50/zoom, sf::Color(255, 255, 0, 80));
+      Obj test_box = Obj(Vector(0, 0), Vector(100, 200), sf::Color(255, 100, 0));
+      Obj test_circ = Obj(Vector(300, 0), 40, sf::Color(255, 100, 0));
 
       std::string stats = "";
 
@@ -256,8 +306,9 @@ public:
         auto objects_in_camera = qt_container.search(AreaRect(screen_pos, rendering_distance));
         for (auto& obj : objects_in_camera) {
           obj->item.render(current_camera_pos, zoom);
-          obj->item.pos += obj->item.velocity * 100 * deltaTime.asSeconds();
-          qt_container.relocate(obj, AreaRect(obj->item.pos, obj->item.dim));
+          // obj->item.pos += obj->item.velocity * 100 * deltaTime.asSeconds();
+          // qt_container.relocate(obj, AreaRect(obj->item.pos, obj->item.dim));
+          // qt_container.relocate(obj, AreaCirc(obj->item.pos, obj->item.radius));
         }
 
         std::string objs_count_str = "\n" + std::to_string(objects_in_camera.size()) + " objects on screen";
@@ -269,6 +320,15 @@ public:
       delta_time = t2 - t1;
 
       cursor_box.render(current_camera_pos, zoom);
+      cursor_circ.render(current_camera_pos, zoom);
+      
+      if (AreaRect(test_box.pos, test_box.dim).overlap(AreaCirc(cursor_circ.pos, cursor_circ.radius))) test_box.rectangle.setFillColor(sf::Color(255, 255, 255));
+      else test_box.rectangle.setFillColor(sf::Color(255, 100, 0));
+      test_box.render(current_camera_pos, zoom);
+      
+      if (AreaCirc(test_circ.pos, test_circ.radius).contains(AreaCirc(cursor_circ.pos, cursor_circ.radius))) test_circ.circle.setFillColor(sf::Color(255, 255, 255));
+      else test_circ.circle.setFillColor(sf::Color(255, 100, 0));
+      test_circ.render(current_camera_pos, zoom);
 
       text_bg.render();
 
