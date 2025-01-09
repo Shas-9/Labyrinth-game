@@ -8,4 +8,8 @@ double PerformanceTester::testFuncPerf(void (*func)()) {
   return delta_time.count();
 }
 
-double PerformanceTester::testFuncMeanPerf(void (*func)(), int n) { return 1; }
+double PerformanceTester::testFuncMeanPerf(void (*func)(), int n) {
+  double total_time = 0;
+  for (int i = 0; i < n; i++) total_time += this->testFuncPerf(func);
+  return total_time/n;
+}
