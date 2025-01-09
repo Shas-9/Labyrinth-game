@@ -4,7 +4,7 @@
 #include <chrono>
 using namespace std::chrono_literals;
 
-#include "UI.h"
+// #include "UI.h"
 #include "singleton/ScreenManager.h"
 
 #include "QuadTree.tpp"
@@ -72,6 +72,10 @@ struct Obj {
       (*ScreenManager::getInstance().window_ptr).draw(this->circle);
     }
   }
+  sf::Shape* getShape() {
+    if (type == 0) return &this->rectangle;
+    else if (type == 1) return &this->circle;
+  }
   int type; // 0 = rect, 1 = circle
   Vector dim;
   Vector pos;
@@ -82,11 +86,13 @@ struct Obj {
 };
 
 void constructQuadTree(QuadTreeContainer<Obj, AreaRect>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
+  std::cout << "construct rect tree" << std::endl;
   qt_container.resize(qt_area);
   for (int i = 0; i < rects.size(); i++) qt_container.insert(objs[i], rects[i]);
 }
 
 void constructQuadTree(QuadTreeContainer<Obj, AreaCirc>& qt_container, AreaRect& qt_area, vector<AreaCirc>& circs, vector<Obj>& objs) {
+  std::cout << "construct circ tree" << std::endl;
   qt_container.resize(qt_area);
   for (int i = 0; i < circs.size(); i++) qt_container.insert(objs[i], circs[i]);
 }
@@ -158,23 +164,29 @@ public:
     sf::RenderWindow window(sf::VideoMode(screen_dimensions.x, screen_dimensions.y), "CatQuest");
     ScreenManager::getInstance().setWindowObject(&window);
 
-    AreaRect map_boundary(0, 0, 150000, 150000);
+    AreaRect map_boundary(0, 0, 1500, 1500);
     Obj map_boundary_obj(map_boundary.pos, map_boundary.size);
 
     vector<AreaRect> rects;
-    // generateBoxes(rects, map_boundary, 100000);
+    generateBoxes(rects, map_boundary, 500);
 
     vector<AreaCirc> circs;
-    generateCircles(circs, map_boundary, 100000);
+    generateCircles(circs, map_boundary, 500);
 
     vector<Obj> objects = {};
-    for (const auto& rect : rects) { objects.push_back(Obj(rect.pos, rect.size)); }
-    for (const auto& circ : circs) { objects.push_back(Obj(circ.pos, circ.radius)); }
+    vector<Obj> rect_objects = {};
+    vector<Obj> circ_objects = {};
 
-    QuadTreeContainer<Obj, AreaCirc> qt_container;
-    constructQuadTree(qt_container, map_boundary, circs, objects);
+    for (const auto& rect : rects) { objects.push_back(Obj(rect.pos, rect.size)); rect_objects.push_back(Obj(rect.pos, rect.size)); }
+    for (const auto& circ : circs) { objects.push_back(Obj(circ.pos, circ.radius)); circ_objects.push_back(Obj(circ.pos, circ.radius)); }
+
+    QuadTreeContainer<Obj, AreaRect> qt_container_rect;
+    constructQuadTree(qt_container_rect, map_boundary, rects, rect_objects);
+
+    QuadTreeContainer<Obj, AreaCirc> qt_container_circ;
+    constructQuadTree(qt_container_circ, map_boundary, circs, circ_objects);
     
-    qt_container.visualizeTree("testing/static-quad-tree.dot"); 
+    // qt_container_rect.visualizeTree("testing/static-quad-tree.dot"); 
 
     Vector target_camera_pos(0, 0);
     double zoom = 1 * SCREEN_Y/1080;
@@ -280,8 +292,6 @@ public:
       // // instant caera movement
       // current_camera_pos = target_camera_pos;
 
-      // map_boundary_obj.render(current_camera_pos, zoom);
-
       Vector screen_size = Vector(SCREEN_X, SCREEN_Y)/zoom;
       Vector rendering_distance = screen_size*3;
       Vector screen_pos = current_camera_pos - screen_size/2;
@@ -299,19 +309,41 @@ public:
       if (quadTreeMode) {
 
         if (remove_objects_in_cursor) {
-          auto objects_in_cursor = qt_container.search(AreaRect(cursor_box.pos, cursor_box.dim));
-          for (auto& obj : objects_in_cursor) qt_container.remove(obj);
+          auto circ_objects_in_cursor = qt_container_circ.search(AreaRect(cursor_box.pos, cursor_box.dim));
+          for (auto& circ_obj : circ_objects_in_cursor) qt_container_circ.remove(circ_obj);
+
+          auto rect_objects_in_cursor = qt_container_rect.search(AreaRect(cursor_box.pos, cursor_box.dim));
+          for (auto& rect_obj : rect_objects_in_cursor) qt_container_rect.remove(rect_obj);
         }
 
-        auto objects_in_camera = qt_container.search(AreaRect(screen_pos, rendering_distance));
-        for (auto& obj : objects_in_camera) {
+        auto circ_objects_in_camera = qt_container_circ.search(AreaRect(screen_pos, rendering_distance));
+        auto rect_objects_in_camera = qt_container_rect.search(AreaRect(screen_pos, rendering_distance));
+
+        for (auto& obj : circ_objects_in_camera) {
+          // move object
+          obj->item.pos += obj->item.velocity * 100 * deltaTime.asSeconds();
+          qt_container_circ.relocate(obj, AreaCirc(obj->item.pos, obj->item.radius));
+          // setFillColor upon collision
+          if (qt_container_circ.search(AreaCirc(obj->item.pos, obj->item.radius)).size() > 1) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
+          else if (qt_container_rect.search(AreaCirc(obj->item.pos, obj->item.radius)).size() > 0) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
+          else obj->item.getShape()->setFillColor(sf::Color(100, 100, 255));
+          // render
           obj->item.render(current_camera_pos, zoom);
-          // obj->item.pos += obj->item.velocity * 100 * deltaTime.asSeconds();
-          // qt_container.relocate(obj, AreaRect(obj->item.pos, obj->item.dim));
-          // qt_container.relocate(obj, AreaCirc(obj->item.pos, obj->item.radius));
         }
 
-        std::string objs_count_str = "\n" + std::to_string(objects_in_camera.size()) + " objects on screen";
+        for (auto& obj : rect_objects_in_camera) {
+          // move object
+          obj->item.pos += obj->item.velocity * 100 * deltaTime.asSeconds();
+          qt_container_rect.relocate(obj, AreaRect(obj->item.pos, obj->item.dim));
+          // setFillColor upon collision
+          if (qt_container_rect.search(AreaRect(obj->item.pos, obj->item.dim)).size() > 1) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
+          else if (qt_container_circ.search(AreaRect(obj->item.pos, obj->item.dim)).size() > 0) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
+          else obj->item.getShape()->setFillColor(sf::Color(100, 100, 255));
+          // render
+          obj->item.render(current_camera_pos, zoom);
+        }
+
+        std::string objs_count_str = "\n" + std::to_string(rect_objects_in_camera.size() + circ_objects_in_camera.size()) + " objects on screen";
         stats += objs_count_str;
       } else {
         for (auto& obj : objects) obj.render(current_camera_pos, zoom);
@@ -326,8 +358,8 @@ public:
       else test_box.rectangle.setFillColor(sf::Color(255, 100, 0));
       test_box.render(current_camera_pos, zoom);
       
-      if (AreaCirc(test_circ.pos, test_circ.radius).contains(AreaCirc(cursor_circ.pos, cursor_circ.radius))) test_circ.circle.setFillColor(sf::Color(255, 255, 255));
-      else test_circ.circle.setFillColor(sf::Color(255, 100, 0));
+      // if (AreaCirc(test_circ.pos, test_circ.radius).contains(AreaCirc(cursor_circ.pos, cursor_circ.radius))) test_circ.circle.setFillColor(sf::Color(255, 255, 255));
+      // else test_circ.circle.setFillColor(sf::Color(255, 100, 0));
       test_circ.render(current_camera_pos, zoom);
 
       text_bg.render();
@@ -350,10 +382,10 @@ public:
 
 int main() {
   srand(time(0));
-  UI* ui = new UI();
+  // UI* ui = new UI();
   // UI* ui = new UI(800, 500);
   // UI* ui = new UI(1920/4, 1080/4);
-  // CamTesting *test = new CamTesting();
+  CamTesting *test = new CamTesting();
   // CamTesting *test = new CamTesting(1920/1.7, 1080/1.7);
   
 
