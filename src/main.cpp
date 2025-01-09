@@ -169,10 +169,10 @@ public:
     Obj map_boundary_obj(map_boundary.pos, map_boundary.size);
 
     vector<AreaRect> rects;
-    generateBoxes(rects, map_boundary, 500);
+    generateBoxes(rects, map_boundary, 500000);
 
     vector<AreaCirc> circs;
-    generateCircles(circs, map_boundary, 500);
+    generateCircles(circs, map_boundary, 500000);
 
     vector<Obj> objects = {};
     vector<Obj> rect_objects = {};

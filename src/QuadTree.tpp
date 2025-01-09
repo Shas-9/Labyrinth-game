@@ -2,6 +2,7 @@
 #define STATIC_QUAD_TREE_INCLUDE
 
 #include "AreaShape.h"
+#include "misc.h"
 
 #include <memory>
 #include <vector>
@@ -20,19 +21,6 @@ std::string gen_random(const int len) {
 
     for (int i = 0; i < len; ++i) tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
     return tmp_s;
-}
-
-std::string exec(const char* cmd) {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) {
-        throw std::runtime_error("popen() failed!");
-    }
-    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) != nullptr) {
-        result += buffer.data();
-    }
-    return result;
 }
 
 #define MAX_QUAD_TREE_DEPTH 10

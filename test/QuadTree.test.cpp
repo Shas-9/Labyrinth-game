@@ -1,4 +1,4 @@
-#include "../src/PerformanceTester.h"
+#include "../src/PerformanceTester.tpp"
 #include "../src/QuadTree.tpp"
 #include "../src/singleton/ScreenManager.h"
 
@@ -85,8 +85,8 @@ struct Obj {
   sf::CircleShape circle;
 };
 
-void constructQuadTree(QuadTreeContainer<Obj, AreaRect>& qt_container, AreaRect& qt_area, list<AreaRect>& rects, list<Obj>& objs) {
-  std::cout << "construct rect tree" << std::endl;
+template <typename AREA_RECT_CONTAINER, typename OBJ_CONTAINER>
+void constructQuadTree(QuadTreeContainer<Obj, AreaRect>& qt_container, AreaRect& qt_area, AREA_RECT_CONTAINER& rects, OBJ_CONTAINER& objs) {
   qt_container.resize(qt_area);
   // for (int i = 0; i < rects.size(); i++) qt_container.insert(objs[i], rects[i]);
   auto rects_it = rects.begin();
@@ -94,8 +94,8 @@ void constructQuadTree(QuadTreeContainer<Obj, AreaRect>& qt_container, AreaRect&
   for(; rects_it != rects.end(); objs_it++, rects_it++) qt_container.insert(*objs_it, *rects_it);
 }
 
-void constructQuadTree(QuadTreeContainer<Obj, AreaCirc>& qt_container, AreaRect& qt_area, list<AreaCirc>& circs, list<Obj>& objs) {
-  std::cout << "construct circ tree" << std::endl;
+template <typename AREA_CIRC_CONTAINER, typename OBJ_CONTAINER>
+void constructQuadTree(QuadTreeContainer<Obj, AreaCirc>& qt_container, AreaRect& qt_area, AREA_CIRC_CONTAINER& circs, OBJ_CONTAINER& objs) {
   qt_container.resize(qt_area);
   // for (int i = 0; i < circs.size(); i++) qt_container.insert(objs[i], circs[i]);
   auto circs_it = circs.begin();
@@ -103,7 +103,8 @@ void constructQuadTree(QuadTreeContainer<Obj, AreaCirc>& qt_container, AreaRect&
   for(; circs_it != circs.end(); objs_it++, circs_it++) qt_container.insert(*objs_it, *circs_it);
 }
 
-void generateBoxes(list<AreaRect>& boxes, AreaRect bounds, int num_boxes) {
+template <typename AREA_RECT_CONTAINER>
+void generateBoxes(AREA_RECT_CONTAINER& boxes, AreaRect bounds, int num_boxes) {
   for (int i = 0; i < num_boxes; i++) {
     int box_width = 50 + (std::rand() % 50+1);
     int box_height = 50 + (std::rand() % 50+1);
@@ -113,7 +114,8 @@ void generateBoxes(list<AreaRect>& boxes, AreaRect bounds, int num_boxes) {
   }
 }
 
-void generateCircles(list<AreaCirc>& circles, AreaRect bounds, int num_circles) {
+template <typename AREA_CIRC_CONTAINER>
+void generateCircles(AREA_CIRC_CONTAINER& circles, AreaRect bounds, int num_circles) {
   for (int i = 0; i < num_circles; i++) {
     int radius = 50 + (std::rand() % 50+1);
     int x = bounds.pos.x + std::rand() % (int)(bounds.size.x + 1 - radius);
@@ -122,16 +124,43 @@ void generateCircles(list<AreaCirc>& circles, AreaRect bounds, int num_circles) 
   }
 }
 
+void testFuncVector(int num_boxes_circles) {
+  AreaRect map_boundary(0, 0, 15000, 15000);
+  Obj map_boundary_obj(map_boundary.pos, map_boundary.size);
 
-void testFunc() {
+  vector<AreaRect> rects;
+  generateBoxes(rects, map_boundary, num_boxes_circles);
+
+  vector<AreaCirc> circs;
+  generateCircles(circs, map_boundary, num_boxes_circles);
+
+  vector<Obj> objects = {};
+  vector<Obj> rect_objects = {};
+  vector<Obj> circ_objects = {};
+
+  for (const auto& rect : rects) { objects.push_back(Obj(rect.pos, rect.size)); rect_objects.push_back(Obj(rect.pos, rect.size)); }
+  for (const auto& circ : circs) { objects.push_back(Obj(circ.pos, circ.radius)); circ_objects.push_back(Obj(circ.pos, circ.radius)); }
+  
+  QuadTreeContainer<Obj, AreaRect> qt_container_rect;
+  constructQuadTree(qt_container_rect, map_boundary, rects, rect_objects);
+
+  QuadTreeContainer<Obj, AreaCirc> qt_container_circ;
+  constructQuadTree(qt_container_circ, map_boundary, circs, circ_objects);
+
+  // for (int frame = 0; i < 100; frame++) {
+
+  // }
+}
+
+void testFuncList(int num_boxes_circles) {
   AreaRect map_boundary(0, 0, 15000, 15000);
   Obj map_boundary_obj(map_boundary.pos, map_boundary.size);
 
   list<AreaRect> rects;
-  generateBoxes(rects, map_boundary, 500);
+  generateBoxes(rects, map_boundary, num_boxes_circles);
 
   list<AreaCirc> circs;
-  generateCircles(circs, map_boundary, 500);
+  generateCircles(circs, map_boundary, num_boxes_circles);
 
   list<Obj> objects = {};
   list<Obj> rect_objects = {};
@@ -140,12 +169,19 @@ void testFunc() {
   for (const auto& rect : rects) { objects.push_back(Obj(rect.pos, rect.size)); rect_objects.push_back(Obj(rect.pos, rect.size)); }
   for (const auto& circ : circs) { objects.push_back(Obj(circ.pos, circ.radius)); circ_objects.push_back(Obj(circ.pos, circ.radius)); }
   
+  QuadTreeContainer<Obj, AreaRect> qt_container_rect;
+  constructQuadTree(qt_container_rect, map_boundary, rects, rect_objects);
+
+  QuadTreeContainer<Obj, AreaCirc> qt_container_circ;
+  constructQuadTree(qt_container_circ, map_boundary, circs, circ_objects);
+
   // for (int frame = 0; i < 100; frame++) {
 
   // }
 }
 
 int main() {
-  PerformanceTester perf;
-  std::cout << perf.testFuncMeanPerf(&testFunc, 1000) << std::endl;
+  PerformanceTester<int> perf;
+  // std::cout << perf.testFuncMeanPerf(&testFunc, 1) << std::endl;
+  perf.plotFuncPerf("number of boxes+circles", testFuncVector, 1, 500, 1000000, 2, false);
 }
