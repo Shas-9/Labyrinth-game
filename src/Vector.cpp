@@ -4,6 +4,7 @@
 #include <cmath>
 
 Vector::Vector(): x(0), y(0) {}
+Vector::Vector(sf::Vector2f v): x(v.x), y(v.y) {};
 Vector::Vector(double x, double y): x(x), y(y) {}
 Vector::Vector(float x, float y): x(x), y(y) {}
 Vector::Vector(int x, int y): x(x), y(y) {}

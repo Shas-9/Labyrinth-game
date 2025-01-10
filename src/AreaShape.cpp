@@ -1,9 +1,9 @@
 #include "AreaShape.h"
 
 // AreaRect Implementations
-AreaRect::AreaRect() : pos({0, 0}), size({1, 1}) {}
+AreaRect::AreaRect() : pos(Vector(0, 0)), size(Vector(1, 1)) {}
 
-AreaRect::AreaRect(double x, double y, double w, double h) : pos({x, y}), size({w, h}) {}
+AreaRect::AreaRect(double x, double y, double w, double h) : pos(Vector(x, y)), size(Vector(w, h)) {}
 
 AreaRect::AreaRect(const Vector pos, const Vector size) : pos(pos), size(size) {}
 
@@ -56,9 +56,9 @@ bool AreaRect::overlap(const AreaCirc& circ) const {
 }
 
 // AreaCirc Implementations
-AreaCirc::AreaCirc() : pos({0, 0}), radius(1) {}
+AreaCirc::AreaCirc() : pos(Vector(0, 0)), radius(1) {}
 
-AreaCirc::AreaCirc(double x, double y, double radius) : pos({x, y}), radius(radius) {}
+AreaCirc::AreaCirc(double x, double y, double radius) : pos(Vector(x, y)), radius(radius) {}
 
 AreaCirc::AreaCirc(const Vector pos, double radius) : pos(pos), radius(radius) {}
 

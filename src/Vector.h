@@ -1,6 +1,8 @@
 #ifndef VECTOR_INCLUDE
 #define VECTOR_INCLUDE
 
+#include <SFML/Graphics.hpp>
+
 class Vector {
 private:
 
@@ -9,6 +11,7 @@ public:
   double y;
   
   Vector();
+  Vector(sf::Vector2f v);
   Vector(double x, double y);
   Vector(float x, float y);
   Vector(int x, int y);
