@@ -16,84 +16,208 @@ using namespace std::chrono_literals;
 #define SCREEN_X ScreenManager::getInstance().screen_dimensions.x
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
+// struct Obj {
+//   Obj(Vector pos = {0, 0}, Vector dim = {1, 1}, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) : pos(pos), dim(dim) {
+//     this->type = 0;
+
+//     this->rectangle.setFillColor(color);
+
+//     // Set the size of the object
+//     this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
+
+//     // Set the position of the object
+//     this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+
+//     this->velocity = velocity;
+//   }
+//   Obj(Vector pos, double radius, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) : pos(pos), radius(radius) {
+//     this->type = 1;
+
+//     this->circle.setFillColor(color);
+
+//     // Set the size of the object
+//     this->circle.setRadius(radius);
+
+//     // Set the position of the object
+//     this->circle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+
+//     this->velocity = velocity;
+//   }
+//   void render(Vector current_camera_pos, double zoom) {
+//     if (type == 0) {
+//       // update position with respect to zoom and camera
+//       Vector relative_pos = (this->pos - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+//       this->rectangle.setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
+//       this->rectangle.setSize(sf::Vector2f(this->dim.x * zoom, this->dim.y * zoom));
+      
+//       (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
+//     } else if (type == 1) {
+//       // update position with respect to zoom and camera
+//       Vector relative_pos = (this->pos - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+//       this->circle.setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
+//       this->circle.setRadius(this->radius * zoom);
+      
+//       (*ScreenManager::getInstance().window_ptr).draw(this->circle);
+//     }
+//   }
+//   void render() {
+//     if (type == 0) {
+//       this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+//       this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
+      
+//       (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
+//     } else if (type == 1) {
+//       this->circle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
+//       this->circle.setRadius(this->radius);
+      
+//       (*ScreenManager::getInstance().window_ptr).draw(this->circle);
+//     }
+//   }
+//   sf::Shape* getShape() {
+//     if (type == 0) return &this->rectangle;
+//     else if (type == 1) return &this->circle;
+//   }
+//   int type; // 0 = rect, 1 = circle
+//   Vector dim;
+//   Vector pos;
+//   Vector velocity;
+//   double radius;
+//   sf::RectangleShape rectangle;
+//   sf::CircleShape circle;
+// };
+
 struct Obj {
-  Obj(Vector pos = {0, 0}, Vector dim = {1, 1}, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) : pos(pos), dim(dim) {
-    this->type = 0;
-
-    this->rectangle.setFillColor(color);
-
-    // Set the size of the object
-    this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
-
-    // Set the position of the object
-    this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
-
+  Obj(Vector pos = { 0, 0 }, Vector dim = { 1, 1 }, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) {
+    this->shape = new sf::RectangleShape();
+    this->is_rect = true;
     this->velocity = velocity;
+
+    auto rect = dynamic_cast<sf::RectangleShape*>(this->shape);
+    rect->setFillColor(color);
+    rect->setSize(sf::Vector2f(dim.x, dim.y));
+    rect->setPosition(sf::Vector2f(pos.x, pos.y));
   }
-  Obj(Vector pos, double radius, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) : pos(pos), radius(radius) {
-    this->type = 1;
-
-    this->circle.setFillColor(color);
-
-    // Set the size of the object
-    this->circle.setRadius(radius);
-
-    // Set the position of the object
-    this->circle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
-
+  Obj(Vector pos, double radius, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) {
+    this->shape = new sf::CircleShape();
+    this->is_rect = false;
     this->velocity = velocity;
+
+    auto circ = dynamic_cast<sf::CircleShape*>(this->shape);
+    circ->setFillColor(color);
+    circ->setRadius(radius);
+    circ->setPosition(sf::Vector2f(pos.x, pos.y));
   }
-  void render(Vector current_camera_pos, double zoom) {
-    if (type == 0) {
-      // update position with respect to zoom and camera
-      Vector relative_pos = (this->pos - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
-      this->rectangle.setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
-      this->rectangle.setSize(sf::Vector2f(this->dim.x * zoom, this->dim.y * zoom));
+  void render(Vector current_camera_pos, float zoom) {
+    if (this->is_rect == true) {
+      Vector relative_pos = (Vector(this->shape->getPosition()) - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+      auto rect = dynamic_cast<sf::RectangleShape*>(this->shape);
       
-      (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
-    } else if (type == 1) {
-      // update position with respect to zoom and camera
-      Vector relative_pos = (this->pos - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
-      this->circle.setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
-      this->circle.setRadius(this->radius * zoom);
+      sf::Vector2f old_pos = rect->getPosition();
+      sf::Vector2f old_dim = rect->getSize();
+
+      rect->setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
+      rect->setSize(rect->getSize() * zoom);
       
-      (*ScreenManager::getInstance().window_ptr).draw(this->circle);
+      ScreenManager::getInstance().window_ptr->draw(*this->shape);
+
+      rect->setPosition(old_pos);
+      rect->setSize(old_dim);
+    } else if (this->is_rect == false) {
+      Vector relative_pos = (Vector(this->shape->getPosition()) - current_camera_pos) * zoom + Vector(SCREEN_X, SCREEN_Y) / 2;
+      auto circ = dynamic_cast<sf::CircleShape*>(this->shape);
+      
+      sf::Vector2f old_pos = circ->getPosition();
+      float old_radius = circ->getRadius();
+
+      circ->setPosition(sf::Vector2f(relative_pos.x, relative_pos.y));
+      circ->setRadius(circ->getRadius() * zoom);
+      
+      ScreenManager::getInstance().window_ptr->draw(*this->shape);
+
+      circ->setPosition(old_pos);
+      circ->setRadius(old_radius);
     }
   }
   void render() {
-    if (type == 0) {
-      this->rectangle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
-      this->rectangle.setSize(sf::Vector2f(this->dim.x, this->dim.y));
-      
-      (*ScreenManager::getInstance().window_ptr).draw(this->rectangle);
-    } else if (type == 1) {
-      this->circle.setPosition(sf::Vector2f(this->pos.x, this->pos.y));
-      this->circle.setRadius(this->radius);
-      
-      (*ScreenManager::getInstance().window_ptr).draw(this->circle);
+    ScreenManager::getInstance().window_ptr->draw(*this->shape);
+  }
+  ~Obj() { delete this->shape; }
+
+  // Copy Constructor (Deep Copy)
+  Obj(const Obj& other) {
+    this->is_rect = other.is_rect;
+    this->velocity = other.velocity;
+
+    if (this->is_rect) {
+      if (auto rect = dynamic_cast<sf::RectangleShape*>(other.shape)) {
+        this->shape = new sf::RectangleShape(*rect); // Deep copy the RectangleShape
+      } else {
+        this->shape = nullptr; // Handle other types of shapes if applicable
+      }
+    } else {
+      if (auto circ = dynamic_cast<sf::CircleShape*>(other.shape)) {
+        this->shape = new sf::CircleShape(*circ); // Deep copy the RectangleShape
+      } else {
+        this->shape = nullptr; // Handle other types of shapes if applicable
+      }
     }
   }
-  sf::Shape* getShape() {
-    if (type == 0) return &this->rectangle;
-    else if (type == 1) return &this->circle;
+
+  // Copy Assignment Operator (Deep Copy)
+  Obj& operator=(const Obj& other) {
+    if (this != &other) {
+      delete this->shape; // Clean up existing resource
+
+      this->is_rect = other.is_rect;
+      this->velocity = other.velocity;
+
+      // Deep copy the shape
+      if (this->is_rect) {
+        if (auto rect = dynamic_cast<sf::RectangleShape*>(other.shape)) {
+          this->shape = new sf::RectangleShape(*rect); // Deep copy the RectangleShape
+        } else {
+          this->shape = nullptr; // Handle other types of shapes if applicable
+        }
+      } else {
+        if (auto circ = dynamic_cast<sf::CircleShape*>(other.shape)) {
+          this->shape = new sf::CircleShape(*circ); // Deep copy the RectangleShape
+        } else {
+          this->shape = nullptr; // Handle other types of shapes if applicable
+        }
+      }
+    }
+    return *this;
   }
-  int type; // 0 = rect, 1 = circle
-  Vector dim;
-  Vector pos;
+
+  void setFillColor(sf::Color color) { this->shape->setFillColor(color); }
+  sf::Shape* getShape() { return this->shape; }
+  Vector getPos() { return Vector(this->shape->getPosition()); }
+  void setPos(Vector new_pos) { this->shape->setPosition(new_pos.x, new_pos.y); }
+  Vector getDim() {
+    if (this->is_rect) {
+      auto rect = dynamic_cast<sf::RectangleShape*>(this->shape);
+      return Vector(rect->getSize());
+    } else return Vector(0, 0);
+  }
+  float getRadius() {
+    if (this->is_rect) return 0;
+    else {
+      auto circ = dynamic_cast<sf::CircleShape*>(this->shape);
+      return circ->getRadius();
+    }
+  }
+
+  bool is_rect;
   Vector velocity;
-  double radius;
-  sf::RectangleShape rectangle;
-  sf::CircleShape circle;
+  sf::Shape* shape;
 };
 
 void constructQuadTree(QuadTreeContainer<Obj, AreaRect>& qt_container, AreaRect& qt_area, vector<AreaRect>& rects, vector<Obj>& objs) {
-  std::cout << "construct rect tree" << std::endl;
   qt_container.resize(qt_area);
   for (int i = 0; i < rects.size(); i++) qt_container.insert(objs[i], rects[i]);
 }
 
 void constructQuadTree(QuadTreeContainer<Obj, AreaCirc>& qt_container, AreaRect& qt_area, vector<AreaCirc>& circs, vector<Obj>& objs) {
-  std::cout << "construct circ tree" << std::endl;
   qt_container.resize(qt_area);
   for (int i = 0; i < circs.size(); i++) qt_container.insert(objs[i], circs[i]);
 }
@@ -169,10 +293,10 @@ public:
     Obj map_boundary_obj(map_boundary.pos, map_boundary.size);
 
     vector<AreaRect> rects;
-    generateBoxes(rects, map_boundary, 500000);
+    generateBoxes(rects, map_boundary, 250);
 
     vector<AreaCirc> circs;
-    generateCircles(circs, map_boundary, 500000);
+    generateCircles(circs, map_boundary, 250);
 
     vector<Obj> objects = {};
     vector<Obj> rect_objects = {};
@@ -310,10 +434,10 @@ public:
       if (quadTreeMode) {
 
         if (remove_objects_in_cursor) {
-          auto circ_objects_in_cursor = qt_container_circ.search(AreaRect(cursor_box.pos, cursor_box.dim));
+          auto circ_objects_in_cursor = qt_container_circ.search(AreaRect(cursor_box.getPos(), cursor_box.getDim()));
           for (auto& circ_obj : circ_objects_in_cursor) qt_container_circ.remove(circ_obj);
 
-          auto rect_objects_in_cursor = qt_container_rect.search(AreaRect(cursor_box.pos, cursor_box.dim));
+          auto rect_objects_in_cursor = qt_container_rect.search(AreaRect(cursor_box.getPos(), cursor_box.getDim()));
           for (auto& rect_obj : rect_objects_in_cursor) qt_container_rect.remove(rect_obj);
         }
 
@@ -322,11 +446,12 @@ public:
 
         for (auto& obj : circ_objects_in_camera) {
           // move object
-          obj->item.pos += obj->item.velocity * 100 * deltaTime.asSeconds();
-          qt_container_circ.relocate(obj, AreaCirc(obj->item.pos, obj->item.radius));
-          // setFillColor upon collision
-          if (qt_container_circ.search(AreaCirc(obj->item.pos, obj->item.radius)).size() > 1) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
-          else if (qt_container_rect.search(AreaCirc(obj->item.pos, obj->item.radius)).size() > 0) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
+          // std::cout << obj->item.is_rect << std::endl;
+          // obj->item.setPos(obj->item.getPos() + obj->item.velocity * 100 * deltaTime.asSeconds());
+          // qt_container_circ.relocate(obj, AreaCirc(obj->item.getPos(), obj->item.getRadius()));
+          // // setFillColor upon collision
+          if (qt_container_circ.search(AreaCirc(obj->item.getPos(), obj->item.getRadius())).size() > 1) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
+          else if (qt_container_rect.search(AreaCirc(obj->item.getPos(), obj->item.getRadius())).size() > 0) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
           else obj->item.getShape()->setFillColor(sf::Color(100, 100, 255));
           // render
           obj->item.render(current_camera_pos, zoom);
@@ -334,11 +459,11 @@ public:
 
         for (auto& obj : rect_objects_in_camera) {
           // move object
-          obj->item.pos += obj->item.velocity * 100 * deltaTime.asSeconds();
-          qt_container_rect.relocate(obj, AreaRect(obj->item.pos, obj->item.dim));
+          // obj->item.getPos() += obj->item.velocity * 100 * deltaTime.asSeconds();
+          // qt_container_rect.relocate(obj, AreaRect(obj->item.getPos(), obj->item.getDim()));
           // setFillColor upon collision
-          if (qt_container_rect.search(AreaRect(obj->item.pos, obj->item.dim)).size() > 1) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
-          else if (qt_container_circ.search(AreaRect(obj->item.pos, obj->item.dim)).size() > 0) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
+          if (qt_container_rect.search(AreaRect(obj->item.getPos(), obj->item.getDim())).size() > 1) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
+          else if (qt_container_circ.search(AreaRect(obj->item.getPos(), obj->item.getDim())).size() > 0) obj->item.getShape()->setFillColor(sf::Color(255, 255, 255));
           else obj->item.getShape()->setFillColor(sf::Color(100, 100, 255));
           // render
           obj->item.render(current_camera_pos, zoom);
@@ -355,12 +480,12 @@ public:
       cursor_box.render(current_camera_pos, zoom);
       cursor_circ.render(current_camera_pos, zoom);
       
-      if (AreaRect(test_box.pos, test_box.dim).overlap(AreaCirc(cursor_circ.pos, cursor_circ.radius))) test_box.rectangle.setFillColor(sf::Color(255, 255, 255));
-      else test_box.rectangle.setFillColor(sf::Color(255, 100, 0));
+      if (AreaRect(test_box.getPos(), test_box.getDim()).overlap(AreaCirc(cursor_circ.getPos(), cursor_circ.getRadius()))) test_box.setFillColor(sf::Color(255, 255, 255));
+      else test_box.setFillColor(sf::Color(255, 100, 0));
       test_box.render(current_camera_pos, zoom);
       
-      // if (AreaCirc(test_circ.pos, test_circ.radius).contains(AreaCirc(cursor_circ.pos, cursor_circ.radius))) test_circ.circle.setFillColor(sf::Color(255, 255, 255));
-      // else test_circ.circle.setFillColor(sf::Color(255, 100, 0));
+      // if (AreaCirc(test_circ.getPos(), test_circ.getRadius()).contains(AreaCirc(cursor_circ.getPos(), cursor_circ.getRadius()))) test_circ.setFillColor(sf::Color(255, 255, 255));
+      // else test_circ.setFillColor(sf::Color(255, 100, 0));
       test_circ.render(current_camera_pos, zoom);
 
       text_bg.render();
