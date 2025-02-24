@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(Game)
 
+# Generate compile_commands file
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Find SFML library
 set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libs/sfml/lib/cmake/SFML")  # Adjust to your actual SFML installation path
 find_package(SFML 2.6 COMPONENTS system window graphics REQUIRED)
