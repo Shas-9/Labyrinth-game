@@ -12,15 +12,15 @@
 #include <fstream> 
 
 std::string gen_random(const int len) {
-    static const char alphanum[] =
-        "0123456789"
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "abcdefghijklmnopqrstuvwxyz";
-    std::string tmp_s;
-    tmp_s.reserve(len);
+  static const char alphanum[] =
+    "0123456789"
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz";
+  std::string tmp_s;
+  tmp_s.reserve(len);
 
-    for (int i = 0; i < len; ++i) tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
-    return tmp_s;
+  for (int i = 0; i < len; ++i) tmp_s += alphanum[rand() % (sizeof(alphanum) - 1)];
+  return tmp_s;
 }
 
 #define MAX_QUAD_TREE_DEPTH 10
@@ -43,7 +43,7 @@ protected:
   std::string id;
 
 public:
-  QuadTree(const AreaRect& size = {{0.0, 0.0}, {100.0, 100.0}}, const size_t depth = 0) {
+  QuadTree(const AreaRect& size = { {0.0, 0.0}, {100.0, 100.0} }, const size_t depth = 0) {
     this->depth = depth;
     this->resize(size);
     this->id = gen_random(5);
@@ -52,7 +52,7 @@ public:
   void resize(const AreaRect& resize_area) {
     this->clear();
     this->rect_area = resize_area;
-    Vector child_size = Vector(this->rect_area.size.x/2, this->rect_area.size.y/2);
+    Vector child_size = Vector(this->rect_area.size.x / 2, this->rect_area.size.y / 2);
 
     this->child_areas = {
       // top left
@@ -65,7 +65,7 @@ public:
       AreaRect(Vector(this->rect_area.pos.x + child_size.x, this->rect_area.pos.y + child_size.y), child_size),
     };
   }
-  
+
   void clear() {
     this->tree_container.clear();
     for (int i = 0; i < 4; i++) {
@@ -94,7 +94,7 @@ public:
       }
     }
 
-    this->tree_container.push_back({item_size, item});
+    this->tree_container.push_back({ item_size, item });
     return { &this->tree_container, std::prev(this->tree_container.end()) };
   }
 
@@ -116,7 +116,7 @@ public:
         items_list.push_back(p.second);
       }
     }
-    
+
     for (int i = 0; i < 4; i++) {
       if (this->child_trees[i]) {
         if (search_area.contains(this->child_areas[i])) this->child_trees[i]->items(items_list);
@@ -131,7 +131,7 @@ public:
         items_list.push_back(p.second);
       }
     }
-    
+
     for (int i = 0; i < 4; i++) {
       if (this->child_trees[i]) {
         if (search_area.contains(this->child_areas[i])) this->child_trees[i]->items(items_list);
@@ -153,7 +153,7 @@ public:
       std::ofstream MyFile(file_location);
 
       MyFile << "digraph test123 {" << std::endl;
-      
+
       MyFile << "  \"" << this->id << "\" [shape=box,label=\" Root \n" << this->tree_container.size() << " elements\"];" << std::endl;
 
       // Write to the file
@@ -175,7 +175,7 @@ protected:
       if (this->child_trees[i]) {
         std::string blah[] = { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
         idk << "  \"" << this->child_trees[i]->id << "\" [shape=box,label=\"" << blah[i] << "\n" << this->child_trees[i]->tree_container.size() << " elements\"];" << std::endl;
-        
+
         idk << "  \"" << this->id << "\" -> \"" << this->child_trees[i]->id << "\";" << std::endl;
         this->child_trees[i]->printChildren(idk);
       }
@@ -198,7 +198,7 @@ protected:
   QuadTree<typename QuadTreeContainerList::iterator, AREA_TYPE> root;
 
 public:
-  QuadTreeContainer(const AreaRect& size = {{0.0, 0.0}, {100.0, 100.0}}, const size_t depth = 0) {}
+  QuadTreeContainer(const AreaRect& size = { {0.0, 0.0}, {100.0, 100.0} }, const size_t depth = 0) {}
 
   void resize(const AreaRect& resize_area) {
     this->root.resize(resize_area);
@@ -221,7 +221,7 @@ public:
   void insert(const OBJECT_TYPE& item, const AREA_TYPE& item_size) {
     QuadTreeItem<OBJECT_TYPE, AREA_TYPE> new_item;
     new_item.item = item;
-    
+
     this->all_items.push_back(new_item);
     this->all_items.back().item_ptr = this->root.insert(std::prev(this->all_items.end()), item_size);
   }

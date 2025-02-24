@@ -16,3 +16,10 @@ CopyConstructor: CopyConstructor.test.cpp ../src/Vector.cpp ../src/AreaShape.cpp
 	cd bin && g++ -c $(patsubst %.cpp, ../%.cpp, $^) $(CC_FLAGS) -I../$(INCLUDES)
 	g++ -o $(BIN_NAME) $(wildcard bin/*.o) $(CC_FLAGS) $(LIBS)
 	export LD_LIBRARY_PATH=../libs/sfml/lib && ./$(BIN_NAME)
+
+MoveSemantics: MoveSemantics.test.cpp ../src/Vector.cpp ../src/AreaShape.cpp ../src/singleton/ScreenManager.cpp
+	rm -rf bin/*.o bin/*.out *.o *.out bin/*.h.gch
+
+	cd bin && g++ -c $(patsubst %.cpp, ../%.cpp, $^) $(CC_FLAGS) -I../$(INCLUDES)
+	g++ -o $(BIN_NAME) $(wildcard bin/*.o) $(CC_FLAGS) $(LIBS)
+	export LD_LIBRARY_PATH=../libs/sfml/lib && ./$(BIN_NAME)

@@ -245,25 +245,22 @@
 
 //         if (remove_objects_in_cursor) {
 //           auto circ_objects_in_cursor = qt_container_circ.search(AreaRect(cursor_box.getPos(), cursor_box.getDim()));
-//           for (int circ_obj_index : circ_objects_in_cursor) qt_container_circ.remove(circ_obj_index);
+//           for (auto& circ_obj : circ_objects_in_cursor) qt_container_circ.remove(circ_obj);
 
 //           auto rect_objects_in_cursor = qt_container_rect.search(AreaRect(cursor_box.getPos(), cursor_box.getDim()));
-//           for (int rect_obj_index : rect_objects_in_cursor) qt_container_rect.remove(rect_obj_index);
+//           for (auto& rect_obj : rect_objects_in_cursor) qt_container_rect.remove(rect_obj);
 //         }
 
 //         auto circ_objects_in_camera = qt_container_circ.search(AreaRect(screen_pos, rendering_distance));
 //         auto rect_objects_in_camera = qt_container_rect.search(AreaRect(screen_pos, rendering_distance));
 
-//         for (auto& obj_index : circ_objects_in_camera) {
-//           auto obj = (*qt_container_circ.free_list_ptr)[obj_index].element_data.second;
-//           auto obj_area = (*qt_container_circ.free_list_ptr)[obj_index].element_data.first;
-          
+//         for (auto& obj : circ_objects_in_camera) {
 //           // move object
 //           obj->item->setPos(obj->item->getPos() + obj->item->velocity * 100 * deltaTime.asSeconds());
 //           qt_container_circ.relocate(obj, AreaCirc(obj->item->getPos(), obj->item->getRadius()));
           
 //           // restrict object to map boundary only!!
-//           if (!map_boundary.contains(obj_area)) obj->item->velocity = obj->item->velocity * -1;
+//           if (!map_boundary.contains(obj->item_ptr.iterator->first)) obj->item->velocity = obj->item->velocity * -1;
           
 //           // setFillColor upon collision
 //           // if (qt_container_circ.search(AreaCirc(obj->item->getPos(), obj->item->getRadius())).size() > 1) obj->item->setFillColor(sf::Color(255, 255, 255));
@@ -273,16 +270,13 @@
 //           obj->item->render(current_camera_pos, zoom);
 //         }
 
-//         for (auto& obj_index : rect_objects_in_camera) {
-//           auto obj = (*qt_container_rect.free_list_ptr)[obj_index].element_data.second;
-//           auto obj_area = (*qt_container_rect.free_list_ptr)[obj_index].element_data.first;
-
+//         for (auto& obj : rect_objects_in_camera) {
 //           // move object
 //           obj->item->setPos(obj->item->getPos() + obj->item->velocity * 100 * deltaTime.asSeconds());
 //           qt_container_rect.relocate(obj, AreaRect(obj->item->getPos(), obj->item->getDim()));
           
 //           // restrict object to map boundary only!!
-//           if (!map_boundary.contains(obj_area)) obj->item->velocity = obj->item->velocity * -1;
+//           if (!map_boundary.contains(obj->item_ptr.iterator->first)) obj->item->velocity = obj->item->velocity * -1;
           
 //           // setFillColor upon collision
 //           // if (qt_container_rect.search(AreaRect(obj->item->getPos(), obj->item->getDim())).size() > 1) obj->item->setFillColor(sf::Color(255, 255, 255));

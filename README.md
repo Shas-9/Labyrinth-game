@@ -2,7 +2,10 @@
 
 ## Getting started
 
-Clone the repo and run "make all" in the terminal
+Clone the repo and run the following command from the root directory in the terminal
+```bash
+cd build && cmake .. && make && cd .. && ./build/Game
+```
 
 ## Documentation
 

@@ -1,0 +1,2 @@
+# cd build && cmake .. && make && cd .. && ~/Downloads/apps/bin/valgrind ./build/Game
+cd build && cmake .. && make && cd .. && ./build/Game

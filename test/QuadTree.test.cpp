@@ -14,6 +14,28 @@ using std::list;
 #define SCREEN_X ScreenManager::getInstance().screen_dimensions.x
 #define SCREEN_Y ScreenManager::getInstance().screen_dimensions.y
 
+// Data Oreaitned Obj
+struct DataOrientedObj {
+  DataOrientedObj(Vector pos = { 0, 0 }, Vector dim = { 1, 1 }, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) {
+    this->velocity = velocity;
+    this->color = color;
+    this->pos = pos;
+    this->dim = dim;
+  }
+  DataOrientedObj(Vector pos, double radius, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256), Vector velocity = Vector(std::rand() % 11 - 5, std::rand() % 11 - 5)) {
+    this->velocity = velocity;
+    this->color = color;
+    this->pos = pos;
+    this->radius = radius;
+  }
+
+  sf::Color color;
+  Vector velocity;
+  Vector pos;
+  Vector dim;
+  float radius;
+};
+
 struct OldObj {
   OldObj(Vector pos = { 0, 0 }, Vector dim = { 1, 1 }, const sf::Color color = sf::Color(std::rand() % 256, std::rand() % 256, std::rand() % 256)) : pos(pos), dim(dim) {
     // this->rectangle = new sf::RectangleShape();
@@ -429,6 +451,17 @@ void testFuncVectorDynamicCastObjOptimized(int num_boxes_circles) {
   makeCircQuadTree(qt_container_circ, map_boundary, num_boxes_circles);
 }
 
+void testFuncVectorDataOrientedObj(int num_boxes_circles) {
+  AreaRect map_boundary(0, 0, 15000, 15000);
+  DataOrientedObj map_boundary_obj(map_boundary.pos, map_boundary.size);
+
+  QuadTreeContainer<DataOrientedObj, AreaRect> qt_container_rect;
+  makeRectQuadTree(qt_container_rect, map_boundary, num_boxes_circles);
+
+  QuadTreeContainer<DataOrientedObj, AreaCirc> qt_container_circ;
+  makeCircQuadTree(qt_container_circ, map_boundary, num_boxes_circles);
+}
+
 // void testFuncVectorTestObj(int num_boxes_circles) {
 //   AreaRect map_boundary(0, 0, 15000, 15000);
 //   TestObj map_boundary_obj(map_boundary.pos, map_boundary.size);
@@ -497,7 +530,12 @@ int main() {
   std::cout << "sf::Shape*: " << sizeof(sf::Shape*) << std::endl;
   std::cout << "DynamicCastObj: " << sizeof(DynamicCastObj) << std::endl;
   std::cout << "TestObj: " << sizeof(TestObj) << std::endl;
+  std::cout << "Vector: " << sizeof(Vector) << std::endl;
+  std::cout << "sf::Color: " << sizeof(sf::Color) << std::endl;
+  std::cout << "float: " << sizeof(float) << std::endl;
+  std::cout << "DataOrientedObj: " << sizeof(DataOrientedObj) << std::endl;
   std::cout << perf.testVariableFuncMeanPerf(&testFuncVectorDynamicCastObjOptimized, 50000, 1) << std::endl;
+  // std::cout << perf.testVariableFuncMeanPerf(&testFuncVectorDataOrientedObj, 50000, 1) << std::endl;
   // std::cout << perf.testVariableFuncMeanPerf(&testFuncVectorDynamicCastObj, 50000, 5) << std::endl;
   // perf.plotFuncPerf("number of boxes+circles", testFuncVectorDynamicCastObjOptimized, 1, 500, 1000000, 2, false);
 }
